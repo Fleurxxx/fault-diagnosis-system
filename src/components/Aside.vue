@@ -18,7 +18,7 @@
                           <!-- <div class="a-title-box">
                               <img class="a-title" src="../assets/img/云服务器.png">
                           </div> -->
-                          
+
                           <el-menu-item index="/home">
                               {{"\xa0\xa0"}}<i class="fa fa-home"></i>{{"\xa0\xa0"}}
                               <span>首页</span>
@@ -33,7 +33,7 @@
                           </el-sub-menu>
                           <el-sub-menu index="3">
                               <template #title>
-                                  {{"\xa0\xa0"}}<i class="fa fa-reddit-alien"></i>{{"\xa0\xa0"}}
+                                  {{"\xa0\xa0"}}<i class="fa fa-bar-chart"></i>{{"\xa0\xa0"}}
                                   <span>故障诊断</span>
                               </template>
                               <el-menu-item index="/bucket">{{"\xa0\xa0\xa0\xa0"}}<i class="fa fa-github-alt"></i>{{"\xa0\xa0"}}在线诊断</el-menu-item>
@@ -44,8 +44,8 @@
                                   {{"\xa0\xa0"}}<i class="fa fa-folder"></i>{{"\xa0\xa0"}}
                                   <span>故障维修</span>
                               </template>
-                              <el-menu-item index="/bucket">{{"\xa0\xa0\xa0\xa0"}}<i class="fa fa-bitbucket"></i>{{"\xa0\xa0"}}维修中心</el-menu-item>
-                              <el-menu-item index="/object">{{"\xa0\xa0\xa0\xa0"}}<i class="fa fa-object-group"></i>{{"\xa0\xa0"}}维修记录</el-menu-item>
+                              <el-menu-item index="/bucket">{{"\xa0\xa0\xa0\xa0"}}<i class="fa fa-paper-plane-o"></i>{{"\xa0\xa0"}}维修中心</el-menu-item>
+                              <el-menu-item index="/object">{{"\xa0\xa0\xa0\xa0"}}<i class="fa fa-list-ul"></i>{{"\xa0\xa0"}}维修记录</el-menu-item>
                           </el-sub-menu>
                           <el-sub-menu index="5">
                               <template #title>
@@ -56,12 +56,12 @@
                           </el-sub-menu>
                       </el-menu>
                   </el-aside>
-  
+
               </el-col>
           </el-row>
       </div>
   </template>
-  
+
   <script setup>
   import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed } from 'vue';
   import { useStore } from 'vuex';
@@ -92,15 +92,15 @@
   watchEffect(()=>{
   })
   // 使用toRefs解构
-  // let { } = { ...toRefs(data) } 
+  // let { } = { ...toRefs(data) }
   defineExpose({
     ...toRefs(data)
   })
-  
+
   </script>
   <style scoped lang='less'>
-  
-  
+
+
   /*左侧导航栏*/
   .el-menu-vertical-demo {
           width: 250px;
@@ -119,5 +119,5 @@
       .el-aside::-webkit-scrollbar {
           display: none;
       }
-  
+
   </style>
