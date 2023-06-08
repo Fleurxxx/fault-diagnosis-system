@@ -51,14 +51,14 @@ const store = useStore();
 * 路由对象
 */
 const route = useRoute();
-console.log("当前路由信息:")
-console.log(route.matched)
+// console.log("当前路由信息:")
+// console.log(route.matched)
 /**
 * 路由实例
 */
 const router = useRouter();
-console.log("当前路由的匹配记录:")
-console.log(router.currentRoute.value.matched)
+// console.log("当前路由的匹配记录:")
+// console.log(router.currentRoute.value.matched)
 
 
 //console.log('1-开始创建组件-setup')
@@ -73,8 +73,8 @@ const data = reactive({
 //面包屑显示
 const getMatched = () => {
     data.breadList = route.matched
-    console.log("这是当前的路径信息：")
-    console.log(data.breadList)
+    // console.log("这是当前的路径信息：")
+    // console.log(data.breadList)
 }
 getMatched()
 
@@ -94,7 +94,7 @@ watch(() => router.currentRoute.value.path,(toPath) => {
 watchEffect(()=>{
 })
 // 使用toRefs解构
-// let { } = { ...toRefs(data) } 
+// let { } = { ...toRefs(data) }
 defineExpose({
   ...toRefs(data)
 })
@@ -111,12 +111,12 @@ defineExpose({
         display: flex;//将容器的子元素垂直排列
         flex-direction: column;
         .container{
-        height: 100% 
+        height: 100%
         }
         .bread{ //面包屑
           position:relative;
           padding-bottom:15px;
         }
-        
+
   }
 </style>

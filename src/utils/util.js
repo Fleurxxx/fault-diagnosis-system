@@ -244,13 +244,14 @@ export const doCustomTimes = (times, callback) => {
 //       }).map(item => {
 //         return item[0].split(',')
 //       })
+//       console.log(arr)
 //       if (format === 'csv' || format === 'xlsx') resolve(arr)
 //       else reject(new Error('[Format Error]:你上传的不是Csv或者Xlsx文件'))
 //     }
 //   })
 // }
-import Papa from 'papaparse';
 
+import Papa from 'papaparse';
 export const getArrayFromFile = (file) => {
   let nameSplit = file.name.split('.');
   let format = nameSplit[nameSplit.length - 1].toLowerCase();
@@ -262,7 +263,14 @@ export const getArrayFromFile = (file) => {
     reader.onload = function (evt) {
       let data = evt.target.result; // 读到的数据
       let arr = [];
-
+      let pasteData = data.trim()
+      // console.log(data)
+      arr = pasteData.split((/[\n\u0085\u2028\u2029]|\r\n?/g)).map(row => {
+        return row.split('\t')
+      }).map(item => {
+        return item[0].split(',')
+      })
+      // console.log(arr)
       if (format === 'csv') {
         Papa.parse(data, {
           delimiter: '\t', // 使用制表符作为字段分隔符
@@ -303,25 +311,36 @@ export const getTableDataFromArray = (array) => {
   let columns = []
   let tableData = []
   if (array.length > 1) {
+    let regex = /\s*,\s*/; // 匹配逗号并可选地包含前后空格
+    let result = String(array[0]).split(regex).map(item => item.trim());
+    // console.log(result);
     let titles = array.shift()
-    columns = titles.map(item => {
+    // console.log(titles)
+    columns = result.map(item =>{
       return {
+        key: item,
         title: item,
-        key: item
+        dataKey:item,
+        width: 150,
       }
     })
     let cnt = 0;
     tableData = array.map(item => {
       let res = {}
+      let ans = {}
       item.forEach((col, i) => {
         res[titles[i]] = col
-        // console.log(col)
+        let val = String(col).split(regex).map(item => item.trim());
+        // console.log(val)
+        for(let j=0; j<val.length; j++){
+          ans[result[j]] = val[j]
+        }
       })
       cnt++;
       if(cnt===10){
-        return res
+        return ans
       }
-      return res
+      return ans
     })
   }
   return {
