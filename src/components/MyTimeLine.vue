@@ -103,23 +103,18 @@ import { reactive } from "vue";
 
 const steps = reactive([
   {
-    title: '发起申请',
-    description: '创建申请',
+    title: '故障分析',
+    description: '分析完成，点击查看详情',
     status: 'in-progress',
   },
   {
-    title: '运维确认',
-    description: '等待运维人员受理',
-    status: 'uncompleted',
-  },
-  {
-    title: '维修中',
+    title: '修复过程记录中',
     description: '请耐心等待哦',
     status: 'uncompleted',
   },
   {
     title: '完成',
-    description: '维修完成',
+    description: '故障修复完成，已保存到记录',
     status: 'uncompleted',
   },
 ]);

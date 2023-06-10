@@ -120,3 +120,4 @@ defineExpose({
         
   }
 </style>
+<style src="src/assets/style/base.scss"></style>

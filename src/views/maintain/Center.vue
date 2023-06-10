@@ -11,8 +11,8 @@
         <div class="step-description">{{ steps[status - 1].description }}</div>
       </div>
     <div>
-      <el-button class="lef_btn" v-if="status === 4">打印结果</el-button>
-      <el-button class="lef_btn" v-else>打印结果</el-button>
+      <el-button class="lef_btn" v-if="status === 4" @click="printResult">打印结果</el-button>
+      <el-button class="lef_btn" v-else @click="toInfo">查看详情</el-button>
       <el-button class="next" @click="backToList">返回列表</el-button>
     </div>
   </div>
@@ -112,12 +112,12 @@ const form = reactive({
 );
 const steps = reactive([
   {
-    title: '提交成功',
-    description: '申请维修成功！',
+    title: '故障分析完成',
+    description: '等待人员记录维修过程',
   },
   {
-    title: '运维已确认',
-    description: '正在维修中，请耐心等待哦',
+    title: '修复过程记录中',
+    description: '请耐心等待哦',
   },
   {
     title: '维修完成',
@@ -144,6 +144,12 @@ const backToList = () => {
 }
 //获取所有订单
 const orderFocus = () => {
+
+}
+const printResult = () => {
+
+}
+const toInfo = () => {
 
 }
 </script>

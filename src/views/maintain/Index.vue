@@ -335,4 +335,3 @@ h3{
   font-weight: 540;
 }
 </style>
-<style src="src/assets/style/base.scss"></style>
