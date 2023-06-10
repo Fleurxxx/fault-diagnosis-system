@@ -2,7 +2,6 @@ $primary-color: #6477B7;
 $second-color:#F0F1F8;
 $back-color: #F0F2F8;
 
-
 /* 文字样式 */
 .text {
     font-size: 10px;
@@ -71,4 +70,19 @@ $back-color: #F0F2F8;
      width: 25px;
      border-radius: 50%;
      border: 1px solid #c4c4c4;
+  }
+  .el-dialog__header {
+    background: rgb(90, 137, 247);
+    text-align: center;
+    margin: 0;
+  }
+  .el-dialog__title {
+    color: aliceblue;
+    font-weight: 600;
+  }
+  .el-card__body {
+    display: flex;
+    gap: 30px;
+    flex-direction: column;
+    width: 100%;
   }

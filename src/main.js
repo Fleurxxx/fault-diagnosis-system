@@ -51,11 +51,13 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)
 }
 
+import zhCn from 'element-plus/dist/locale/zh-cn'
+zhCn.el.pagination.total = '共 ' + '{total}' + ' 条';
 //挂载
 app.use(router)
     .use(Vuex)
     .use(state)
+    .use(ElementPlus, { locale: zhCn })
     .use(VueCodeMirror)
     .use(ViewUIPlus)
-    .use(ElementPlus)
     .mount('#app')

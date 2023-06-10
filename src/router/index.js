@@ -82,6 +82,16 @@ const routes = [
                 meta: {
                     title: '故障维修'
                 },
+            },{ //------- 故障维修中心 -------//
+                path:"/center",  
+                component: ()=>import('../views/maintain/Center.vue'),
+                meta: {
+                    title: '维修中心'
+                },
+            },{
+                path:"/detail",
+                component: ()=>import('../views/maintain/Details.vue'),
+            // }
             },{ //------- 组件测试-------//
                 path:"/file",  //上传
                 component: ()=>import('../components/updata/Files.vue'),
@@ -144,6 +154,9 @@ const routes = [
         meta: {
             title: '404'
         },
+    },{
+        path:"/timeline",
+        component: ()=>import('../components/MyTimeLine.vue'),
     }
 ]
 

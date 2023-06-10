@@ -10,6 +10,7 @@ let apiFun = {
     tag:{},
   },
   test:{},
+  fix:{},
 };
 
 /**
@@ -228,4 +229,12 @@ apiFun.object.deleteObject = (objectIdList) => {
 apiFun.object.listSubObject = (keyword,parent,pageNum,size) => {
   return http.get('/manageObject/getSubObjects?keyword='+keyword+'&parent='+parent+'&pageNum='+pageNum+'&size='+size)
 }
+
+/**
+ * 故障维修
+ */
+apiFun.fix.deleteFixRecord = (recordId) => {
+  return http.delete('/fix/deleteFixRecord?recordId=' + recordId)
+}
+
 export default apiFun;
