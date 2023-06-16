@@ -1,6 +1,6 @@
 <template>
   <div class="header">
-    <h3>维修记录</h3>
+    <h3>诊断记录</h3>
   </div>
   <div class="middle">
     <div class="left">

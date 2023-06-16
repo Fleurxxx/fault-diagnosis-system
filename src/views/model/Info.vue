@@ -21,8 +21,52 @@
                 标签一的内容
               </TabPane>
               <TabPane label="设置" name="name2">
-                <div id="txt1">
-                  修改信息
+                <div id="txt1" class="edit">
+                  <h2 class="edit-title1">设置</h2>
+                  <h3 class="edit-title2">基本信息</h3>
+                  <div class="edit-content">
+                    <el-form
+                        label-width="100px"
+                        ref="formlabelref"
+                        :rules="rules"
+                        :inline="true"
+                        :model="formlabel"
+                        class="con-form"
+                    >
+                        <el-form-item label="模型名称" prop="name" class="form-input" >
+                            <el-input class="input"
+                                      v-model="data.name"
+                                      maxlength="30"
+                                      placeholder="30个字符以内，必须使用中英文或者数字开头，支持小括号、短横线和空格"
+                                      show-word-limit
+                                      type="text"
+                                    />
+                        </el-form-item><br/>
+                        <div style="margin: 20px 0" />
+                        <el-form-item label="模型介绍"  prop="introduce" class="form-input" >
+                            <el-input class="input"
+                                      v-model="data.introduce"
+                                      maxlength="100"
+                                      placeholder="请简单描述该模型"
+                                      show-word-limit
+                                      type="textarea"
+                                    />
+                        </el-form-item><br/>
+                        <div style="margin: 10px 0" />
+                        <el-form-item label="模型介绍"  prop="introduce" class="form-input" >
+                          <div class="mb-2 flex items-center text-sm">
+                            <el-radio-group v-model="radio1" class="ml-4">
+                              <el-radio label="1" size="large">公开</el-radio>
+                              <el-radio label="2" size="large">私密</el-radio>
+                            </el-radio-group>
+                          </div>
+                        </el-form-item><br/>
+                        <div style="margin: 30px 0" />
+                        <el-form-item  class="form-button" >
+                            <el-button type="primary" @click="submit(data)" style="width: 80px;">保存修改</el-button>
+                        </el-form-item>
+                    </el-form>
+                  </div>
                 </div>
               </TabPane>
               <!-- <TabPane label="标签三" name="name3">标签三的内容</TabPane> -->
@@ -67,6 +111,7 @@ const data = reactive({
   filesize:'5MB',
   time: (new Date()).getTime() - 60 * 3 * 1000,
 })
+const radio1 = ref('1')
 
 const back =()=>{
   router.push({ path: "/info" });
@@ -176,6 +221,26 @@ defineExpose({
 
 
   }
+  .edit{
+    margin-top: 40px;
+    margin-left: 15px;
+    .edit-title1{
+      margin-bottom: 40px;;
+    }
+    .edit-title2{
+      margin-bottom: 20px;;
+    }
+    .edit-content{
+      margin-left: -30px;
+      .input{
+        width:400px;
+      }
+    }
+    .form-button{
+      margin-left: 420px;
+    }
+  }
+
 }
 
 

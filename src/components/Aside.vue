@@ -29,23 +29,23 @@
                                   <span>分类模型管理</span>
                               </template>
                               <el-menu-item index="/model">{{"\xa0\xa0\xa0\xa0"}}<i class="fa fa-object-group"></i>{{"\xa0\xa0"}}在线训练</el-menu-item>
-                              <el-menu-item index="/model/management">{{"\xa0\xa0\xa0\xa0"}}<i class="fa fa-list-alt"></i>{{"\xa0\xa0"}}模型管理</el-menu-item>
+                              <el-menu-item index="/management">{{"\xa0\xa0\xa0\xa0"}}<i class="fa fa-list-alt"></i>{{"\xa0\xa0"}}模型管理</el-menu-item>
                           </el-sub-menu>
                           <el-sub-menu index="3">
                               <template #title>
                                   {{"\xa0\xa0"}}<i class="fa fa-bar-chart"></i>{{"\xa0\xa0"}}
                                   <span>故障诊断</span>
                               </template>
-                              <el-menu-item index="/bucket">{{"\xa0\xa0\xa0\xa0"}}<i class="fa fa-github-alt"></i>{{"\xa0\xa0"}}在线诊断</el-menu-item>
-                              <el-menu-item index="/object">{{"\xa0\xa0\xa0\xa0"}}<i class="fa fa-th-list"></i>{{"\xa0\xa0"}}历史记录</el-menu-item>
+                              <el-menu-item index="/diagnose">{{"\xa0\xa0\xa0\xa0"}}<i class="fa fa-github-alt"></i>{{"\xa0\xa0"}}在线诊断</el-menu-item>
+                              <el-menu-item index="/history">{{"\xa0\xa0\xa0\xa0"}}<i class="fa fa-th-list"></i>{{"\xa0\xa0"}}历史记录</el-menu-item>
                           </el-sub-menu>
                           <el-sub-menu index="4">
                               <template #title>
-                                  {{"\xa0\xa0"}}<i class="fa fa-folder"></i>{{"\xa0\xa0"}}
+                                  {{"\xa0\xa0"}}<i class="fa fa-medkit"></i>{{"\xa0\xa0"}}
                                   <span>故障维修</span>
                               </template>
-                              <el-menu-item index="/center">{{"\xa0\xa0\xa0\xa0"}}<i class="fa fa-bitbucket"></i>{{"\xa0\xa0"}}维修中心</el-menu-item>
-                              <el-menu-item index="/maintain">{{"\xa0\xa0\xa0\xa0"}}<i class="fa fa-object-group"></i>{{"\xa0\xa0"}}维修记录</el-menu-item>
+                              <el-menu-item index="/center">{{"\xa0\xa0\xa0\xa0"}}<i class="fa fa-delicious"></i>{{"\xa0\xa0"}}维修中心</el-menu-item>
+                              <el-menu-item index="/maintain">{{"\xa0\xa0\xa0\xa0"}}<i class="fa fa-wpforms"></i>{{"\xa0\xa0"}}维修记录</el-menu-item>
                           </el-sub-menu>
                           <el-sub-menu index="5">
                               <template #title>
