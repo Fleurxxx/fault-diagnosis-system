@@ -29,25 +29,30 @@
                     @change:改变事件,多选框勾选和取消勾选都会触发事件,所以在取消勾选时要删除勾选状态下的值
                   -->
                   <!-- <el-checkbox v-model="checked" :label="item.id" @change="ids(item)">{{name}}</el-checkbox> -->
-                  <el-checkbox class="card-check" v-model="item.checked" :label="item.id" @change="ids(item)">{{item.name}}</el-checkbox>
+                  <el-checkbox class="card-check" v-model="item.checked" :label="item.id" @change="ids(item)">{{ item.id }}</el-checkbox>
                   <div class="card-but">
                     <!-- 修改按钮 -->
                     <el-button type="text" class="button" @click="handleUpdate(item)"><i class="fa fa-pencil fa-fw"></i></el-button>
                     <!-- 删除按钮 -->
-                    <el-button type="text" class="button" @click="rowDel(item.id)"><i class="fa fa-trash-o fa-fw"></i></el-button>
+                    <el-button type="text" class="button" @click="rowDel(item.id)"><el-icon style="font-size: 15px"><DeleteFilled /></el-icon></el-button>
                     <!-- 开关按钮 -->
-                    <el-button type="text" class="button" @click="devicePowerBtn(item)"><i class="fa fa-ban fa-fw"></i></el-button>
+                    <el-button type="text" class="button" @click="devicePowerBtn(item)"><i :class="item.status===1 ? 'fa fa-pause' : 'fa fa-play'"></i></el-button>
                   </div>
                 </div>
               </template>
               <!-- 卡片显示的内容 -->
               <div class="card-content" v-on:click="handleClick">
-                <h2>数据模型</h2>
-                <p>这是一段简单介绍</p>
-                <p>这是一段简单介绍</p>
-                <p>这是一段简单介绍</p>
-                <p>这是一段简单介绍</p>
+                <h2>{{ item.name }}</h2>
+                <p>{{ item.introduction }}</p>
+                <div class="card-status">
+                  <Badge :status="item.status === 1 ? 'success' : 'default'" :text="item.status === 1 ? '运行中' : '未运行'" />
+                </div>
               </div>
+              <template #footer>
+                <div  style="height:40px;">
+                  <el-button class="button" text>Operation button</el-button>
+                </div>
+              </template>
               </el-card>
           </el-col>
         </el-row>
@@ -103,12 +108,25 @@ const data = ref([]);
 
 // 添加20个数据到data变量
 for (let i = 0; i < 20; i++) {
-  data.value.push({
-    id: i + 1,
-    checked: false,
-    // name:"23547375424",
-    // 其他属性...
-  });
+  if(i===0){
+      data.value.push({
+      id: i + 1,
+      checked: false,
+      name:"数据模型",
+      introduction:"这是一段对于模型的简单描述",
+      status:1,
+      // 其他属性...
+    });
+  }else{
+      data.value.push({
+      id: i + 1,
+      checked: false,
+      name:"数据模型",
+      introduction:"这是一段对于模型的简单描述",
+      status:0,
+      // 其他属性...
+    });
+  }
 }
 
 // 获取数组中数值的下标
@@ -265,16 +283,25 @@ function onLoad(page, params = {}) {
     height: 15px;
   }
   .card-content{
+    padding-top:10px;
     height: 100px;
     cursor: pointer; /*悬停变小手的属性*/
+    p{
+      padding-top: 5px;
+    }
+  }
+  .card-status{
+    // float: right;
+    padding: 15px 0 0 0;
   }
   .card-check{
     position: relative;
-    left: -110px;
+    // left: -110px;
     top: -8px;
+    width: 250px;
   }
   .card-but{
-    v-index:8;
+    // v-index:8;
     position: relative;
     top: -40px;
     left: 30%;

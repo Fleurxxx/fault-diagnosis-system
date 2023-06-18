@@ -2,12 +2,12 @@
  * @Author: Fleurxxx 984209872@qq.com
  * @Date: 2023-06-05 22:52:58
  * @LastEditors: Fleurxxx 984209872@qq.com
- * @LastEditTime: 2023-06-12 22:51:29
+ * @LastEditTime: 2023-06-17 20:41:17
  * @FilePath: \maintenance\src\components\DataCard.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
-  <div >
+  <div class="box">
     <Tabs value="name1">
         <TabPane label="详细" name="name1">
           标签一的内容
@@ -60,4 +60,7 @@ defineExpose({
 
 </script>
 <style scoped lang='less'>
+.box{
+  height: 100%;
+}
 </style>

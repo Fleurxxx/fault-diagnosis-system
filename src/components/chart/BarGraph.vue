@@ -1,9 +1,17 @@
+<!--
+ * @Author: Fleurxxx 984209872@qq.com
+ * @Date: 2023-06-14 20:27:00
+ * @LastEditors: Fleurxxx 984209872@qq.com
+ * @LastEditTime: 2023-06-18 17:07:34
+ * @FilePath: \maintenance\src\components\chart\BarGraph.vue
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
 <template>
   <!-- 折现面积图 -->
-  <div>
+  <div >
     <!-- 准备好一个盒子必须有宽高这里的id 必须和下面获取的节点一致 -->
     <div
-        id="today-users-chart"
+        :id="ids"
         class="pic"
       ></div>
   </div>
@@ -15,22 +23,22 @@ import * as echarts from "echarts";
 import { ref, toRefs, reactive, onMounted } from "vue";
 
 export default {
-
+  props: {
+    ids: String,
+  },
   setup(props) {
-
-
     onMounted(() => {
-
-
+      // console.log(props.ids)
       // 初始化实例对象 echarts.init(dom容器)
-      const chartDom = document.getElementById('today-users-chart')
+      const chartDom = document.getElementById(props.ids)
       const chart = echarts.init(chartDom)
       chart.setOption({
         color: '#3398db',
         tooltip: {},
         xAxis: {
           type: 'category',
-          data:['feature0','feature1','feature2','feature3','feature4','feature6','feature7','feature8','feature9','feature10','feature11', 'feature12','feature13', 'feature14'],
+          data:['feature0','feature1','feature2','feature3'],
+          // data:['feature0','feature1','feature2','feature3','feature4','feature6','feature7','feature8','feature9','feature10','feature11', 'feature12','feature13', 'feature14'],
           // data:[2528,3018,4928,1858,3002,3695],
           axisLabel:{
             interval: 0
@@ -45,7 +53,7 @@ export default {
         series: [
           {
             type: 'bar',
-            data: [0, 182, 50, 334, 390, 330, 220, 150, 82, 200, 134, 290, 330, 150],
+            data: [0, 182, 50, 0],
             barWidth: '100%',
             // areaStyle: {
             //   color: 'purple'
@@ -67,15 +75,17 @@ export default {
         }
       })
 
-
     });
+    return {
+      props,
+    }
 
   },
 };
 </script>
 <style scoped lang="scss">
   .pic{
-    width:800px;
-    height:400px;
+    width: 300px;;
+    height: 180px;
   }
 </style>

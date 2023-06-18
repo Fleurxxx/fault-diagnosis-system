@@ -2,7 +2,7 @@
  * @Author: Fleurxxx 984209872@qq.com
  * @Date: 2023-05-30 20:36:57
  * @LastEditors: Fleurxxx 984209872@qq.com
- * @LastEditTime: 2023-06-14 21:50:23
+ * @LastEditTime: 2023-06-18 10:14:07
  * @FilePath: \maintenance\src\main.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -43,6 +43,10 @@ import 'element-plus/dist/index.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
 
+//Driver页面分步引导
+import Driver from 'driver.js'
+import 'driver.js/dist/driver.min.css'
+
 
 const app = createApp(App)
 
@@ -53,6 +57,7 @@ app.config.globalProperties.$echarts = echarts
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)
 }
+
 
 import zhCn from 'element-plus/dist/locale/zh-cn'
 zhCn.el.pagination.total = '共 ' + '{total}' + ' 条';

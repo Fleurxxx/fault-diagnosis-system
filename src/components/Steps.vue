@@ -27,7 +27,7 @@ export default {
     steps: String,
   },
   setup(props) {
-    console.log(props)
+    // console.log(props)
     return {
       props,
     };
