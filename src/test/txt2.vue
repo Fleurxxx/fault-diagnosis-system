@@ -1,185 +1,98 @@
 <template>
-  <div>
-    <div class="box-but">
-      <el-button>新增</el-button>
-      <el-button>批量操作</el-button>
-    </div>
-     <basic-container>
-      <el-row :gutter="12" v-loading="loading">
-        <!-- date遍历循环的数据 -->
-        <el-col :span="6" v-for="item in data" :key="item.id">
-          <el-card shadow="hover"><!--style="background-color: #5daf34"  灰 #e1e1e1 绿 #5daf34-->
-            <!-- 卡片的头部位 -->
-            <template #header>
-              <div class="card-header">
-                <!--
-                  这里声明一下,我在多选时,往数组中添加的是对象
-                  label属性:是多选框的值,若该标签中无内容,则该属性也充当 checkbox 按钮后的介绍
-                  @change:改变事件,多选框勾选和取消勾选都会触发事件,所以在取消勾选时要删除勾选状态下的值
-                -->
-                <!-- <el-checkbox v-model="checked" :label="item.id" @change="ids(item)">{{name}}</el-checkbox> -->
-                <el-checkbox class="card-check" v-model="item.checked" :label="item.id" @change="ids(item)">{{name}}</el-checkbox>
-                <div class="card-but">
-                  <a><font-awesome-icon icon="fa-brands fa-qq"/></a>
-                  <!-- 修改按钮 -->
-                  <el-button type="text" icon="el-icon-edit-outline" @click="handleUpdate(item)"/>
-                  <!-- 删除按钮 -->
-                  <el-button type="text" icon="el-icon-delete" @click="rowDel(item.id)"/>
-                  <!-- 开关按钮 -->
-                  <el-button type="text" icon="el-icon-switch-button" @click="devicePowerBtn(item)"/>
-                </div>
-              </div>
-            </template>
-            <!-- 卡片显示的内容 -->
-            <div>
-              <h2>数据模型</h2>
-              <p>这是一段简单介绍</p>
-            </div>
-            </el-card>
-        </el-col>
-      </el-row>
+  <div >
+    <el-table :data="projectList" id="proFunction" style="width: 100%;" max-height="670">
+	    <el-table-column v-for="(value,index) in functionList" :key="index" align='center' min-width="230">
+        <template v-slot="scope">
+          <!-- 柱状图放置区域 -->
+          <div :id="scope.row.projectName+'_'+value.name" style="width:100%;height:200px;border:1px solid skyblue;margin: 0 auto;"></div>
+        </template>
+      </el-table-column>
+</el-table>
 
-      <!-- 分页 -->
-      <div class="blockPage">
-        <el-pagination
-          @size-change="sizeChange"
-          @current-change="currentChange"
-          :page-sync="page"
-          :pager-count="10"
-          :page-sizes="[12,24,36,48]"
-          :page-size="page.pageSize"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="page.total">
-        </el-pagination>
-      </div>
-    </basic-container>
   </div>
 </template>
 
-<script setup>
-import { ref, reactive } from 'vue';
-// import { add, getDetail, getList, remove, update } from "@/api/接口js文件";
-
-
-const checked = ref(false);
-const page = reactive({
-  pageSize: 12,
-  currentPage: 1,
-  total: 0,
-});
-const selectionList = ref([]);
-const data = ref([]);
-
-// 添加20个数据到data变量
-for (let i = 0; i < 20; i++) {
-  data.value.push({
-    id: i + 1,
-    checked: false
-    // 其他属性...
-  });
-}
-
-// 获取数组中数值的下标
-function indexOf(val, ids) {
-  for (let i = 0; i < ids.length; i++) {
-    if (ids[i] === val)
-      return i;
+<script>
+import * as echarts from "echarts";
+export default {
+  data() {
+    return {
+      projectList:[]
+    }
+  },
+  mounted() {
+  },
+  methods: {
+    //柱状图数据处理和渲染
+    zhu () {
+      let that = this
+      let option = {}
+      console.time('柱状图绘制')
+      console.log(this.projectList)
+      console.log(this.functionList)
+      const chartDom = document.getElementById(props.ids)
+      const chart = echarts.init(chartDom)
+      //数据处理部分
+      //柱状图渲染部分
+      option = {
+              xAxis: {
+                type: 'category',
+                data: deptName,//横坐标名称集合
+              },
+              yAxis: {
+                type: 'value'
+              },
+              series: [
+                {
+                  data: deptUserNum,//纵坐标数据集
+                  type: 'bar',
+                  barWidth: 15,//柱子宽度
+                  itemStyle: {
+                    normal: {
+                      label: {
+                        show: true,		//开启数值显示
+                        position: 'top',	//在上方显示
+                        textStyle: {	    //数值样式
+                          color: 'black',
+                          fontSize: 16
+                        }
+                      },
+                      color: function (params) {
+                        // 定义颜色集合
+                        var colorList = [
+                          '#C6E579', '#B5C334', '#FCCE10', '#E87C25', '#27727B',
+                          '#FE8463', '#9BCA63', '#FAD860', '#F3A43B', '#60C0DD',
+                          '#D7504B', '#C1232B', '#F4E001', '#F0805A', '#26C0C0'
+                        ];
+                        //根据数据量返回颜色列表
+                        if (params) {
+                          if ($.inArray(params.name, that.Bgs) == -1) {
+                            return colorList[params.dataIndex]
+                          } else {
+                          //特殊情况，如果横坐标数据名在特殊集合中，统一使用黑色渲染
+                            return 'black'
+                          }
+                        }
+                      },
+                    }
+                  },
+                  markLine: { // 设置平均线
+                    data: [
+                      {
+                        type: "average",
+                        name: "我是平均值",
+                        color: "#baf"
+                      }
+                    ]
+                  },
+                }
+              ]
+            };
+            //渲染
+            myChart.setOption(option)
+      }
   }
-  return -1;
-}
-
-// 多选赋值ids
-function ids(val) {
-  const ids = selectionList.value;
-  const index = indexOf(val, ids);
-  if (ids.length > 0 && index > -1) {
-    ids.splice(index, 1);
-  } else {
-    ids.push(val);
-    ids.join(",");
-  }
-}
-
-// 新增接口
-function rowSave(row) {
-  // add(row).then(() => {
-  //   onLoad(page);
-  //   console.log("操作成功!");
-  // }, error => {
-  //   console.log(error);
-  // });
-}
-
-// 修改接口
-function rowUpdate(row, index) {
-  // update(row).then(() => {
-  //   onLoad(page);
-  //   console.log("操作成功!");
-  // }, error => {
-  //   console.log(error);
-  // });
-}
-
-// 删除接口
-function rowDel(row) {
-  // remove(row.id)
-  //   .then(() => {
-  //     onLoad(page);
-  //     console.log("操作成功!");
-  //   });
-}
-
-function searchReset() {
-  // query = {};
-  // onLoad(page);
-}
-
-function searchChange(params) {
-  // query = params;
-  // page.currentPage = 1;
-  // onLoad(page, params);
-}
-
-function selectionClear() {
-  // $refs.crud.toggleSelection();
-}
-
-function currentChange(currentPage) {
-  page.currentPage = currentPage;
-}
-
-function sizeChange(pageSize) {
-  page.pageSize = pageSize;
-}
-
-function refreshChange() {
-  // onLoad(page, query);
-}
-
-// 分页接口
-function onLoad(page, params = {}) {
-  // loading = true;
-  // getList(page.currentPage, page.pageSize, Object.assign(params, query))
-  //   .then(res => {
-  //     const data = res.data.data;
-  //     page.total = data.total;
-  //     data.value = data.records;
-  //     loading = false;
-  //     selectionClear();
-  //   });
 }
 </script>
-<style scoped>
-.box-but{
-  margin-right: 80%;
-}
-.card-check{
-  position: relative;
-  left: -100px;
-  top:-10px;
-}
-.card-but{
-  v-index:8;
-}
-
+<style scoped lang='less'>
 </style>

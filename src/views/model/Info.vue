@@ -13,14 +13,37 @@
         <div class="info" >
           <h1>{{data.name}}</h1>
           <p @click="change('txt1')" class="cur"><i class="fa fa-pencil-square-o"></i> {{ data.introduce }}</p>
+          <div class="info-tag">
+            <el-tag v-for="(item, index) in tags" :key="index" :type="item.type" class="tags">{{ item.text }}</el-tag>
+          </div>
         </div>
-        <div class="analyse">
+        <div class="analyse ">
           <Button class="analyse-but" type="primary" shape="circle" @click="download()">&nbsp;<Icon type="md-download" />&nbsp;下载（{{data.filesize}}）&nbsp;</Button>
-          <Tabs v-model="activeTab">
-              <TabPane label="数据卡" name="name1">
-                标签一的内容
+          <Tabs v-model="activeTab" class="custom-tabs">
+              <TabPane label="数据卡" name="name1" >
+                <div style="height:20px;"></div>
+                <DataCard  class="tab-card"/>
               </TabPane>
-              <TabPane label="设置" name="name2">
+              <TabPane label="部署" name="name2">
+                <div class="hint">
+                  <div class="hint-reminder">
+                    <div class="hint-left">
+                      <img src="../../assets/icon/暂无数据.png" class="hint-img"/>
+                    </div>
+                    <div class="hint-right">
+                      <div class="hint-content">
+                        <p class="title">暂未部署模型</p>
+                        <div class="hint-progress">
+                          <MineSteps v-bind:steps="steps"/>
+                        </div>
+                        <p>模型部署是为开发者提供应用化API转化功能，来提供对新数据的预测和决策支持。</p>
+                        <a>立即部署</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </TabPane>
+              <TabPane label="设置" name="name3">
                 <div id="txt1" class="edit">
                   <h2 class="edit-title1">设置</h2>
                   <h3 class="edit-title2">基本信息</h3>
@@ -45,6 +68,7 @@
                         <div style="margin: 20px 0" />
                         <el-form-item label="模型介绍"  prop="introduce" class="form-input" >
                             <el-input class="input"
+                                      ref="myInput"
                                       v-model="data.introduce"
                                       maxlength="100"
                                       placeholder="请简单描述该模型"
@@ -61,6 +85,30 @@
                             </el-radio-group>
                           </div>
                         </el-form-item><br/>
+                        <el-form-item label="模型标签">
+                          <el-tag
+                                  v-for="tag in dynamicTags"
+                                  :key="tag"
+                                  class="ml-1"
+                                  closable
+                                  :disable-transitions="false"
+                                  @close="handleClose(tag)"
+                                >
+                            {{ tag }}
+                          </el-tag>
+                          <el-input
+                            v-if="inputVisible"
+                            ref="InputRef"
+                            v-model="inputValue"
+                            class="ml-1 w-20 info-tag"
+                            size="small"
+                            @keyup.enter="handleInputConfirm"
+                            @blur="handleInputConfirm"
+                          />
+                          <el-button v-else class="button-new-tag ml-1" size="small" @click="showInput">
+                            + 新标签
+                          </el-button>
+                        </el-form-item>
                         <div style="margin: 30px 0" />
                         <el-form-item  class="form-button" >
                             <el-button type="primary" @click="submit(data)" style="width: 80px;">保存修改</el-button>
@@ -69,7 +117,11 @@
                   </div>
                 </div>
               </TabPane>
-              <!-- <TabPane label="标签三" name="name3">标签三的内容</TabPane> -->
+              <TabPane label="版本" name="name4">
+                <div class="hint">
+                  <Version />
+                </div>
+              </TabPane>
           </Tabs>
         </div>
 
@@ -82,12 +134,15 @@
 </template>
 
 <script setup>
-import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed } from 'vue';
+import { ref, reactive, toRefs, nextTick, onBeforeMount, onMounted, watchEffect, computed } from 'vue';
 import { useStore } from 'vuex';
 import  {Message} from 'view-ui-plus'
-import { ElMessageBox,ElMessage } from 'element-plus';
+import { ElMessageBox,ElMessage,ElInput } from 'element-plus';
 import ScrollIntoView from 'scroll-into-view-if-needed'
 import { useRoute, useRouter } from 'vue-router';
+import DataCard from '../../components/data/DataCard.vue'
+import MineSteps from '../../components/Steps.vue'
+import Version from '../../components/data/ModelVersion.vue'
 
 /**
 * 仓库
@@ -113,24 +168,100 @@ const data = reactive({
 })
 const radio1 = ref('1')
 
-const back =()=>{
-  router.push({ path: "/info" });
+const submit =()=>{
+  // router.push({ path: "/info" });
+  ElMessage({
+    message: '保存成功',
+    type: 'success',
+  })
 }
 
-
+//简介跳转
+const myInput = ref(null);
 const activeTab = ref('name1')
 const change = (index) => {
-  activeTab.value = 'name2'
-  // console.log(activeTab.value)
-  document?.getElementById(index)?.scrollIntoView({
-    behavior: "smooth", //smooth:平滑，auto：直接定位
-    block: "start",
-    inline: "start",
+  // 在跳转后等待一段时间，以确保页面滚动完成
+  setTimeout(() => {
+    activeTab.value = 'name3'
+
+  }, 100);
+  // //平滑定位跳转
+  // document?.getElementById(index)?.scrollIntoView({
+  //   behavior: "smooth", //smooth:平滑，auto：直接定位
+  //   block: "start",
+  //   inline: "start",
+  // });
+  //聚焦输入框
+  nextTick(() => {
+        myInput.value.focus();
   });
+
+
+
+
+
+
 };
 
 const download = () =>{
-  console.log(22222)
+  ElMessage({
+    message: '下载成功',
+    type: 'success',
+  })
+}
+
+//步骤条
+const steps = reactive([
+  {
+    title: '部署设置',
+    description: '',
+    status: 'in-progress',
+  },
+  {
+    title: '在线',
+    description: '',
+    status: 'uncompleted',
+  },
+  {
+    title: '数据诊断',
+    description: '',
+    status: 'uncompleted',
+  },
+]);
+
+/**
+ * 标签
+ */
+const tags = ref([
+  { text: '标签1', type: 'success' },
+  { text: '标签2', type: 'info' },
+  { text: '标签3', type: 'warning' },
+  { text: '标签4', type: 'danger' },
+])
+const inputValue = ref('')
+const dynamicTags = ref(['Tag 1', 'Tag 2', 'Tag 3'])
+const inputVisible = ref(false)
+const InputRef = ref()
+
+//删除标签
+const handleClose = (tag) => {
+  dynamicTags.value.splice(dynamicTags.value.indexOf(tag), 1)
+
+}
+
+const showInput = () => {
+  inputVisible.value = true
+  nextTick(() => {
+    InputRef.value.input.focus()
+  })
+}
+
+const handleInputConfirm = () => {
+  if (inputValue.value) {
+    dynamicTags.value.push(inputValue.value)
+  }
+  inputVisible.value = false
+  inputValue.value = ''
 }
 
 onBeforeMount(() => {
@@ -150,13 +281,15 @@ defineExpose({
 </script>
 <style scoped lang='less'>
 
+
 .box{
   flex-direction: column;
   box-sizing: border-box;
   position: sticky;
   top:0;
   width:100%;
-  height: 190vh;
+  // height: 190vh;
+  // height:100%;
   box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, 0.08);
   .box-title{
     float: left;
@@ -170,7 +303,7 @@ defineExpose({
 
   .box-reminder{
     float: center;
-    padding:5% 18% 0 14%;
+    padding:5% 12% 0 14%;
     .reminder{
       text-align: left;
     }
@@ -192,22 +325,64 @@ defineExpose({
       margin-top: 90px;
     }
     .info p{
-      padding-top: 18px;
+      padding-top: 35px;
     }
+    .info-tag{
+      padding-top: 20px;
+      .tags{
+        margin-right: 10px;
+      }
 
+    }
+    .el-tag.is-closable {
+        margin-right: 10px;
+    }
 
     .analyse{
       margin-top: 35px;
       // position: relative;
       .analyse-but{
         position: absolute;
-        right: 23%;
+        right: 20%;
         z-index:10;
+      }
+      .tab-card{
+        box-shadow:0 0 0 #fff; /*去掉阴影 */;
+      }
+    }
+    .hint{
+      float: center;
+      padding:5% 3% 0 3%;
+      // background-color:rgba(184, 182, 182, 0.08);
+      .hint-reminder{
+        padding: 13px 20px 60px 30px; //上右下左
+        background-color: rgba(10, 10, 10, 0.054);
+        .hint-left{
+          width:40%;
+          height:100%;
+          float: left;
+          margin-right: -70px;
+          .hint-img{
+              width:200px;
+            }
+        }
+        .hint-right{
+          display: flex;
+        }
+        .hint-content{
+          flex-direction:column;
+          padding: 30px 0 0px 0;
+          .hint-progress{
+            width: 650px;
+            padding: 10px 0 10px 0;
+          }
+        }
+
       }
     }
 
-
   }
+
   .cur{
     cursor: pointer; /*鼠标悬停变小手*/
   }
@@ -243,6 +418,10 @@ defineExpose({
 
 }
 
+/deep/.step-line {
+  margin-top:20px;
+  width: 50px;
+}
 
 
 </style>
