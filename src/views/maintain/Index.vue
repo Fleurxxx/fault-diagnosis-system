@@ -1,123 +1,125 @@
 <template>
-  <div class="header">
-    <h3>维修记录</h3>
-  </div>
-  <div class="middle">
-    <div class="left">
-      <el-button class="create"  @click="dialogVisible = true"><el-icon><Plus /></el-icon>&nbsp&nbsp新建</el-button>
-      <el-button class="download" @click="batchDownload">批量下载</el-button>
+  <div class="box">
+    <div class="box-title">
+      <p class="title">维修记录</p>
     </div>
-    <div class="right">
-      <el-input placeholder="请输入内容进行搜索" v-model="searchText" clearable @clear="clear">
-        <template #append>
-          <el-button @click="search">搜索</el-button> 
-        </template>
-      </el-input>
+    <div class="middle">
+      <div class="left">
+        <el-button class="create"  @click="dialogVisible = true"><el-icon><Plus /></el-icon>&nbsp&nbsp新建</el-button>
+        <el-button class="download" @click="batchDownload">批量下载</el-button>
+      </div>
+      <div class="right">
+        <el-input placeholder="请输入内容进行搜索" v-model="searchText" clearable @clear="clear">
+          <template #append>
+            <el-button @click="search">搜索</el-button> 
+          </template>
+        </el-input>
+      </div>
     </div>
-  </div>
-  <div class="content">
-    <div class="form">
-      <el-dialog
-        v-model="dialogVisible"
-        title="新建维修记录"
-        width="50%">
-        <el-form
-          class="show"
-          ref="addForm"
-          :model="form"
-          label-width="auto"
-          label-position="left"
-        >
-          <el-form-item label="数据名称" prop="name" :required="true">
-            <el-input v-model="form.name"></el-input>
-          </el-form-item>
-          <el-form-item label="总大小" prop="size" :required="true">
-            <el-input v-model="form.size" type="number" placeholder="请输入数字"></el-input>
-          </el-form-item>
-          <el-form-item label="故障类型" prop="type" :required="true">
-            <el-select v-model="form.type" placeholder="请选择">
-              <el-option v-for="item in nameList" :key="item" :label="item" :value="item">
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="创建时间" prop="createTime" :required="true">
-            <el-date-picker
-              v-model="form.createTime"
-              type="date"
-              placeholder="Pick a time"
-              :disabledDate="disabledDate"
-            ></el-date-picker>
-          </el-form-item>
-          <el-form-item label="状态" prop="status" :required="true">
-            <el-radio-group v-model="form.status">
-              <el-radio :label="0" >未修复</el-radio>
-              <el-radio :label="1" >已修复</el-radio>
-            </el-radio-group>
-          </el-form-item>
-        </el-form>
-        <template #footer>
-          <span class="dialog-footer">
-            <el-button @click="dialogVisible = false">取 消</el-button>
-            <el-button type="primary" @click="handleAdd">确 定</el-button>
-          </span>
-        </template>
-      </el-dialog>
-    </div>
-    <div class="bottom">
-      <el-row class="table">
-        <el-table
-          :data="fixData"
-          @selection-change="handleSelectionChange"
-          style="width: 100%"
-          :header-cell-style="{
-            background: 'rgb(242,243,245)',
-            color: 'rgb(0,0,71)',
-            fonsSize: '18px',
-          }"
-          :cell-style="{color: 'rgb(85,68,85)', fontWeight: '350'}"
-        >
-          <el-table-column type="selection" width="50"/>
-          <el-table-column prop="id" label="数据编号" width="120px" />
-          <el-table-column
-            prop="name"
-            label="数据名称"
-            width="208px"
+    <div class="content">
+      <div class="form">
+        <el-dialog
+          v-model="dialogVisible"
+          title="新建维修记录"
+          width="35%">
+          <el-form
+            class="show"
+            ref="addForm"
+            :model="form"
+            label-width="auto"
+            label-position="left"
           >
-          </el-table-column>
-          <el-table-column prop="size" label="总大小" width="120px" />
-          <el-table-column prop="type" label="故障类型" width="170px" />
-          <el-table-column prop="createTime" label="创建时间" width="180px" />
-          <el-table-column
-            prop="status"
-            label="状态"
-            width="120px">
-            <template v-slot="scope">
-              <span v-if="scope.row.status === 0">未修复</span>
-              <span v-else>已修复</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="操作" width="250">
-            <template v-slot="scope">
-              <el-button link @click="handleDisplay(scope.row)"
-                ><el-icon><CaretRight /></el-icon></el-button>
-              <el-button link @click="handleDownload(scope.row)"
-                ><el-icon><Download /></el-icon></el-button>
-              <el-button link type="primary" @click="handleCheck(scope.row)"
-                >查看</el-button>
-              <el-button link type="danger" @click="handleDelete(scope.row)"
-                >删除</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-row>
-      <div class="pager">
-        <el-pagination
-          :current-page="currentPage"
-          :page-size="pageSize"
-          layout="total, prev, pager, next"
-          :total="totalNum"
-          @current-change="handleCurrentChange"
-        />
+            <el-form-item label="数据名称" prop="name" :required="true">
+              <el-input v-model="form.name"></el-input>
+            </el-form-item>
+            <el-form-item label="总大小" prop="size" :required="true">
+              <el-input v-model="form.size" type="number" placeholder="请输入数字" label-width="10px"></el-input>
+            </el-form-item>
+            <el-form-item label="故障类型" prop="type" :required="true">
+              <el-select v-model="form.type" placeholder="请选择">
+                <el-option v-for="item in nameList" :key="item" :label="item" :value="item">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="创建时间" prop="createTime" :required="true">
+              <el-date-picker
+                v-model="form.createTime"
+                type="date"
+                placeholder="Pick a time"
+                :disabledDate="disabledDate"
+              ></el-date-picker>
+            </el-form-item>
+            <el-form-item label="状态" prop="status" :required="true">
+              <el-radio-group v-model="form.status">
+                <el-radio :label="0" >未修复</el-radio>
+                <el-radio :label="1" >已修复</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-form>
+          <template #footer>
+            <span class="dialog-footer">
+              <el-button @click="dialogVisible = false">取 消</el-button>
+              <el-button type="primary" @click="handleAdd">确 定</el-button>
+            </span>
+          </template>
+        </el-dialog>
+      </div>
+      <div class="bottom">
+        <el-row class="table">
+          <el-table
+            :data="fixData"
+            @selection-change="handleSelectionChange"
+            style="width: 100%"
+            :header-cell-style="{
+              background: 'rgb(242,243,245)',
+              color: 'rgb(0,0,71)',
+              fonsSize: '18px',
+            }"
+            :cell-style="{color: 'rgb(85,68,85)', fontWeight: '350'}"
+          >
+            <el-table-column type="selection" width="50"/>
+            <el-table-column prop="id" label="数据编号" width="110px" />
+            <el-table-column
+              prop="name"
+              label="数据名称"
+              width="208px"
+            >
+            </el-table-column>
+            <el-table-column prop="size" label="总大小" width="120px" />
+            <el-table-column prop="type" label="故障类型" width="170px" />
+            <el-table-column prop="createTime" label="创建时间" width="140px" />
+            <el-table-column
+              prop="status"
+              label="状态"
+              width="110px">
+              <template v-slot="scope">
+                <span v-if="scope.row.status === 0">未修复</span>
+                <span v-else>已修复</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="操作" width="210">
+              <template v-slot="scope">
+                <el-button link @click="handleDisplay(scope.row)"
+                  ><el-icon><CaretRight /></el-icon></el-button>
+                <el-button link @click="handleDownload(scope.row)"
+                  ><el-icon><Download /></el-icon></el-button>
+                <el-button link type="primary" @click="handleCheck(scope.row)"
+                  >查看</el-button>
+                <el-button link type="danger" @click="handleDelete(scope.row)"
+                  >删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-row>
+        <div class="pager">
+          <el-pagination
+            :current-page="currentPage"
+            :page-size="pageSize"
+            layout="total, prev, pager, next"
+            :total="totalNum"
+            @current-change="handleCurrentChange"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -288,6 +290,24 @@ const disabledDate = (time) => {
 
 </script>
 <style lang="less" scoped>
+.box{
+  flex-direction: column;
+  box-sizing: border-box;
+  position: sticky;
+  top:0;
+  width:100%;
+  height: 190vh;
+  box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, 0.08);
+  .box-title{
+    text-align: left;
+    padding-top: 22px;
+    padding-left: 50px;
+  }
+  .title{
+    font-size:18px;
+    font-weight:bold;
+  }
+}
 .header {
   display: flex;
   justify-content: space-between;
@@ -296,6 +316,7 @@ const disabledDate = (time) => {
   display: flex;
   justify-content: space-between;
   margin-top: 10px;
+  padding: 22px 50px 0 50px;
   .left{
     display: flex;
     flex-direction: row;
@@ -330,6 +351,7 @@ const disabledDate = (time) => {
 }
 .content {
   background-color: #fff;
+  padding: 0 50px 0 50px;
 }
 h3{
   font-weight: 540;

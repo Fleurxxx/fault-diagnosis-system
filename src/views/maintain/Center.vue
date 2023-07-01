@@ -1,85 +1,87 @@
 <template>
-  <div class="header">
-    <h3>维修中心</h3>
-  </div>
-  <div class="content_2" v-if="status !== 1">
-    <div class="correct">
-      <el-image style="width: 60px" :src="url" :fit="fit" />
+  <div class="box">
+    <div class="box-title">
+      <p class="title">维修中心</p>
     </div>
-    <div class="step-content">
-        <div class="step-title">{{ steps[status - 1].title }}</div>
-        <div class="step-description">{{ steps[status - 1].description }}</div>
+    <div class="content_2" v-if="status !== 1">
+      <div class="correct">
+        <el-image style="width: 60px" :src="url" :fit="fit" />
       </div>
-    <div>
-      <el-button class="lef_btn" v-if="status === 4" @click="printResult">打印结果</el-button>
-      <el-button class="lef_btn" v-else @click="toInfo">查看详情</el-button>
-      <el-button class="next" @click="backToList">返回列表</el-button>
-    </div>
-  </div>
-  <div class="middle">
-    <MyTimeLine></MyTimeLine>
-  </div>
-  <div class="bottom" v-if="status === 1">
-    <div class="content">
-      <div class="form">
-        <el-form
-          class="show"
-          ref="addForm"
-          :model="form"
-          label-width="auto"
-          label-position="left"
-        >
-          <el-form-item label="选择订单" prop="order" :required="true">
-            <el-select v-model="form.order" placeholder="请选择" style="width:100%" @focus="orderFocus">
-              <el-option v-for="item in orderList" :key="item" :label="item" :value="item">
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="预约时间" prop="time" :required="true" >
-            <el-date-picker
-              v-model="form.time"
-              type="date"
-              placeholder="Pick a time"
-              :disabledDate="disabledDate"
-              style="width:100%"
-            ></el-date-picker>
-          </el-form-item>
-          <el-form-item label="维修地点" prop="provCityCounty" :required="true">
-            <elui-china-area-dht @change="addressChange" style="width:100%"></elui-china-area-dht>
-          </el-form-item>
-          <el-form-item label="推广地址" prop="createTime" :required="true">
-            <el-input v-model="form.address" type="textarea" :autosize="{ minRows: 4, maxRows: 5}"></el-input>
-          </el-form-item>
-        </el-form>
-      </div>
-      <div class="card">
-        <el-card class="box-card">
-          <div class="card-header">
-            <div class="avatar">
-              <el-image style="width: 100px; height: 120px" :src="person.avatar" :fit="fit" />
-            </div>
-            <div class="info">
-              <ul class="person-info-list">
-                <li>姓名： {{ person.name }}</li>
-                <li>年龄： {{ person.age }}</li>
-                <li>性别： {{ person.gender }}</li>
-                <li>职业： {{ person.occupation }}</li>
-              </ul>
-            </div>
-          </div>
-          <div class="card-bottom">
-            <div class="title">技能和专长：</div>
-            <div class="card-content">
-              <ul class="skills-list">
-                <li v-for="(skill, index) in person.skills" :key="index">-  {{ skill }}</li>
-              </ul>
-            </div>
-          </div>
-        </el-card>
+      <div class="step-content">
+          <div class="step-title">{{ steps[status - 1].title }}</div>
+          <div class="step-description">{{ steps[status - 1].description }}</div>
+        </div>
+      <div>
+        <el-button class="lef_btn" v-if="status === 4" @click="printResult">打印结果</el-button>
+        <el-button class="lef_btn" v-else @click="toInfo">查看详情</el-button>
+        <el-button class="next" @click="backToList">返回列表</el-button>
       </div>
     </div>
-    <div>
-      <el-button class="next" @click="next">下一步</el-button>
+    <div class="middle">
+      <MyTimeLine></MyTimeLine>
+    </div>
+    <div class="bottom" v-if="status === 1">
+      <div class="content">
+        <div class="form">
+          <el-form
+            class="show"
+            ref="addForm"
+            :model="form"
+            label-width="auto"
+            label-position="left"
+          >
+            <el-form-item label="选择订单" prop="order" :required="true">
+              <el-select v-model="form.order" placeholder="请选择" style="width:100%" @focus="orderFocus">
+                <el-option v-for="item in orderList" :key="item" :label="item" :value="item">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="预约时间" prop="time" :required="true" >
+              <el-date-picker
+                v-model="form.time"
+                type="date"
+                placeholder="Pick a time"
+                :disabledDate="disabledDate"
+                style="width:100%"
+              ></el-date-picker>
+            </el-form-item>
+            <el-form-item label="维修地点" prop="provCityCounty" :required="true">
+              <elui-china-area-dht @change="addressChange" style="width:100%"></elui-china-area-dht>
+            </el-form-item>
+            <el-form-item label="推广地址" prop="createTime" :required="true">
+              <el-input v-model="form.address" type="textarea" :autosize="{ minRows: 4, maxRows: 5}"></el-input>
+            </el-form-item>
+          </el-form>
+        </div>
+        <div class="card">
+          <el-card class="box-card">
+            <div class="card-header">
+              <div class="avatar">
+                <el-image style="width: 100px; height: 120px" :src="person.avatar" :fit="fit" />
+              </div>
+              <div class="info">
+                <ul class="person-info-list">
+                  <li>姓名： {{ person.name }}</li>
+                  <li>年龄： {{ person.age }}</li>
+                  <li>性别： {{ person.gender }}</li>
+                  <li>职业： {{ person.occupation }}</li>
+                </ul>
+              </div>
+            </div>
+            <div class="card-bottom">
+              <div class="title">技能和专长：</div>
+              <div class="card-content">
+                <ul class="skills-list">
+                  <li v-for="(skill, index) in person.skills" :key="index">-  {{ skill }}</li>
+                </ul>
+              </div>
+            </div>
+          </el-card>
+        </div>
+      </div>
+      <div>
+        <el-button class="next" @click="next">下一步</el-button>
+      </div>
     </div>
   </div>
 </template>
@@ -154,6 +156,24 @@ const toInfo = () => {
 }
 </script>
 <style lang="less" scoped>
+.box{
+  flex-direction: column;
+  box-sizing: border-box;
+  position: sticky;
+  top:0;
+  width:100%;
+  height: 190vh;
+  box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, 0.08);
+  .box-title{
+    text-align: left;
+    padding-top: 22px;
+    padding-left: 50px;
+  }
+  .title{
+    font-size:18px;
+    font-weight:bold;
+  }
+}
 .header {
   display: flex;
   justify-content: space-between;
@@ -164,7 +184,6 @@ const toInfo = () => {
   align-items: center;
   margin-top: 40px;
   margin-bottom: 40px;
-  // background-color: rgb(247,248,250);
 }
 .bottom {
   display: flex;

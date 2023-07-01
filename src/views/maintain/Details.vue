@@ -1,112 +1,114 @@
 <template>
-  <div class="header">
-    <h3>维修详情</h3>
-  </div>
-  <div class="fault-repair-details">
-    <div class="small-div">
-      <div class="small-div-header">
-          <h3>数据集信息</h3>
-      </div>
-      <div class="small-div-body">
-          <div class="line"></div>
-          <div class="label">
-              <div class="label-name">数据集名称</div>
-              <div class="label-content">{{ dataset.name }}</div>
-          </div>
-          <div class="line"></div>
-          <div class="label">
-              <div class="label-name">数据集大小</div>
-              <div class="label-content">{{ dataset.size }}</div>
-          </div>
-          <div class="line"></div>
-          <div class="label">
-              <div class="label-name">数据集创建日期</div>
-              <div class="label-content">{{ dataset.createdDate }}</div>
-          </div>
-      </div>
+  <div class="box">
+    <div class="box-title">
+      <p class="title">维修详情</p>
     </div>
-    <div class="content-bottom">
-        <div class="left">
-            <div class="small-div">
-                <div class="small-div-header">
-                    <h3>故障信息</h3>
-                </div>
-                <div class="small-div-body">
-                    <div class="label">
-                        <div class="label-name">故障类型</div>
-                        <div class="label-content">{{ fault.type }}</div>
-                    </div>
-                    <div class="line"></div>
-                    <div class="label">
-                        <div class="label-name">故障描述</div>
-                        <div class="label-content">{{ fault.description }}</div>
-                    </div>
-                    <div class="line"></div>
-                    <div class="label">
-                        <div class="label-name">故障发生时间</div>
-                        <div class="label-content">{{ fault.occurredAt }}</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="right">
-            <div class="small-div">
-                <div class="small-div-header">
-                    <h3>维修状态</h3>
-                </div>
-                <div class="small-div-body">
-                    <div class="label">
-                        <div class="label-name">员工ID号</div>
-                        <div class="label-content">{{ dataset.name }}</div>
-                    </div>
-                    <div class="line"></div>
-                    <div class="label">
-                        <div class="label-name">姓名</div>
-                        <div class="label-content">{{ dataset.name }}</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="content-bottom">
-        <div class="left">
-          <div class="small-div">
-                <div class="small-div-header">
-                    <h3>故障原因</h3>
-                </div>
-                <div class="small-div-body fault">
-                  {{ faultAnalysis.cause }}
-                </div>
-            </div>
-        </div>
-        <div class="right">
-            <div class="small-div">
-                <div class="small-div-header">
-                    <h3>解决方案</h3>
-                </div>
-                <div class="fault small-div-body ">
-                  {{ faultAnalysis.solution }}
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="echart">
+    <div class="fault-repair-details">
       <div class="small-div">
         <div class="small-div-header">
-            <h3>故障趋势分析</h3>
+            <h3>数据集信息</h3>
         </div>
         <div class="small-div-body">
-          <div id="trendAnalysis" ref="trendAnalysisRef" :style="{ width: '100%', height: '400px' }"></div>
+            <div class="line"></div>
+            <div class="label">
+                <div class="label-name">数据集名称</div>
+                <div class="label-content">{{ dataset.name }}</div>
+            </div>
+            <div class="line"></div>
+            <div class="label">
+                <div class="label-name">数据集大小</div>
+                <div class="label-content">{{ dataset.size }}</div>
+            </div>
+            <div class="line"></div>
+            <div class="label">
+                <div class="label-name">数据集创建日期</div>
+                <div class="label-content">{{ dataset.createdDate }}</div>
+            </div>
         </div>
       </div>
-    </div>
-    <div class="echart">
-      <div class="small-div">
-        <div class="small-div-header">
-            <h3>故障风险评估</h3>
+      <div class="content-bottom">
+          <div class="left">
+              <div class="small-div">
+                  <div class="small-div-header">
+                      <h3>故障信息</h3>
+                  </div>
+                  <div class="small-div-body">
+                      <div class="label">
+                          <div class="label-name">故障类型</div>
+                          <div class="label-content">{{ fault.type }}</div>
+                      </div>
+                      <div class="line"></div>
+                      <div class="label">
+                          <div class="label-name">故障描述</div>
+                          <div class="label-content">{{ fault.description }}</div>
+                      </div>
+                      <div class="line"></div>
+                      <div class="label">
+                          <div class="label-name">故障发生时间</div>
+                          <div class="label-content">{{ fault.occurredAt }}</div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="right">
+              <div class="small-div">
+                  <div class="small-div-header">
+                      <h3>维修状态</h3>
+                  </div>
+                  <div class="small-div-body">
+                      <div class="label">
+                          <div class="label-name">员工ID号</div>
+                          <div class="label-content">{{ dataset.name }}</div>
+                      </div>
+                      <div class="line"></div>
+                      <div class="label">
+                          <div class="label-name">姓名</div>
+                          <div class="label-content">{{ dataset.name }}</div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="content-bottom">
+          <div class="left">
+            <div class="small-div">
+                  <div class="small-div-header">
+                      <h3>故障原因</h3>
+                  </div>
+                  <div class="small-div-body fault">
+                    {{ faultAnalysis.cause }}
+                  </div>
+              </div>
+          </div>
+          <div class="right">
+              <div class="small-div">
+                  <div class="small-div-header">
+                      <h3>解决方案</h3>
+                  </div>
+                  <div class="fault small-div-body ">
+                    {{ faultAnalysis.solution }}
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="echart">
+        <div class="small-div">
+          <div class="small-div-header">
+              <h3>故障趋势分析</h3>
+          </div>
+          <div class="small-div-body">
+            <div id="trendAnalysis" ref="trendAnalysisRef" :style="{ width: '100%', height: '400px' }"></div>
+          </div>
         </div>
-        <div class="small-div-body">
-          <div id="riskAssess" ref="riskAssessRef" :style="{ width: '100%', height: '300px' }"></div>
+      </div>
+      <div class="echart">
+        <div class="small-div">
+          <div class="small-div-header">
+              <h3>故障风险评估</h3>
+          </div>
+          <div class="small-div-body">
+            <div id="riskAssess" ref="riskAssessRef" :style="{ width: '100%', height: '300px' }"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -290,9 +292,25 @@ type: 'line'
 </script>
 
 <style scoped lang="less">
-.chart {
-  height: 400px;
-  height: 500px;
+.box{
+  flex-direction: column;
+  box-sizing: border-box;
+  position: sticky;
+  top:0;
+  width:100%;
+  box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, 0.08);
+  .box-title{
+    text-align: left;
+    padding-top: 22px;
+    padding-left: 50px;
+  }
+  .title{
+    font-size:18px;
+    font-weight:bold;
+  }
+}
+.fault-repair-details {
+  padding: 22px 50px 10px 50px;
 }
 .header {
   display: flex;
