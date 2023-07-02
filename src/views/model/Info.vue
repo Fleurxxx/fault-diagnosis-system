@@ -25,23 +25,8 @@
                 <DataCard  class="tab-card"/>
               </TabPane>
               <TabPane label="部署" name="name2">
-                <div class="hint">
-                  <div class="hint-reminder">
-                    <div class="hint-left">
-                      <img src="../../assets/icon/暂无数据.png" class="hint-img"/>
-                    </div>
-                    <div class="hint-right">
-                      <div class="hint-content">
-                        <p class="title">暂未部署模型</p>
-                        <div class="hint-progress">
-                          <MineSteps v-bind:steps="steps"/>
-                        </div>
-                        <p>模型部署是为开发者提供应用化API转化功能，来提供对新数据的预测和决策支持。</p>
-                        <a>立即部署</a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <!-- <Process /> -->
+                <DeploymentSettings />
               </TabPane>
               <TabPane label="设置" name="name3">
                 <div id="txt1" class="edit">
@@ -119,7 +104,7 @@
               </TabPane>
               <TabPane label="版本" name="name4">
                 <div class="hint">
-                  <Version />
+                  <Version :showimg="true"/>
                 </div>
               </TabPane>
           </Tabs>
@@ -141,8 +126,9 @@ import { ElMessageBox,ElMessage,ElInput } from 'element-plus';
 import ScrollIntoView from 'scroll-into-view-if-needed'
 import { useRoute, useRouter } from 'vue-router';
 import DataCard from '../../components/data/DataCard.vue'
-import MineSteps from '../../components/Steps.vue'
 import Version from '../../components/data/ModelVersion.vue'
+import Process from '../../components/deployment/Process.vue'
+import DeploymentSettings from '../../components/deployment/DeploymentSettings.vue'
 
 /**
 * 仓库
@@ -210,24 +196,7 @@ const download = () =>{
   })
 }
 
-//步骤条
-const steps = reactive([
-  {
-    title: '部署设置',
-    description: '',
-    status: 'in-progress',
-  },
-  {
-    title: '在线',
-    description: '',
-    status: 'uncompleted',
-  },
-  {
-    title: '数据诊断',
-    description: '',
-    status: 'uncompleted',
-  },
-]);
+
 
 /**
  * 标签

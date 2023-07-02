@@ -1,9 +1,9 @@
 <template>
-    <div>
+    <div class="aside-box">
           <!--        左侧选项栏       -->
           <el-row class="tac">
               <el-col :span="15">
-                  <el-aside width="300px">
+                  <el-aside width="260px">
                       <el-menu router
                                :default-active="this.$router.path"
                                class="el-menu-vertical-demo"
@@ -34,7 +34,7 @@
                           <el-sub-menu index="3">
                               <template #title>
                                   {{"\xa0\xa0"}}<i class="fa fa-bar-chart"></i>{{"\xa0\xa0"}}
-                                  <span>故障诊断</span>&nbsp;&nbsp;<Badge dot style="position: relative;top:-5px"></Badge>
+                                  <span>故障诊断</span>&nbsp;&nbsp;<Badge dot style="z-index:0;position: relative;top:-5px"></Badge>
                               </template>
                               <el-menu-item index="/diagnose">{{"\xa0\xa0\xa0\xa0"}}<i class="fa fa-github-alt"></i>{{"\xa0\xa0"}}在线诊断</el-menu-item>
                               <el-menu-item index="/history">{{"\xa0\xa0\xa0\xa0"}}<i class="fa fa-th-list"></i>{{"\xa0\xa0"}}历史记录</el-menu-item>
@@ -99,11 +99,15 @@
 
   </script>
   <style scoped lang='less'>
+  .aside-box{
+    height: 100%;
+  }
 
 
   /*左侧导航栏*/
   .el-menu-vertical-demo {
           width: 250px;
+          height: 100%;
           border: 0 !important; /*垂直时，去除右侧白边*/
       }
       .a-title-box{
@@ -114,7 +118,7 @@
           width: 50px;
       }
       .el-menu{
-          height: 210vh;
+          height: 91vh;
       }
       .el-aside::-webkit-scrollbar {
           display: none;

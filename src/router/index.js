@@ -2,7 +2,7 @@
  * @Author: Fleurxxx 984209872@qq.com
  * @Date: 2023-02-11 05:34:11
  * @LastEditors: Fleurxxx 984209872@qq.com
- * @LastEditTime: 2023-06-15 21:08:55
+ * @LastEditTime: 2023-07-02 11:14:15
  * @FilePath: \oss-backstage\src\router\index.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -141,6 +141,12 @@ const routes = [
           },{
             path:"/txt2",
             component: ()=>import('../test/txt2.vue'),
+            meta: {
+                title: '代码编辑器'
+            }
+          },{
+            path:"/csv",
+            component: ()=>import('../test/pushcsv.vue'),
             meta: {
                 title: '代码编辑器'
             }
