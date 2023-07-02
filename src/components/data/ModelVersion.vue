@@ -1,8 +1,8 @@
-<!--
+<!-- 数据历史版本
  * @Author: Fleurxxx 984209872@qq.com
  * @Date: 2023-06-18 20:21:35
  * @LastEditors: Fleurxxx 984209872@qq.com
- * @LastEditTime: 2023-06-18 22:09:07
+ * @LastEditTime: 2023-07-02 10:02:36
  * @FilePath: \maintenance\src\components\data\ModelVersion.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -12,7 +12,7 @@
       <Timeline>
         <TimelineItem color="green" class="cur" @click="open()">
           <Row>
-              <Col span="8">
+              <Col span="10">
                 <p class="time">
                   <Time :time="time3" type="date" />
                 </p>
@@ -25,20 +25,20 @@
         </TimelineItem>
         <TimelineItem color="green" class="cur" @click="open()">
           <Row>
-              <Col span="8">
+              <Col span="10">
                 <p class="time">
                   <Time :time="time2" type="date" />
                 </p>
                 <p class="content">发布2.0版本</p>
               </Col>
-              <Col span="12">
+              <Col span="10">
                 <Trend flag="up">12.5%</Trend>
               </Col>
           </Row>
         </TimelineItem>
         <TimelineItem color="red" class="cur" @click="open()">
           <Row>
-              <Col span="8">
+              <Col span="10">
                 <p class="time">
                   <Time :time="time2" />
                 </p>
@@ -51,7 +51,7 @@
         </TimelineItem>
         <TimelineItem color="blue" class="cur" @click="open()">
           <Row>
-              <Col span="8">
+              <Col span="10">
                 <p class="time">
                   <Time :time="time1" :interval="1" />
                 </p>
@@ -66,7 +66,7 @@
       </Timeline>
     </div>
     <div class="right">
-      <img src="../../assets/icon/暂无记录.png" class="image" />
+      <img v-if="showimg" src="../../assets/icon/暂无记录.png" class="image" />
     </div>
 
   </div>
@@ -93,8 +93,10 @@ const router = useRouter();
 /**
 * 数据部分
 */
+const props =defineProps({  //获取传参的数据
+  showimg:String,
+})
 const data = reactive({})
-
 const time1 = new Date()
 const time2 = (new Date()).getTime() - 86400 * 3 * 1000
 const time3 = (new Date()).getTime() - 186400 * 3 * 1000

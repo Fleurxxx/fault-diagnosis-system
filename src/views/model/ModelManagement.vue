@@ -36,7 +36,7 @@
                     <!-- 删除按钮 -->
                     <el-button type="text" class="button" @click="rowDel(item.id)"><el-icon style="font-size: 15px"><DeleteFilled /></el-icon></el-button>
                     <!-- 开关按钮 -->
-                    <el-button type="text" class="button" @click="devicePowerBtn(item)"><i :class="item.status===1 ? 'fa fa-pause' : 'fa fa-play'"></i></el-button>
+                    <el-button type="text" class="button" @click="switchBut(item)"><i :class="item.status===1 ? 'fa fa-pause' : 'fa fa-play'"></i></el-button>
                   </div>
                 </div>
               </template>
@@ -173,11 +173,22 @@ function rowUpdate(row, index) {
 
 // 删除接口
 function rowDel(row) {
+  
   // remove(row.id)
   //   .then(() => {
   //     onLoad(page);
   //     console.log("操作成功!");
   //   });
+}
+
+function switchBut(row){
+  // console.log(row)
+  if(row.status === 1){
+    row.status = 0;
+  }else{
+    row.status = 1;
+  }
+
 }
 
 //点击卡片跳转页面

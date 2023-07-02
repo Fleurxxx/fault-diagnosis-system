@@ -13,7 +13,7 @@
           标签一的内容
         </TabPane>
         <TabPane label="简洁" name="name2">
-          标签二的内容
+          <Data />
         </TabPane>
         <TabPane label="图示分析" name="name3">
           <Column />
@@ -27,6 +27,7 @@ import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed 
 import { useStore } from 'vuex';
 import { useRoute, useRouter } from 'vue-router';
 import Column from './Column.vue'
+import Data from './Data.vue'
 /**
 * 仓库
 */

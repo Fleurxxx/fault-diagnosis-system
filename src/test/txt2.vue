@@ -1,98 +1,142 @@
 <template>
   <div >
-    <el-table :data="projectList" id="proFunction" style="width: 100%;" max-height="670">
-	    <el-table-column v-for="(value,index) in functionList" :key="index" align='center' min-width="230">
-        <template v-slot="scope">
-          <!-- 柱状图放置区域 -->
-          <div :id="scope.row.projectName+'_'+value.name" style="width:100%;height:200px;border:1px solid skyblue;margin: 0 auto;"></div>
+    <el-table
+      size="small"
+      stripe
+      style="width: 100%"
+      class="table_info"
+      v-loading="loading"
+      :data="tableData"
+      :summary-method="getSummaries"
+      show-summary>
+      <el-table-column
+        label="标题"
+        prop="Title"
+        min-width="2">
+      </el-table-column>
+      <el-table-column
+        label="数量A"
+        prop="Num1"
+        min-width="2">
+      </el-table-column>
+      <el-table-column
+        label="数量B"
+        prop="Num2"
+        min-width="2">
+      </el-table-column>
+      <el-table-column
+        label="数量C"
+        prop="Num3"
+        min-width="2">
+      </el-table-column>
+      <el-table-column
+        label="数量D"
+        prop="Num4"
+        min-width="2">
+      </el-table-column>
+      <el-table-column
+        label="操作"
+        width="300">
+        <template >
+          <div style="line-height: 1; font-size: 0;">
+            <el-button size="mini" @click="look">查看</el-button>
+          </div>
         </template>
       </el-table-column>
-</el-table>
-
+    </el-table>
   </div>
 </template>
 
-<script>
-import * as echarts from "echarts";
-export default {
-  data() {
-    return {
-      projectList:[]
+<script setup>
+import { ref, reactive, nextTick, toRefs, onBeforeMount, onMounted, watchEffect, computed } from 'vue';
+import { useStore } from 'vuex';
+import { useRoute, useRouter } from 'vue-router';
+/**
+* 仓库
+*/
+const store = useStore();
+/**
+* 路由对象
+*/
+const route = useRoute();
+/**
+* 路由实例
+*/
+const router = useRouter();
+//console.log('1-开始创建组件-setup')
+/**
+* 数据部分
+*/
+const data = reactive({})
+
+// 合计行设置
+const showSummariesPosition = () => {
+  // 合计行显示在表头
+  const table = document.querySelector('.el-table');
+  const footer = document.querySelector('.el-table__footer-wrapper');
+  const body = document.querySelector('.el-table__body-wrapper');
+  table.removeChild(footer);
+  table.insertBefore(footer, body);
+
+  // 在合计行的最后一列添加按钮
+  const html = table.querySelectorAll('td')[5].querySelector('.cell');
+  html.innerHTML = "<el-button size='mini' style='padding: 7px 15px;font-size:12px;border-radius:3px;display: inline-block;display: inline-block;line-height: 1;white-space: nowrap;cursor: pointer;background: #fff;border: 1px solid #dcdfe6;color: #606266;-webkit-appearance: none;text-align: center;box-sizing: border-box;outline: 0;margin: 0;transition: .1s;font-weight: 500;'>查看</el-button>";
+  html.onclick = toAllDetails;
+};
+
+const tableData = [{
+        Title: '2016-05-02',
+        Num1: '8',
+        Num2: '15',
+        Num3: '10',
+        Num4: '9',
+        address: '10'
+    }, {
+        Title: '2016-05-04',
+        Num1: '8',
+        Num2: '15',
+        Num3: '10',
+        Num4: '9',
+        address: '10'
+    }, {
+        Title: '2016-05-01',
+        Num1: '8',
+        Num2: '15',
+        Num3: '10',
+        Num4: '9',
+        address: '10'
+    }, {
+        Title: '2016-05-03',
+        Num1: '8',
+        Num2: '15',
+        Num3: '10',
+        Num4: '9',
+        address: '10'
     }
-  },
-  mounted() {
-  },
-  methods: {
-    //柱状图数据处理和渲染
-    zhu () {
-      let that = this
-      let option = {}
-      console.time('柱状图绘制')
-      console.log(this.projectList)
-      console.log(this.functionList)
-      const chartDom = document.getElementById(props.ids)
-      const chart = echarts.init(chartDom)
-      //数据处理部分
-      //柱状图渲染部分
-      option = {
-              xAxis: {
-                type: 'category',
-                data: deptName,//横坐标名称集合
-              },
-              yAxis: {
-                type: 'value'
-              },
-              series: [
-                {
-                  data: deptUserNum,//纵坐标数据集
-                  type: 'bar',
-                  barWidth: 15,//柱子宽度
-                  itemStyle: {
-                    normal: {
-                      label: {
-                        show: true,		//开启数值显示
-                        position: 'top',	//在上方显示
-                        textStyle: {	    //数值样式
-                          color: 'black',
-                          fontSize: 16
-                        }
-                      },
-                      color: function (params) {
-                        // 定义颜色集合
-                        var colorList = [
-                          '#C6E579', '#B5C334', '#FCCE10', '#E87C25', '#27727B',
-                          '#FE8463', '#9BCA63', '#FAD860', '#F3A43B', '#60C0DD',
-                          '#D7504B', '#C1232B', '#F4E001', '#F0805A', '#26C0C0'
-                        ];
-                        //根据数据量返回颜色列表
-                        if (params) {
-                          if ($.inArray(params.name, that.Bgs) == -1) {
-                            return colorList[params.dataIndex]
-                          } else {
-                          //特殊情况，如果横坐标数据名在特殊集合中，统一使用黑色渲染
-                            return 'black'
-                          }
-                        }
-                      },
-                    }
-                  },
-                  markLine: { // 设置平均线
-                    data: [
-                      {
-                        type: "average",
-                        name: "我是平均值",
-                        color: "#baf"
-                      }
-                    ]
-                  },
-                }
-              ]
-            };
-            //渲染
-            myChart.setOption(option)
-      }
-  }
+]
+const getSummaries = ({columns, data}) => {
+    let sums = ['合计', '', 35]
+    return sums
 }
+const look = () => {
+
+}
+onBeforeMount(() => {
+  //console.log('2.组件挂载页面之前执行----onBeforeMount')
+})
+onMounted(() => {
+  nextTick(() => {
+    showSummariesPosition();
+  });
+});
+watchEffect(()=>{
+})
+// 使用toRefs解构
+// let { } = { ...toRefs(data) }
+defineExpose({
+  ...toRefs(data)
+})
+
 </script>
 <style scoped lang='less'>
 </style>
