@@ -66,7 +66,7 @@
             </div>
             <el-form-item  class="form-button" >
                 <el-button type="primary" @click="submit(data)" style="width: 80px;">下一步</el-button>
-                <el-button @click="reset" style="width: 80px;">返回</el-button>
+                <!-- <el-button @click="reset" style="width: 80px;">返回</el-button> -->
             </el-form-item>
         </el-form>
 

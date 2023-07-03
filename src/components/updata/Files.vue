@@ -2,7 +2,7 @@
  * @Author: Fleurxxx 984209872@qq.com
  * @Date: 2023-06-02 08:14:33
  * @LastEditors: Fleurxxx 984209872@qq.com
- * @LastEditTime: 2023-06-09 01:52:12
+ * @LastEditTime: 2023-07-02 11:24:25
  * @FilePath: \maintenance\src\components\Files.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -115,15 +115,18 @@ export default {
 </script>
 
 
-  <style>
-  .update-table-intro{
-    margin-top: 10px;
-  }
-  .code-high-line{
-    color: #2d8cf0;
-  }
-  .table{
-    border: 1px solid rgba(227, 220, 220, 0.6);
-    margin-top: 25px;
-  }
-  </style>
+<style scoped lang='less'>
+.update-table-intro{
+  margin-top: 10px;
+}
+.code-high-line{
+  color: #2d8cf0;
+}
+.table{
+  border: 1px solid rgba(227, 220, 220, 0.6);
+  margin-top: 25px;
+}
+/deep/ .el-table-v2__header-cell {
+  background-color: #eff3f8;
+}
+</style>

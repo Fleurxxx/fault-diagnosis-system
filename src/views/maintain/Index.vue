@@ -29,17 +29,23 @@
             label-width="auto"
             label-position="left"
           >
-            <el-form-item label="数据名称" prop="name" :required="true">
+            <el-form-item label="模型" prop="name" :required="true">
               <el-input v-model="form.name"></el-input>
             </el-form-item>
-            <el-form-item label="总大小" prop="size" :required="true">
-              <el-input v-model="form.size" type="number" placeholder="请输入数字" label-width="10px"></el-input>
+            <el-form-item label="测试数据集" prop="name" :required="true">
+              <el-input v-model="form.name"></el-input>
             </el-form-item>
             <el-form-item label="故障类型" prop="type" :required="true">
               <el-select v-model="form.type" placeholder="请选择">
                 <el-option v-for="item in nameList" :key="item" :label="item" :value="item">
                 </el-option>
               </el-select>
+            </el-form-item>
+            <el-form-item label="故障原因" prop="type" :required="true">
+              <el-input v-model="form.type" type="textarea" rows="4" placeholder="描述"></el-input>
+            </el-form-item>
+            <el-form-item label="解决方法" prop="type" :required="true">
+              <el-input v-model="form.type" type="textarea" rows="4" placeholder="描述"></el-input>
             </el-form-item>
             <el-form-item label="创建时间" prop="createTime" :required="true">
               <el-date-picker
@@ -201,7 +207,7 @@ const form = reactive({
     status: null,
   },
 );
-onMounted(() => { 
+onMounted(() => {
   const getRecords = (val) => {
     // const res = getRecordsApi(pageSize, currentPage, searchText);
   };

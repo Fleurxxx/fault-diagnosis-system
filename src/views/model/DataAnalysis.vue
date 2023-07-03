@@ -14,7 +14,7 @@
     </div>
     <div class="box-table">
       <el-button type="primary" @click="submit()" style="width: 80px;">下一步</el-button>
-      <!-- <el-button  @click="back()" style="width: 80px;">返回</el-button> -->
+      <el-button  @click="back()" style="width: 80px;">返回</el-button>
     </div>
     <div>
           <el-dialog
@@ -38,9 +38,6 @@
             <template #footer>
               <span class="dialog-footer">
                 <el-button @click="cancel()">取消</el-button>
-                <!-- <el-button type="primary" @click="data.centerDialogVisible = false">
-                  Confirm
-                </el-button> -->
               </span>
             </template>
           </el-dialog>
@@ -134,7 +131,8 @@ const submit =()=>{
 
 }
 const back =()=>{
-  this.$router.go(-1)
+  router.go(-1)
+  // window.history.go(-1)
 }
 
 onBeforeMount(() => {

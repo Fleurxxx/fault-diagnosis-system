@@ -2,7 +2,7 @@
  * @Author: Fleurxxx 984209872@qq.com
  * @Date: 2023-05-31 15:25:57
  * @LastEditors: Fleurxxx 984209872@qq.com
- * @LastEditTime: 2023-06-01 01:37:11
+ * @LastEditTime: 2023-07-01 23:33:01
  * @FilePath: \maintenance\src\views\home\Index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -11,11 +11,13 @@
   <div class="common-layout">
     <el-container>
       <el-header class="header">
-        <Header></Header>
+        <el-affix >
+          <Header></Header>
+        </el-affix>
       </el-header>
       <el-container>
         <el-aside width="260px">
-          <Aside></Aside>
+            <Aside></Aside>
         </el-aside>
         <el-main>
           <div class="bread">
@@ -31,6 +33,9 @@
             </el-breadcrumb>
           </div>
           <router-view class="main"></router-view>
+          <!-- <div>
+            <GlobalFooter :links="links" :copyright="copyright" />
+          </div> -->
         </el-main>
       </el-container>
     </el-container>
@@ -78,6 +83,29 @@ const getMatched = () => {
 }
 getMatched()
 
+//页脚
+const links = reactive([
+    {
+        key: '帮助',
+        title: '帮助',
+        href: 'https://www.iviewui.com',
+        blankTarget: true
+    },
+    {
+        key: 'github',
+        icon: 'logo-github',
+        href: 'https://github.com/view-design/ViewUIPlus',
+        blankTarget: true
+    },
+    {
+        key: '条款',
+        title: '条款',
+        href: '',
+        blankTarget: true
+    }
+])
+const copyright = ref('Copyright © 2023 起舞队')
+
 
 onBeforeMount(() => {
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
@@ -106,17 +134,23 @@ defineExpose({
         --el-header-padding: 0 0px;
     }
 .common-layout{
-        width: 100%;
-        height: 100%;
-        display: flex;//将容器的子元素垂直排列
-        flex-direction: column;
-        .container{
-        height: 100%
-        }
-        .bread{ //面包屑
-          position:relative;
-          padding-bottom:15px;
-        }
+      width: 100%;
+      height: 100%;
+      display: flex;//将容器的子元素垂直排列
+      flex-direction: column;
+      .container{
+      height: 100%
+      }
+      .bread{ //面包屑
+        position:relative;
+        padding-bottom:15px;
+      }
 
-  }
+}
+//使用Container布局容器时侧栏固定，header固定，main主体内容多时可以滑动
+.el-main {
+  // 181px为顶部header高度+底部footer高度
+  height: calc(100vh - 60px);
+  overflow-y: auto;
+}
 </style>
