@@ -121,9 +121,8 @@
         </el-row>
       </div>
     </div>
-    <div>
+    <div >
       <!-- 抽屉 -->
-
       <Drawer title="模型部署"
         v-model="drawer.value"
         width="620"
@@ -366,57 +365,31 @@ const drawer = reactive({
   }
 })
 
-//日期限制
-const pickerOptions = {
-  disabledDate(time) {
-    const date = new Date(time);
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    return !(month === 6 && (day === 10 || day === 18));
-  },
-  shortcuts: [
-    {
-      text: '选择可选日期',
-      onClick(picker) {
-        const now = new Date();
-        const selectableDate = new Date(now.getFullYear(), 5, 10); // 设置可选日期为 6 月 10 日
-        picker.$emit('pick', selectableDate);
-      }
-    },
-    {
-      text: '选择可选日期',
-      onClick(picker) {
-        const now = new Date();
-        const selectableDate = new Date(now.getFullYear(), 5, 18); // 设置可选日期为 6 月 18 日
-        picker.$emit('pick', selectableDate);
-      }
-    }
-  ]
-};
+
 
 
 // const data = reactive({})
 const data = [
     {
-        "id": "1",
+        "id": "112345",
         "name": "Roberta",
         "age": "39",
         "gender": "M"
     },
     {
-        "id": "2",
+        "id": "221433",
         "name": "Oliver",
         "age": "25",
         "gender": "M"
     },
     {
-        "id": "3",
+        "id": "33257879",
         "name": "Shayna",
         "age": "18",
         "gender": "F"
     },
     {
-        "id": "4",
+        "id": "4345785",
         "name": "Fechin",
         "age": "18",
         "gender": "M"
@@ -424,14 +397,22 @@ const data = [
 ]
 //查看csv
 const handleClick = () => {
-  Heiho(data,{ max: 100, title: '在线浏览.csv'});
+  // 添加表头信息
+  let keys = Object.keys(data[0]);
+  const header = {}
+  keys.forEach(item => {
+    header[item]= item
+  })
+  console.log(header)
+  data.unshift(header)
+  Heiho(data, { max: 100, title: '在线浏览.csv' });
+
 }
 //导出
 const exportCsv = () => {
   let keys = Object.keys(data[0]);
   console.log(keys)
   const header = {}
-  let j=0;
   keys.forEach(item => {
     header[item]= item
   })
@@ -474,6 +455,8 @@ onBeforeMount(() => {
 })
 onMounted(() => {
  //console.log('3.-组件挂载到页面之后执行-------onMounted')
+
+
 })
 watchEffect(()=>{
 })
@@ -640,5 +623,8 @@ defineExpose({
 .history-data{
   margin-top:30px;
   margin-left: 120px
+}
+/deep/ #heiho-view {
+  z-index: 2000;
 }
 </style>
