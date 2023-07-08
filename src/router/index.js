@@ -1,8 +1,16 @@
 /*
  * @Author: Fleurxxx 984209872@qq.com
+ * @Date: 2023-06-01 20:28:39
+ * @LastEditors: Fleurxxx 984209872@qq.com
+ * @LastEditTime: 2023-07-07 22:59:41
+ * @FilePath: \maintenance\src\router\index.js
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
+/*
+ * @Author: Fleurxxx 984209872@qq.com
  * @Date: 2023-02-11 05:34:11
  * @LastEditors: Fleurxxx 984209872@qq.com
- * @LastEditTime: 2023-06-07 17:26:07
+ * @LastEditTime: 2023-07-02 11:14:15
  * @FilePath: \oss-backstage\src\router\index.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -13,7 +21,7 @@ import { start, close } from "../utils/nprogress";
 
 const routes = [
     {
-        path: '/',
+        path: '/h',
         redirect:'/home',
         component: () => import('../views/home/Index.vue'),
         children:[
@@ -26,26 +34,10 @@ const routes = [
                 },
             },{ //------- 模型训练 -------//
                 path:"/model",   //在线训练
-                redirect:'/model/upfile',
                 component: ()=>import('../views/model/OnlineTraining.vue'),
                 meta: {
                     title: '在线训练'
-                },
-                children:[
-                    {
-                        path:"/model/upfile",  //上传
-                        component: ()=>import('../components/updata/Files.vue'),
-                        meta: {
-                            title: '模型信息'
-                        },
-                    },{
-                        path:"/model/paste",  //手动上传
-                        component: ()=>import('../components/updata/Hand.vue'),
-                        meta: {
-                            title: '模型信息'
-                        },
-                    }
-                ]
+                }
             },{
                 path:"/analysis",  //数据分析
                 component: ()=>import('../views/model/DataAnalysis.vue'),
@@ -65,25 +57,55 @@ const routes = [
                     title: '模型管理'
                 },
             },{
-              path:"/info",  //训练完成
-              component: ()=>import('../views/model/Info.vue'),
+              path:"/info",  //模型详情
+              redirect:'/info/modelInfo',
               meta: {
-                  title: '在线训练'
+                  title: '模型详情'
               },
+              children:[
+                  {
+                      path:"modelInfo",
+                      component: ()=>import('../views/model/Info.vue'),
+                  },{
+                    path:"update",
+                    component: ()=>import('../views/model/VersionUpdates.vue'),
+                    meta: {
+                        title: '模型更新'
+                    },
+                }
+              ]
           },{ //------- 故障诊断 -------//
-                path:"/diagnose",
-                component: ()=>import('../views/diagnose/OnlineDiagnose.vue'),
-                meta: {
-                    title: '故障诊断'
-                },
-            },{ //------- 故障维修 -------//
+              path:"/diagnose",
+              component: ()=>import('../views/diagnose/OnlineDiagnose.vue'),
+              meta: {
+                  title: '在线诊断'
+              },
+          },{
+            path:"/fault",
+            component: ()=>import('../views/diagnose/FaultAnalysis.vue'),
+            meta: {
+                title: '在线诊断'
+            },
+          },{
+            path:"/fini",
+            component: ()=>import('../views/diagnose/Finish.vue'),
+            meta: {
+                title: '在线诊断'
+            },
+          },{
+            path:"/history",
+            component: ()=>import('../views/diagnose/Record.vue'),
+            meta: {
+                title: '历史记录'
+            },
+          },{ //------- 故障维修 -------//
                 path:"/maintain",
                 component: ()=>import('../views/maintain/Index.vue'),
                 meta: {
                     title: '故障维修'
                 },
             },{ //------- 故障维修中心 -------//
-                path:"/center",  
+                path:"/center",
                 component: ()=>import('../views/maintain/Center.vue'),
                 meta: {
                     title: '维修中心'
@@ -111,18 +133,48 @@ const routes = [
                   title: '代码编辑器'
               },
           },{
-            path:"/txt",  //基于codemirror实现的代码编辑器
+            path:"/txt",
             component: ()=>import('../test/txt1.vue'),
             meta: {
                 title: '代码编辑器'
             }
-        },{
-          path:"/table",  //基于codemirror实现的代码编辑器
-          component: ()=>import('../components/table/Table.vue'),
-          meta: {
-              title: '代码编辑器'
-          },
-        }
+          },{
+            path:"/txt2",
+            component: ()=>import('../test/txt2.vue'),
+            meta: {
+                title: '代码编辑器'
+            }
+          },{
+            path:"/txt3",
+            component: ()=>import('../test/txt3.vue'),
+            meta: {
+                title: '代码编辑器'
+            }
+          },{
+            path:"/csv",
+            component: ()=>import('../test/pushcsv.vue'),
+            meta: {
+                title: '代码编辑器'
+            }
+          },{
+            path:"/zhuzi",
+            component: ()=>import('../components/data/Column.vue'),
+            meta: {
+                title: '代码编辑器'
+            }
+          },{
+            path:"/zhu",
+            component: ()=>import('../components/chart/BuildEletricCharts.vue'),
+            meta: {
+                title: '代码编辑器'
+            }
+          },{
+            path:"/table",  //基于codemirror实现的代码编辑器
+            component: ()=>import('../components/table/Table.vue'),
+            meta: {
+                title: '代码编辑器'
+            },
+          }
             // {
             //     path:"model",
             //     redirect:'/model/training',
@@ -157,6 +209,12 @@ const routes = [
     },{
         path:"/timeline",
         component: ()=>import('../components/MyTimeLine.vue'),
+    },{
+      path:"/",
+      component: ()=>import('../views/login/Login.vue'),
+    },{
+      path:"/timeline",
+      component: ()=>import('../views/login/Register.vue'),
     }
 ]
 
@@ -165,7 +223,7 @@ export const router = createRouter({
   routes
 })
 
- 
+
 
 router.beforeEach((to, from, next) => {
   start();

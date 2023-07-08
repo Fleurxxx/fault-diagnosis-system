@@ -9,7 +9,7 @@
 <template>
     <div class="header-container">
         <div>
-            <img class="Logo" src="../assets/image/Logo.png" alt="">
+            <img class="Logo" src="../assets/image/logo.jpg" alt="">
         </div>
         <div class="l-content">
             <div class="h-6" />
@@ -19,7 +19,7 @@
             <div class="flex-grow" />
             <el-dropdown @command="handleCommand">
                     <span class="el-dropdown-link">
-                          <img class="user" src="../assets/image/tx.png">
+                          <img class="user" src="../assets/icon/head/羊1.png">
                     </span>
                 <template v-slot:dropdown>
                     <el-dropdown-menu >
@@ -79,7 +79,7 @@ onMounted(() => {
 watchEffect(()=>{
 })
 // 使用toRefs解构
-// let { } = { ...toRefs(data) } 
+// let { } = { ...toRefs(data) }
 defineExpose({
   ...toRefs(data)
 })
@@ -87,7 +87,7 @@ defineExpose({
 </script>
 <style scoped lang='less'>
 
-    // .header-container{ 
+    // .header-container{
     //     padding: 0 0px;
     // }
     /deep/.el-menu{
@@ -108,9 +108,9 @@ defineExpose({
         justify-content: space-between;
         align-items: center;
         .Logo{
-            width:200px;
-            padding-top: 10px;
-            padding-left: 20px;
+            width:250px;
+            padding-top: 0px;
+            padding-left: 15px;
         }
         .l-content{
             position: relative;

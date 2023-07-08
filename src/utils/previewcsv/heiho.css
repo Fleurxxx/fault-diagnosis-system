@@ -1,0 +1,76 @@
+/**
+* Heihō: simple spreadsheet viewer
+* @link https://github.com/kktsvetkov/heiho
+*/
+
+body.heiho-body {overflow:hidden}
+
+/*
+* #heiho-view
+*  |
+*  + #heiho-view-header
+*  |  |
+*  |  + #heiho-view-close
+*  |  |
+*  |  + #heiho-view-title
+*  |
+*  + #heiho-view-scroll
+*  |  |
+*  |  + #heiho-view-table
+*  |     |
+*  |     + #heiho-view-thead
+*  |     |	|
+*  |     |	+ th
+*  |     |	+ ...
+*  |     |	+ th
+*  |     |
+*  |     + #heiho-view-tbody
+*  |       |
+*  |       + tr
+*  |       |  |
+*  |       |  td
+*  |       |  ...
+*  |       |  td
+*  |       |
+*  |       + ...
+*  |       + tr
+*  |
+*  + #heiho-view-truncated
+*/
+
+#heiho-view {width:80%;height:80%;position: fixed; top: 0; left: 0; right: 0; bottom: 0;margin:auto; background: black;z-index: 99999999999;}
+
+#heiho-view-header {background:#333; border-bottom:solid 3px black; height: 36px; overflow: hidden}
+
+#heiho-view-title {color: white; font: normal 13px arial; line-height: 2.85em; padding-left: .75em}
+#heiho-view-close {
+  float: right;
+  background: #222;
+  height: 36px;
+  width: 36px;
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+}
+/* #heiho-view-close {float: right; height: 36px; width: 36px; display: inline-block; text-align: center; vertical-align: middle;margin-top: -26px;} */
+#heiho-view-close:before {content: "×"; color: #ccc; display: inline-block; margin-top: 8px;}
+#heiho-view-close:hover {cursor: pointer;  color: white}
+
+#heiho-view-scroll {overflow:auto}
+
+#heiho-view-table {background:white; color:black; font: 12px arial; border-collapse: collapse;}
+#heiho-view-table.width100 {width:100%}
+
+#heiho-view-thead th {background: #444; color: white; border: solid 1px black; padding: 4px; display: none;}
+#heiho-view-thead th:first-child {background: #111}
+
+#heiho-view-tbody td {background: white; color: #555; padding: 2px 4px; border: solid 1px #ccc; vertical-align: top; white-space: nowrap; overflow: hidden; min-width: 1vw}
+#heiho-view-tbody td:first-child {display:none;background: #444; color: #bbb; width: 1%; min-width:25px; border: solid 1px black; text-align:center; vertical-align: middle; font: normal 10px arial;}
+
+#heiho-view-tbody tr:hover td {background:lightyellow}
+#heiho-view-tbody tr:hover td:hover {background:khaki}
+#heiho-view-tbody tr:hover td:first-child {background:orange; color:#111}
+
+#heiho-view-tbody tr.heiho-header td {font-weight:bold; white-space: nowrap}
+
+#heiho-view-truncated {color:white; padding: .45em; background:#844; font: normal 11px arial;}
