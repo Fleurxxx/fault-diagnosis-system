@@ -18,7 +18,7 @@
         </Space>
       </div>
     </div>
-    <div class="hint">
+    <div class="hint"  v-if="wholeData.cardState!==1">
       <div class="reminder">
         <div class="rectangle">
           <div class="left-side">
@@ -47,10 +47,10 @@
         </div>
       </div>
     </div>
-    <div class="hint">
+    <div class="hint"  v-if="wholeData.cardState===1">
       <div class="hint-reminder">
         <div class="hint-left">
-          <img src="../../assets/icon/请先选择.png" class="hint-img"/>
+          <img src="../../assets/icon/暂无数据.png" class="hint-img"/>
         </div>
         <div class="hint-right">
           <div class="hint-content">
@@ -58,9 +58,41 @@
             <div class="hint-progress">
               <MineSteps v-bind:steps="steps"/>
             </div>
-            <p>选择其中一个沙盒服务进行部署，</p>
             <p>模型部署是为开发者提供应用化功能，来提供对新数据的预测和决策支持。</p>
             <a @click="drawer.value = true">立即部署</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="hint" v-else-if="wholeData.cardState===2">
+      <div class="hint-reminder">
+        <div class="hint-left">
+          <img src="../../assets/icon/请先选择.png" class="hint-img"/>
+        </div>
+        <div class="hint-right">
+          <div class="hint-content">
+            <p class="title">选择部署模型</p>
+            <div class="hint-progress">
+              <MineSteps v-bind:steps="steps"/>
+            </div>
+            <p>选择其中一个沙盒服务进行部署。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="hint"  v-else>
+      <div class="hint-reminder">
+        <div class="hint-left">
+          <img src="../../assets/icon/OK.png" class="hint-img"/>
+        </div>
+        <div class="hint-right">
+          <div class="hint-content">
+            <p class="title">已部署</p>
+            <div class="hint-progress">
+              <MineSteps v-bind:steps="steps"/>
+            </div>
+            <p>在线数据测试是在已部署的应用程序中使用实时数据进行测试的过程。</p>
+            <a >立即诊断</a>
           </div>
         </div>
       </div>
@@ -114,7 +146,7 @@
               <template v-slot="scope">
                 <el-button link type="primary" class="txt-color" @click="handleCheck(scope.row)">编辑</el-button>
                 <el-button link type="primary" class="txt-color" @click="handleDelete(scope.row)">删除</el-button>
-                <el-button link type="primary" class="txt-color" @click="handleDelete(scope.row)">正式部署</el-button>
+                <el-button link type="primary" class="txt-color" @click="handleDeployment(scope.row)">正式部署</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -192,7 +224,7 @@
         <Divider />
         <div class="demo-drawer-footer">
             <Button style="margin-right: 8px" @click="exportCsv">下载数据</Button>
-            <Button type="primary" @click="drawer.value = false">提交部署</Button>
+            <Button type="primary" @click="submit">提交部署</Button>
         </div>
       </Drawer>
     </div>
@@ -225,7 +257,9 @@ const router = useRouter();
 /**
 * 数据部分
 */
-
+const wholeData = reactive({
+  cardState:1,
+})
 const status = ref(0)
 const statusText = computed(() => {
   return status.value === 1 ? '运行' : '暂停';
@@ -234,12 +268,20 @@ const statusText = computed(() => {
 const StartServer = () =>{
   if(status.value === 1){
     status.value=0
+    steps[0].status = 'uncompleted'
+    steps[1].status = 'in-progress'
+    steps[2].status = 'uncompleted'
+    wholeData.cardState = 2;
     ElMessage({
     message: '暂停成功',
     type: 'success',
   })
   }else{
     status.value=1
+    steps[0].status = 'uncompleted'
+    steps[1].status = 'uncompleted'
+    steps[2].status = 'in-progress'
+    wholeData.cardState = 3;
     ElMessage({
     message: '启动成功',
     type: 'success',
@@ -249,6 +291,7 @@ const StartServer = () =>{
 
 }
 
+//删除运行
 const DeleteServer = () =>{
   ElMessage({
     message: '删除成功',
@@ -261,12 +304,12 @@ const steps = reactive([
  {
    title: '部署设置',
    description: '',
-   status: 'uncompleted',
+   status: 'in-progress',
  },
  {
    title: '选择部署',
    description: '',
-   status: 'in-progress',
+   status: 'uncompleted',
  },
  {
    title: '数据诊断',
@@ -319,6 +362,7 @@ const fixData = [
   }
 ];
 
+//复制链接
 const copyURL = (url) =>{
   var input = document.createElement("input"); // 创建input对象
   input.value = url; // 设置复制内容
@@ -336,6 +380,31 @@ const copyURL = (url) =>{
 const targetTime1 = new Date().getTime() + 3900000
   const  handleEnd = () => {
   this.$Message.info('倒计时结束');
+}
+
+const handleCheck = () =>{
+  ElMessage({
+    message: '修改成功',
+    type: 'success',
+  })
+}
+
+const handleDelete = () =>{
+  ElMessage({
+    message: '删除成功',
+    type: 'success',
+  })
+}
+
+const handleDeployment = () =>{
+  steps[0].status = 'uncompleted'
+  steps[1].status = 'uncompleted'
+  steps[2].status = 'in-progress'
+  wholeData.cardState = 3;
+  ElMessage({
+    message: '部署成功',
+    type: 'success',
+  })
 }
 
 //抽屉
@@ -367,8 +436,6 @@ const drawer = reactive({
 
 
 
-
-// const data = reactive({})
 const data = [
     {
         "id": "112345",
@@ -410,6 +477,7 @@ const handleClick = () => {
 }
 //导出
 const exportCsv = () => {
+  console.log(data)
   let keys = Object.keys(data[0]);
   console.log(keys)
   const header = {}
@@ -450,8 +518,18 @@ const exportCsv = () => {
   }
 }
 
+
+const submit = () =>{
+  steps[0].status = 'uncompleted'
+  steps[1].status = 'in-progress'
+  steps[2].status = 'uncompleted'
+  wholeData.cardState = 2;
+  drawer.value = false
+}
+
 onBeforeMount(() => {
  //console.log('2.组件挂载页面之前执行----onBeforeMount')
+ console.log(wholeData.cardState)
 })
 onMounted(() => {
  //console.log('3.-组件挂载到页面之后执行-------onMounted')

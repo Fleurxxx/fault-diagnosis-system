@@ -2,14 +2,12 @@
   <div class="box">
 
     <div class="box-title">
-      <p class="title">在线训练</p>
+      <p class="title">模型更新</p>
     </div>
     <div class="box-reminder">
       <div class="reminder">
         <p class="title">操作指导</p>
-        <p>1. 填写模型信息并上传数据集</p>
-        <p>2. 进行在线数据分析，若数据异常请及时进行数据矫正。</p>
-        <p>3. 模型训练完成，下载训练模型。</p>
+        <p>同先前步骤，重新上传数据集对模型进行训练优化。</p>
       </div>
     </div>
     <div class="box-form">
@@ -21,23 +19,6 @@
             :model="data"
             class="con-form"
         >
-            <!-- <el-form-item label="登录名称" prop="name">
-                <el-input v-model="data.loginame" style="width: 350px;">
-                  <template #suffix>s
-                    <span style="border: none;">@8475738355324.cloudcan.com</span>
-                  </template>
-                </el-input>
-            </el-form-item>
-            <el-form-item label="标签"  prop="">
-              <p>未绑定标签</p>{{"\xa0\xa0"}}
-              <el-icon  @click="edit" style="cursor:pointer;"><EditPen /></el-icon>
-            </el-form-item>
-            <div class="mb-2 flex items-center text-sm ">
-              <el-radio-group v-model="radio" class="ml-4 radio-container">
-                <el-radio label="1" size="large">自动生成密码</el-radio>
-                <el-radio label="2" size="large">自定义密码</el-radio>
-              </el-radio-group>
-            </div> -->
             <el-form-item label="模型名称" prop="name" class="form-input" :required="true">
                 <el-input class="input"
                           v-model="data.name"
@@ -56,18 +37,9 @@
                           show-word-limit
                           type="textarea"
                         />
-            </el-form-item><br/>
-            <div style="margin: 10px 0" />
-            <el-form-item label="隐私设置"  prop="radio" class="form-input form-select" >
-                <div class="mb-2 flex items-center text-sm">
-                  <el-radio-group v-model="data.radio" class="ml-4">
-                    <el-radio label="0" size="large">私密</el-radio>
-                    <el-radio label="1" size="large">公开</el-radio>
-                  </el-radio-group>
-                </div>
-            </el-form-item><br/>
+            </el-form-item>
             <div style="height: 15px;" />
-            <el-form-item label="数据上传"  class="form-input" :required="true" style="margin-left:-500px">
+            <el-form-item label="模型介绍"  class="form-input" :required="true" style="margin-left:-500px">
               <el-button  round  :class="button1Class" @click="change(1)">文件上传</el-button>
               <el-button round :class="button2Class"  @click="change(2)">手动上传</el-button>
             </el-form-item><br/>
@@ -90,11 +62,12 @@
 import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed } from 'vue';
 import { useStore } from 'vuex';
 import  {Message} from 'view-ui-plus'
-import { ElMessageBox,ElMessage,ElNotification } from 'element-plus';
+import { ElMessageBox,ElMessage } from 'element-plus';
 import { useRoute, useRouter } from 'vue-router';
 import api from "../../api/api";
 import Files from '../../components/updata/Files.vue'
 import Hand from '../../components/updata/Hand.vue'
+import modelstore from "../../store/model.js";
 
 /**
 * 仓库
@@ -112,8 +85,8 @@ const router = useRouter();
 /**
 * 数据部分
 */
+const modelStore = modelstore();
 const data = reactive({
-  radio:"0",
   name:'',
   introduce:'',
   centerDialogVisible : false,
@@ -168,41 +141,26 @@ let fromData = reactive(null)
 let submit = async(fromData) =>{
   await fromData.validate((valid,fields) => {
     if (valid) {
-      console.log(data.radio)
-      if(data.radio === "1"){
-        data.isPublic = true
-      }else{
-        data.isPublic = false
-      }
       let param = {
+        modelId:data.modelId,
         name: data.name,
         describe: data.introduce,
         fileName: data.fileInfo.fileName,
         url: data.fileInfo.url,
         size: data.fileInfo.size,
-        isPublic: data.isPublic,
       }
       // ElMessage.success("验证成功")
       console.log(param)
-      if(param.url === undefined){
-        ElNotification({
-          title: '尚未上传数据集',
-          message: '请上传数据集后再进行下一步此操作',
-          type: 'warning',
-        })
+      api.train.submitForm(param).then((res)=>{
+      console.log(res)
+      if(res.code===200){
+        router.push({ path: "/analysis" });
       }else{
-        api.train.submitForm(param).then((res)=>{
-          console.log(res)
-          if(res.code===200){
-            router.push({ path: "/analysis" });
-          }else{
-            ElMessage.error(res.message)
-          }
-        }).catch((err)=>{
-        console.log(err);
-        })
+        ElMessage.error(res.message)
       }
-
+      }).catch((err)=>{
+      console.log(err);
+      })
     }
   });
 
@@ -213,8 +171,9 @@ onBeforeMount(() => {
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
 onMounted(() => {
-  //console.log('3.-组件挂载到页面之后执行-------onMounted')
-
+  data.modelId = modelStore.id;
+  data.name = modelStore.name;
+  data.introduce = modelStore.describe;
 })
 watchEffect(()=>{
 })
@@ -266,9 +225,6 @@ defineExpose({
       .input{
         width: 690px;
       }
-    }
-    .form-select{
-      margin-left: -550px;
     }
     .form-update{
       padding: 10px 40px 10px 40px;

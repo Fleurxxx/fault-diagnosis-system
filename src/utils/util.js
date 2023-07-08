@@ -2,6 +2,7 @@ import Cookies from 'js-cookie'
 // cookie保存的天数
 import config from '../config'
 import { forEach, hasOneOf, objEqual } from '../utils/tools'
+import { read } from '../utils/excel'
 const { title, cookieExpires, useI18n } = config
 
 export const TOKEN_KEY = 'token'
@@ -251,6 +252,7 @@ export const doCustomTimes = (times, callback) => {
 //   })
 // }
 
+import XLSX from 'xlsx';
 import Papa from 'papaparse';
 export const getArrayFromFile = (file) => {
   let nameSplit = file.name.split('.');
@@ -270,12 +272,13 @@ export const getArrayFromFile = (file) => {
       }).map(item => {
         return item[0].split(',')
       })
-      // console.log(arr)
-      if (format === 'csv') {
+      // console.log(format)
+      if (format === 'csv' ) {
         Papa.parse(data, {
           delimiter: '\t', // 使用制表符作为字段分隔符
           complete: function (results) {
             arr = results.data;
+            console.log(arr)
             resolve(arr);
           },
           error: function (error) {
@@ -283,10 +286,7 @@ export const getArrayFromFile = (file) => {
           },
         });
       } else if (format === 'xlsx') {
-        // 处理XLSX文件的逻辑，这里需要使用相应的库或工具进行解析
-        // 可以考虑使用第三方库，如'xlsx'、'exceljs'等
-        // 根据具体库的使用方式进行解析，并将结果赋值给arr
-        reject(new Error('[Format Error]: 你上传的不是Csv或者Xlsx文件'));
+        resolve(data);
       } else {
         reject(new Error('[Format Error]: 你上传的不是Csv或者Xlsx文件'));
       }

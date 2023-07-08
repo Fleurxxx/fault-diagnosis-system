@@ -1,11 +1,21 @@
+/*
+ * @Author: Fleurxxx 984209872@qq.com
+ * @Date: 2023-06-01 20:28:39
+ * @LastEditors: Fleurxxx 984209872@qq.com
+ * @LastEditTime: 2023-07-05 22:54:47
+ * @FilePath: \maintenance\src\api\api.js
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 import http from './axios.js'
 
 let apiFun = {
   //自定义对象，命名隔离，消除重名影响
   user:{},
-  train:{},
-  verify:{},
-  repair:{},
+  model:{}, //模型
+  train:{}, //训练
+  diagnose:{}, //诊断
+  repair:{}, //维修
+
   test:{},
 };
 
@@ -47,6 +57,44 @@ apiFun.user.enroll = params => {
   return http.post('/user/register',params)
 }
 
+
+/**
+ * 模型接口
+ * */
+//获取模型列表
+apiFun.model.getModels = (params) =>{
+  return http.get('/model/getModels?key='+params.key+'&current='+params.current+'&size='+params.size)
+}
+
+//获取模型详情
+apiFun.model.getModel = (id) =>{
+  return http.get('/model/getModel?id='+id)
+}
+
+//获取模型所有版本
+apiFun.model.getVersions = (id) =>{
+  return http.get('/model/getVersions?modelId='+id)
+}
+
+//修改模型信息
+apiFun.model.submitInfo = (params) =>{
+  return http.get('/model/upload',params)
+}
+
+//上传模型
+apiFun.train.submitForm = (params) =>{
+  return http.post('/model/addModel',params)
+}
+
+//下载文件
+apiFun.train.download = (fileUrl,fileName) =>{
+  return http.get('/file/download?fileUrl='+fileUrl+'&fileName='+fileName)
+}
+
+//上传模型
+apiFun.train.submitForm = (params) =>{
+  return http.post('/model/addModel',params)
+}
 
 // //删除一个授权策略
 // apiFun.bucket.authorize.delete =(bucketName,authorizeId) =>{

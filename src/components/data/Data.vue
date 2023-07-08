@@ -2,7 +2,7 @@
  * @Author: Fleurxxx 984209872@qq.com
  * @Date: 2023-06-02 08:14:33
  * @LastEditors: Fleurxxx 984209872@qq.com
- * @LastEditTime: 2023-07-02 11:41:20
+ * @LastEditTime: 2023-07-08 01:32:56
  * @FilePath: \maintenance\src\components\Files.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -16,7 +16,7 @@
       fixed
       :columns="columns"
       :data="tableData"
-      :width="900"
+      :width="1135"
       :height="550"
     />
   </div>

@@ -111,6 +111,7 @@ import Net from "vanta/src/vanta.net";
 import { ElMessage } from "element-plus";
 import apiFun from "../../api/api";
 import jwt_decode from "jwt-decode"; //解析token
+import { localSet } from '../../api/index'
 
 export default {
   data() {
@@ -189,7 +190,8 @@ export default {
         .then((res) => {
           console.log(res);
           let token = res.data;
-          localStorage.setItem("token", token);
+          // window.localStorage.setItem("token", token);
+          localSet("token", token);
           //解析token
           const decode = jwt_decode(token);
           console.log("token解析内容", decode); //decode是一个对象
@@ -200,13 +202,15 @@ export default {
 
           if(res.code === 200){
             ElMessage.success("登录成功");
-            this.$router.push('/e')
+            this.$router.push('/h')
             // window.location.href = 'http://localhost:8080/#/home' //跳转到主页面管理界面
           }else{
             console.log(res.message)
             ElMessage.error("登录失败");
             // router.push({ path: "/home" }); //跳转到主页面
           }
+        }).catch((err)=>{
+          console.log(err);
         });
       }
     },

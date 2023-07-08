@@ -2,7 +2,7 @@
  * @Author: Fleurxxx 984209872@qq.com
  * @Date: 2023-05-30 20:36:57
  * @LastEditors: Fleurxxx 984209872@qq.com
- * @LastEditTime: 2023-06-18 10:14:07
+ * @LastEditTime: 2023-07-07 22:44:17
  * @FilePath: \maintenance\src\main.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -47,6 +47,13 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import Driver from 'driver.js'
 import 'driver.js/dist/driver.min.css'
 
+import JsonViewer from 'vue-json-viewer'
+
+
+//Driver页面分步引导
+import Driver from 'driver.js'
+import 'driver.js/dist/driver.min.css'
+
 
 const app = createApp(App)
 
@@ -70,5 +77,6 @@ app.use(router)
     .use(state)
     .use(ElementPlus, { locale: zhCn })
     .use(VueCodeMirror)
+    .use(JsonViewer)
     .use(ViewUIPlus)
     .mount('#app')

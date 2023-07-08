@@ -66,7 +66,8 @@
               <el-button round :class="button2Class"  @click="change(2)">手动上传</el-button>
             </el-form-item><br/>
             <div class="form-update">
-              <router-view ></router-view>
+              <Files v-if="data.cutNum===1" />
+              <hand v-else />
             </div>
             <el-form-item  class="form-button" >
                 <el-button type="primary" @click="submit(data)" style="width: 80px;">下一步</el-button>
@@ -85,6 +86,8 @@ import  {Message} from 'view-ui-plus'
 import { ElMessageBox,ElMessage } from 'element-plus';
 import { useRoute, useRouter } from 'vue-router';
 import Steps from '../../components/Steps.vue'
+import Files from '../../components/updata/Files.vue'
+import Hand from '../../components/updata/Hand.vue'
 
 /**
 * 仓库
@@ -106,6 +109,7 @@ const data = reactive({
   name:'',
   introduce:'',
   centerDialogVisible : false,
+  cutNum:1,
 
 })
 const button1Class = ref('edit');
@@ -129,18 +133,16 @@ const steps = reactive([
   },
 ]);
 
-let change = (buttonNumber) =>{
-  if (buttonNumber === 1) {
+let change = (num) =>{
+  data.cutNum = num
+  if (num === 1) {
     button1Class.value = 'edit';
     button2Class.value = 'white-color';
-    router.push({ path: "/diagnose/upfile" });
-  } else if (buttonNumber === 2) {
+  } else if (num === 2) {
     button1Class.value = 'white-color';
     button2Class.value = 'edit';
-    router.push({ path: "/diagnose/paste" });
   }
 }
-
 
 
 

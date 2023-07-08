@@ -1,153 +1,115 @@
 <template>
-  <el-table-v2
-    fixed
-    :columns="fixedColumns"
-    :data="data"
-    :width="1200"
-    :height="600"
-  >
-  <!-- <template #overlay>
-      <div
-        class="el-loading-mask"
-        style="display: flex; align-items: center; justify-content: center"
-      >
-        <el-icon class="is-loading" color="var(--el-color-primary)" :size="26">
-          <loading-icon />
-        </el-icon>
-      </div>
-    </template> -->
-  </el-table-v2>
+  <div id="main" class="pic"></div>
 </template>
 
-<script>
-import { Loading as LoadingIcon } from '@element-plus/icons-vue'
-import { ref, h } from 'vue';
-import {
-  ElButton,
-  ElCheckbox,
-  ElIcon,
-  ElPopover,
-  TableV2FixedDir,
-} from 'element-plus';
-import { Filter } from '@element-plus/icons-vue';
-import { column } from 'element-plus/es/components/table-v2/src/common';
+<script setup>
+import * as echarts from 'echarts';
 
-const generateColumns = (length = 40, prefix = 'column-', props = {}) => {
-  return Array.from({ length }).map((_, columnIndex) => ({
-    ...props,
-    key: `${prefix}${columnIndex}`,
-    dataKey: `${prefix}${columnIndex}`,
-    title: `Column ${columnIndex}`,
-    width: 150,
-  }));
-};
+import { ref, onMounted } from 'vue';
 
+const chartDom = ref(null);
+const myChart = ref(null);
+const option = ref(null);
 
+onMounted(() => {
+  chartDom.value = document.getElementById('main');
+  myChart.value = echarts.init(chartDom.value);
 
-const generateData = (columns, length = 200, prefix = 'row-') => {
-  return Array.from({ length }).map((_, rowIndex) => {
-    return columns.reduce((rowData, column, columnIndex) => {
-      rowData[column.dataKey] = `Row ${rowIndex} - Col ${columnIndex}`;
-      return rowData;
-    }, {
-      id: `${prefix}${rowIndex}`,
-      parentId: null,
-    });
-  });
-};
+  setTimeout(() => {
+    option.value = {
+      legend: {},
+      tooltip: {
+        trigger: 'axis',
+        showContent: false
+      },
+      dataset: {
+        source: [
+          ['product', '2023-5-13', '2023-5-18', '2023-5-20', '2023-5-23', '2023-5-26', '2023-5-28','2023-6-2'],
+          ['故障0', 56.5, 82.1, 88.7, 70.1, 53.4, 85.1, 38.5],
+          ['故障1', 51.1, 51.4, 55.1, 53.3, 73.8, 68.7, 42.4],
+          ['故障2', 40.1, 62.2, 69.5, 36.4, 45.2, 32.5, 57.2],
+          ['故障3', 25.2, 37.1, 41.2, 18.2, 33.9, 49.1, 37.1],
+          ['故障4', 10.7, 53.6, 34.3, 43.2, 55.1, 28.4, 37.9],
+          ['故障5', 18.4, 37.1, 41.2, 18, 33.9, 49.1,37.1],
+        ]
+      },
+      xAxis: { type: 'category' },
+      yAxis: { gridIndex: 0 },
+      grid: { top: '55%' },
+      series: [
+        {
+          type: 'line',
+          smooth: true,
+          seriesLayoutBy: 'row',
+          emphasis: { focus: 'series' }
+        },
+        {
+          type: 'line',
+          smooth: true,
+          seriesLayoutBy: 'row',
+          emphasis: { focus: 'series' }
+        },
+        {
+          type: 'line',
+          smooth: true,
+          seriesLayoutBy: 'row',
+          emphasis: { focus: 'series' }
+        },
+        {
+          type: 'line',
+          smooth: true,
+          seriesLayoutBy: 'row',
+          emphasis: { focus: 'series' }
+        },
+        {
+          type: 'pie',
+          id: 'pie',
+          radius: '30%',
+          center: ['50%', '25%'],
+          emphasis: {
+            focus: 'self'
+          },
+          label: {
+            formatter: '{b}: {@2012} ({d}%)'
+          },
+          encode: {
+            itemName: 'product',
+            value: '2012',
+            tooltip: '2012'
+          }
+        }
+      ]
+    };
 
- console.log(generateColumns(20))
- console.log(typeof generateColumns(20))
- console.log(generateData(generateColumns(20), 1000))
-export default {
-  setup() {
-    const columns = generateColumns(20);
-    const data = ref(generateData(columns, 1000));
-
-    const shouldFilter = ref(false);
-    const popoverRef = ref();
-
-    //按钮
-    const onFilter = () => {
-      // console.log(data)
-      // console.log(columns)
-      popoverRef.value.hide();
-      if (shouldFilter.value) {
-        data.value = generateData(columns, 100, 'filtered-');
-      } else {
-        data.value = generateData(columns, 200);
+    myChart.value.on('updateAxisPointer', (event) => {
+      const xAxisInfo = event.axesInfo[0];
+      if (xAxisInfo) {
+        const dimension = xAxisInfo.value + 1;
+        myChart.value.setOption({
+          series: {
+            id: 'pie',
+            label: {
+              formatter: '{b}: {@[' + dimension + ']} ({d}%)'
+            },
+            encode: {
+              value: dimension,
+              tooltip: dimension
+            }
+          }
+        });
       }
-    };
-
-    //按钮
-    const onReset = () => {
-      shouldFilter.value = false;
-      console.log(fixedColumns)
-      onFilter();
-
-    };
-
-    // 定义表头的headerCellRenderer方法 （表头第一个按钮
-    columns[0].headerCellRenderer = (props) => {
-      return (
-        h('div', { class: 'flex items-center justify-center' }, [
-          h('span', { class: 'mr-2 text-xs' }, props.column.title),
-          h(ElPopover, { ref: popoverRef, trigger: 'click', width: '200' }, {
-            // popover的内容
-            default: () => [
-              h('div', { class: 'filter-wrapper' }, [
-                h('div', { class: 'filter-group' }, [
-                  // 使用ElCheckbox来实现过滤功能
-                  h(ElCheckbox, { modelValue: shouldFilter.value, 'onUpdate:modelValue': (value) => shouldFilter.value = value }, 'Filter Text')
-                ]),
-                h('div', { class: 'el-table-v2__demo-filter' }, [
-                  // 确认按钮
-                  h(ElButton, { text: true, onClick: onFilter }, 'Confirm'),
-                  // 重置按钮
-                  h(ElButton, { text: true, onClick: onReset }, 'Reset')
-                ])
-              ]),
-            ],
-            // popover的触发器
-            reference: () => [
-              h(ElIcon, { class: 'cursor-pointer' }, [
-                h(Filter)
-              ])
-            ],
-          }),
-        ])
-      );
-    };
-
-    // 生成固定列的配置
-    const fixedColumns = columns.map((column, columnIndex) => {
-      // console.log(column)
-      // console.log(columnIndex)
-      let fixed = undefined;
-      if (columnIndex < 1) fixed = TableV2FixedDir.LEFT;
-      // if (columnIndex > 11) fixed = TableV2FixedDir.RIGHT;
-      return { ...column, fixed, width: 100 };
     });
 
+    myChart.value.setOption(option.value);
+  });
 
-
-    return {
-      fixedColumns,
-      data,
-    };
-  },
-};
+  option.value && myChart.value.setOption(option.value);
+})
 </script>
+<style scoped lang='less'>
+  .pic{
+    width: 100%;
+    height: 480px;
+  }
 
-<style scoped>
-.el-table-v2__demo-filter {
-  border-top: var(--el-border);
-  margin: 12px -12px -12px;
-  padding: 0 12px;
-  display: flex;
-  justify-content: space-between;
-}
-.example-showcase .el-table-v2__overlay {
-  z-index: 9;
-}
 </style>
