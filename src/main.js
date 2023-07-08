@@ -50,6 +50,10 @@ import 'driver.js/dist/driver.min.css'
 import JsonViewer from 'vue-json-viewer'
 
 
+//Driver页面分步引导
+import Driver from 'driver.js'
+import 'driver.js/dist/driver.min.css'
+
 
 const app = createApp(App)
 

@@ -299,7 +299,6 @@ const DeleteServer = () =>{
   })
 }
 
-
 //步骤条
 const steps = reactive([
  {
@@ -437,8 +436,6 @@ const drawer = reactive({
 
 
 
-
-
 const data = [
     {
         "id": "112345",
@@ -520,6 +517,7 @@ const exportCsv = () => {
     urlObject.revokeObjectURL(url);
   }
 }
+
 
 const submit = () =>{
   steps[0].status = 'uncompleted'
