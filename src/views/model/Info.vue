@@ -369,10 +369,10 @@ defineExpose({
     margin-top: 40px;
     margin-left: 15px;
     .edit-title1{
-      margin-bottom: 40px;;
+      margin-bottom: 40px;
     }
     .edit-title2{
-      margin-bottom: 20px;;
+      margin-bottom: 20px;
     }
     .edit-content{
       margin-left: -30px;

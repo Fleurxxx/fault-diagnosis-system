@@ -18,7 +18,7 @@
       </div>
     </div>
     <div class="middle">
-      <MyTimeLine></MyTimeLine>
+      <Steps v-bind:steps="steps"></Steps>
     </div>
     <div class="bottom" v-if="status === 1">
       <div class="content">
@@ -89,6 +89,7 @@
 import { ElMessage } from 'element-plus';
 import { ref, reactive, onMounted, computed } from 'vue';
 import MyTimeLine from '../../components/MyTimeLine.vue';
+import Steps from '../../components/Steps.vue';
 import { EluiChinaAreaDht } from 'elui-china-area-dht';
 import router from '../../router';
 const orderList = reactive([]);

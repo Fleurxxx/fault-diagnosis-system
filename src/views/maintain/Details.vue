@@ -12,7 +12,7 @@
           <el-card class="card" shadow="hover">
             <template #header>
               <div class="card-header-2" >
-                <span><i class='fa fa-dot-circle-o'></i>&nbsp;&nbsp;&nbsp;{{ dataset.name }}</span>
+                <span><i class='fa fa-dot-circle-o'></i>&nbsp;&nbsp;&nbsp;模型详情</span>
                 <el-button class="button" type="primary" text @click="modelDetail">查看更多</el-button>
               </div>
             </template>
@@ -24,16 +24,16 @@
                   align="left"
                   label-class-name="my-label"
                   class-name="my-content">
-                  {{ dataset.name }}
+                  {{ state.record.modelId }}
                 </el-descriptions-item>
                 <el-descriptions-item label="模型大小" label-align="center" align="left">
-                  {{ dataset.size }}
-                </el-descriptions-item>
-                <el-descriptions-item label="状态" label-align="center" align="left">
-                  {{ dataset.statue }}
+                  {{ state.record.gmtCreate }}
                 </el-descriptions-item>
                 <el-descriptions-item label="创建时间" label-align="center" align="left">
-                  {{ dataset.createdDate }}
+                  {{ state.record.gmtModified }}
+                </el-descriptions-item>
+                <el-descriptions-item label="修改时间" label-align="center" align="left">
+                  {{ state.record.gmtModified }}
                 </el-descriptions-item>
                 <el-descriptions-item label="标签" label-align="center">
                   <div class="info-tag">
@@ -53,73 +53,158 @@
                 </div>
               </div>
             </template>
-            <div class="file-box">
-              <div class="file-color" @click="handleClick">
-                <Row>
+            <div class="demo-drawer-profile">
+              <el-descriptions :column="2" border size="large">
+                <el-descriptions-item
+                  label-align="center"
+                  align="left"
+                  width="10px">
+                  <template #label>
+                    <el-icon><Place /></el-icon>&nbsp;
+                      名称
+                  </template>
+                  {{ state.record.failureDataSets.name }}
+                </el-descriptions-item>
+                <el-descriptions-item label="URL" label-align="center" align="left" width="80px">
+                  <template #label>
+                    <el-icon><ChromeFilled /></el-icon>&nbsp;
+                    URL
+                  </template>
+                  <Paragraph copyable copy-text="custom text" style="color:#3f3fc2;margin-bottom: -5px;" :copy-config="{ tooltips: false }" @click="copyURL(state.record.failureDataSets.url)">查看URL</Paragraph>
+                </el-descriptions-item>
+                <el-descriptions-item label="简述" label-align="center">
+                  <template #label>
+                    <el-icon><Key /></el-icon>&nbsp;
+                    简述
+                  </template>
+                  {{ state.record.failureDataSets.describe }}
+                </el-descriptions-item>
+              </el-descriptions>
+              <Divider />
+              <div class="file-box">
+                <div class="file-color" @click="handleClick">
+                  <Row>
                     <Col span="2">
                       <Avatar :src=avatarUrl shape="square" icon="ios-person" size="large" />
                     </Col>
                     <div style="padding-left:10px;"></div>
                     <Col span="10">
-                        <p>模型测试样例.csv</p>
-                        <p>13.56 KB</p>
+                        <p>{{ state.record.failureDataSets.fileName }}</p>
+                        <p>{{ state.record.failureDataSets.size }} KB</p>
                     </Col>
-                </Row>
+                  </Row>
+                </div>
               </div>
             </div>
           </el-card>
         </div>
       </div>
       <div>
-          <div class="fault-maintain">
-              <div class="small-div">
-                  <div class="small-div-header">
-                      <h3>故障信息</h3>
-                  </div>
-                  <div class="small-div-body">
-                    <el-descriptions
-                      direction="vertical"
-                      :column="4"
-                      :size="large"
-                      border>
-                      <el-descriptions-item label="故障类型">{{ fault.type }}</el-descriptions-item>
-                      <el-descriptions-item label="故障发生时间">{{ fault.occurredAt }}</el-descriptions-item>
-                      <el-descriptions-item label="故障描述" :span="2" width="400px">{{ fault.description }}</el-descriptions-item>
-                    </el-descriptions>
-                  </div>
-              </div>
-          </div>
-      </div>
-      <div class="content-bottom">
-          <div class="left">
+        <div class="fault-maintain">
             <div class="small-div">
-              <div class="small-div-header">
-                  <h3>故障原因</h3>
-              </div>
-              <div class="small-div-body fault">
-                {{ faultAnalysis.cause }}
-              </div>
-              <div class="small-div-body fault" v-if="faultAnalysis.cause === ''">
-                <el-empty description="未找到故障原因" image-size="130">
-                </el-empty>
-              </div>
+                <div class="small-div-header">
+                    <h3>故障信息</h3>
+                </div>
+                <div class="small-div-body">
+                  <el-card class="card" shadow="hover">
+                    <template #header>
+                      <div class="card-header-2" >
+                        <span><i class='fa fa-dot-circle-o'></i>&nbsp;&nbsp;&nbsp;故障记录</span>
+                        <el-button class="button" type="primary" text @click="">添加</el-button>
+                      </div>
+                    </template>
+                    <div class="detail">
+                        <el-table :data="state.maintains"
+                          :header-cell-style="{background: 'rgb(242,243,245)', color: 'rgb(0,0,20)', fonsSize: '18px',}"
+                          :cell-style="{color: 'rgb(85,68,85)', fontWeight: '350'}">
+                        <el-table-column prop="id" label="记录编号" />
+                        <el-table-column prop="failureId" label="故障ID"/>
+                        <el-table-column prop="analysis" label="人工分析" :formatter="format"/>
+                        <el-table-column prop="isSolve" label="状态">
+                          <template v-slot="scope">
+                            <span v-if="scope.row.isSolve === false">未修复</span>
+                            <span v-else>已修复</span>
+                          </template>
+                        </el-table-column>
+                        <el-table-column fixed="right" label="操作" width="180">
+                          <template v-slot="scope">
+                            <el-button link type="primary" @click="handleCheck(scope.row)"
+                              ><el-icon><View /></el-icon> </el-button>
+                          </template>
+                        </el-table-column>
+                      </el-table>
+                    </div>
+                  </el-card>
+                  <div class="content-bottom">
+                    <div class="left">
+                      <el-card class="card" shadow="hover">
+                        <template #header>
+                          <div class="card-header-2" >
+                            <span><i class='fa fa-dot-circle-o'></i>&nbsp;&nbsp;&nbsp;故障原因</span>
+                          </div>
+                        </template>
+                        <div class="small-div-body fault">
+                            {{ faultAnalysis.cause }}
+                        </div>
+                        <div class="small-div-body fault" v-if="faultAnalysis.cause === ''">
+                          <el-empty description="未找到故障原因" image-size="130">
+                          </el-empty>
+                        </div>
+                      </el-card>
+                    </div>
+                    <div class="right">
+                      <el-drawer
+                        v-model="drawVisible"
+                        title="重新上传分析"
+                        width="35%">
+                        <el-form
+                          class="show"
+                          ref="addForm"
+                          :model="form"
+                          label-width="auto"
+                          label-position="left"
+                        >
+                          <el-form-item label="数据集上传" prop="name">
+                            <div class="form-update">
+                              <Upload multiple type="drag" action="" :before-upload="beforeUpload">
+                                <div style="padding: 20px 20px">
+                                  <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                                  <p>Click or drag files here to upload</p>
+                                </div>
+                              </Upload>
+                            </div>
+                          </el-form-item>
+                          <el-form-item label="分析描述" prop="status" :required="true">
+                            <el-input v-model="form.name" type="textarea" :autosize="{ minRows: 5, maxRows: 5}"></el-input>
+                          </el-form-item>
+                        </el-form>
+                        <template #footer>
+                          <span class="dialog-footer">
+                            <el-button @click="drawVisible = false">取 消</el-button>
+                            <el-button type="primary" @click="handleAnalysis">确 定</el-button>
+                          </span>
+                        </template>
+                      </el-drawer>
+                      <el-card class="card" shadow="hover">
+                        <template #header>
+                          <div class="card-header-2" >
+                            <span><i class='fa fa-dot-circle-o'></i>&nbsp;&nbsp;&nbsp;解决方案</span>
+                          </div>
+                        </template>
+                        <div class="fault small-div-body ">
+                          {{ faultAnalysis.solution }}
+                        </div>
+                        <div class="fault small-div-body">
+                          <el-empty description="未找到解决方案" image-size="90" v-if="faultAnalysis.solution === ''">
+                            <el-button type="primary" @click="handleAnalysis">重新上传分析</el-button>
+                          </el-empty>
+                        </div>
+                      </el-card>
+                    </div>
+                  </div>
+                </div>
             </div>
-          </div>
-          <div class="right">
-            <div class="small-div">
-              <div class="small-div-header">
-                  <h3>解决方案</h3>
-              </div>
-              <div class="fault small-div-body ">
-                {{ faultAnalysis.solution }}
-              </div>
-              <div class="fault small-div-body">
-                <el-empty description="未找到解决方案" image-size="90" v-if="faultAnalysis.solution === ''">
-                  <el-button type="primary">重新上传分析</el-button>
-                </el-empty>
-              </div>
-            </div>
-          </div>
+        </div>
       </div>
       <div class="content-bottom">
         <div class="left">
@@ -223,19 +308,17 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, computed, nextTick } from 'vue';
-import { useRouter } from "vue-router";
+import { ElMessage } from 'element-plus';
+import { ref, reactive, onBeforeMount, onMounted, computed, nextTick } from 'vue';
+import { useRouter, useRoute } from "vue-router";
 const router = useRouter();
+const route = useRoute();
+import apiFun from '../../api/api';
 import * as echarts from "echarts";
 import avatarUrl from '../../assets/icon/csv.png'
 import { trendAnalysisOption } from '../../assets/js/echarts/trendAnalysis';
 import { riskAssessmentOption } from '../../assets/js/echarts/riskAssessmentOption';
-const dataset = reactive({
-  name: '数据集名称',
-  size: '100GB',
-  createdDate: '2023-06-01',
-  statue: 0,
-});
+const recordId = ref();
 const data = [
     {
       "id": "1",
@@ -268,16 +351,6 @@ const tags = ref([
   { text: '标签3', type: 'warning' },
   { text: '标签4', type: 'danger' },
 ])
-const fault = reactive({
-  type: '故障类型',
-  description: '故障描述',
-  occurredAt: '2023-06-03 10:00:00',
-});
-const repairStatus = reactive({
-  repairPerson: '维修人员A',
-  startTime: '2023-06-04 09:00:00',
-  endTime: '2023-06-05 13:00:00',
-});
 const faultAnalysis = reactive({
   // cause: '网络连接故障：可能由于网络中断、不稳定的连接或配置错误导致。资源耗尽：系统资源（如内存、磁盘空间）耗尽，导致应用程序无法正常运行。配置错误：错误的配置参数或设置可能导致系统出现问题。',
   // solution: '检查网络连接：确保网络连接正常，检查网络设备、电缆和路由器是否正常工作。如果发现问题，修复或更换故障设备。优化资源利用：分析系统资源使用情况，查找资源耗尽的原因。清理不必要的文件或进程，增加可用资源。如果需要，考虑升级硬件或调整系统配置。检查配置设置：仔细检查系统配置文件和参数设置，确保其正确性。如果发现配置错误，及时进行修复并重新启动应用程序。',
@@ -289,6 +362,7 @@ const recommendations = reactive([
   {recordId: '222', fault: '规则筛选', mate: '99%'},
 ]);
 let dialogVisible = ref(false);
+let drawVisible = ref(false);
 const persons = reactive([{
   avatar: 'src/assets/image/tx.png',
   name: "John Doe",
@@ -304,10 +378,85 @@ const riskData = reactive([
   { value: 30, name: '中风险' },
   { value: 50, name: '低风险' },
 ]);
+const state = reactive({
+  record: {
+    "id": 2,
+    "userId": 2,
+    "modelId": 10002,
+    "gmtCreate": "",
+    "gmtModified": "2023-07-05T11:45:12.000+00:00",
+    "describe": "test",
+    "title": "test",
+    "courseId": 1,
+    "failureDataSets": {
+        "id": 1,
+        "name": "test2",
+        "failureId": 1,
+        "describe": "test2",
+        "courseId": 1,
+        "url": "",
+        "size": 0
+    }
+  },
+  maintains: []
+});
+const form = reactive({
+    id: '',
+    describe: '',
+  },
+);
 
+onBeforeMount(async () => {
+  await getRecordDetail();
+  await getMaintains();
+});
 onMounted(() => {
   initChart();
 });
+
+const getRecordDetail = async () => {
+  recordId.value = route.query.id;
+  await apiFun.repair.getRecordDetail(recordId.value).then((res) => {
+    if(res.code === 200){
+      state.record = res.data;
+      state.record.gmtCreate = formatDate(state.record.gmtCreate);
+      state.record.gmtModified = formatDate(state.record.gmtModified);
+    }else{
+      ElMessage.error("获取失败");
+    }
+  });
+};
+
+const format = (row, column) => {
+  if(column.property === 'analysis'){
+    if(row.analysis === '' || row.analysis === undefined || row.analysis === null){
+      return '- -'
+    }
+    return row.analysis;
+  }
+}
+
+const formatDate = (date) => {
+  const dateObj = new Date(date);
+  const year = dateObj.getFullYear();
+  const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+  const day = String(dateObj.getDate()).padStart(2, '0');
+  const hours = String(dateObj.getHours()).padStart(2, '0');
+  const minutes = String(dateObj.getMinutes()).padStart(2, '0');
+  const seconds = String(dateObj.getSeconds()).padStart(2, '0');
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
+
+const getMaintains = async () => {
+  await apiFun.repair.getMaintains(recordId.value).then((res) => {
+    if(res.code === 200){
+      console.log(res)
+      state.maintains = res.data;
+    }else{
+      ElMessage.error("获取失败");
+    }
+  });
+}
 
 //查看csv
 const handleClick = () => {// 添加表头信息
@@ -317,14 +466,50 @@ const handleClick = () => {// 添加表头信息
     header[item] = item;
   })
   data.unshift(header);
-  Heiho(data,{ max: 100, title: '在线浏览.csv'});
+  Heiho(data,{ max: 100, title: state.record.failureDataSets.name});
 };
+
+const handleCheck = (row) => {
+  router.push({
+    path:'/start', 
+    query:{id: row.id}
+  })
+  // console.log(row);
+  // apiFun.repair.getMaintainDetail(recordId.value, row.id).then((res) => {
+  //   if(res.code === 200){
+  //     console.log(res);
+  //   }else{
+  //     ElMessage.error("获取失败");
+  //   }
+  // });
+};
+
+const handleAnalysis = () => {
+  
+  drawVisible.value = true;
+}
+
 const modelDetail = () => {
   router.push('/info')
 };
+
 const personDetail = () => {
   dialogVisible.value = true;
 }
+
+const copyURL = (url) =>{
+  var input = document.createElement("input"); // 创建input对象
+  input.value = url; // 设置复制内容
+  document.body.appendChild(input); // 添加临时实例
+  input.select(); // 选择实例内容
+  document.execCommand("Copy"); // 执行复制
+  document.body.removeChild(input); // 删除临时实例
+  ElMessage({
+    message: '复制成功',
+    type: 'success',
+  })
+}
+
 //初始化echarts
 function initChart() {
   let trendAnalysis = echarts.init(document.getElementById("trendAnalysis"));
@@ -337,9 +522,7 @@ function initChart() {
     riskAssess.resize();
   };
 }
-const getDetail = () => {
 
-}
 const getRecommendDetail = (row) => {
   console.log(row);
 }
@@ -388,7 +571,7 @@ const getRecommendDetail = (row) => {
   display: flex;
   gap: 25px;
   flex-direction: column;
-  
+  height: 100%;
 }
 .fault {
   max-height: 300px;
@@ -400,6 +583,7 @@ const getRecommendDetail = (row) => {
   display: flex;
   gap: 25px;
   flex-direction: column;
+  height: 100%;
 }
 .small-div {
   width: 100%;
@@ -480,7 +664,11 @@ h3 {
 }
 
 .card {
-  margin: 10px 0 10px 0;
+  margin: 20px 0 20px 0;
+  .demo-drawer-profile{
+    font-size: 16px;
+    text-align: left;
+  }
   .card-header-2 {
     display: flex;
     justify-content: space-between;
@@ -606,12 +794,36 @@ h3 {
     }
   }
 }
+
+.form-update{
+  width: 100%;
+  border: 1px solid #dcdfe6 ;
+  padding: 10px;
+  border-radius: 4px;
+}
+:deep(.el-drawer__title)  {
+    font-size: 18px;
+    color: #3b3d3f;
+}
 .echart{
   margin-top: 25px;
 }
-
-:deep(.el-card__body)  {
-    padding: 20px 100px 0 20px;
+.colSty{
+  display: inline-block;
 }
+
+.detail_text {
+  display: inline-block;
+  padding: 0 0 0 53px;
+  padding-top: 0;
+  font-size: 16px;
+  font-weight: 400;
+  color: #666666;
+  line-height: 30px;
+  margin: -30px 0 0 0;
+}
+// :deep(.el-card__body)  {
+//     padding: 20px 100px 0 20px;
+// }
 </style>
 <style src="src/assets/style/base.scss"></style>

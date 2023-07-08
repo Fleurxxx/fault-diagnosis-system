@@ -9,7 +9,7 @@
         <el-button class="download" @click="batchDownload">批量下载</el-button>
       </div>
       <div class="right">
-        <el-input placeholder="请输入内容进行搜索" v-model="searchText" clearable @clear="clear">
+        <el-input placeholder="请输入内容进行搜索" v-model="searchText" clearable @input="clear" @clear="clear">
           <template #append>
             <el-button @click="search">搜索</el-button> 
           </template>
@@ -18,57 +18,34 @@
     </div>
     <div class="content">
       <div class="form">
-        <el-dialog
+        <el-drawer
           v-model="dialogVisible"
-          title="新建维修记录"
-          width="35%">
+          title="修改故障记录"
+          size="40%">
           <el-form
             class="show"
             ref="addForm"
             :model="form"
             label-width="auto"
-            label-position="left"
-          >
-            <el-form-item label="模型" prop="name" :required="true">
-              <el-input v-model="form.name"></el-input>
+            label-position="left">
+            <el-form-item label="故障名称" prop="title" :required="true">
+              <el-input v-model="form.title" placeholder="请输入故障名称" class="input"></el-input>
             </el-form-item>
-            <el-form-item label="测试数据集" prop="name" :required="true">
-              <el-input v-model="form.name"></el-input>
-            </el-form-item>
-            <el-form-item label="故障类型" prop="type" :required="true">
-              <el-select v-model="form.type" placeholder="请选择">
-                <el-option v-for="item in nameList" :key="item" :label="item" :value="item">
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="故障原因" prop="type" :required="true">
-              <el-input v-model="form.type" type="textarea" rows="4" placeholder="描述"></el-input>
-            </el-form-item>
-            <el-form-item label="解决方法" prop="type" :required="true">
-              <el-input v-model="form.type" type="textarea" rows="4" placeholder="描述"></el-input>
-            </el-form-item>
-            <el-form-item label="创建时间" prop="createTime" :required="true">
-              <el-date-picker
-                v-model="form.createTime"
-                type="date"
-                placeholder="Pick a time"
-                :disabledDate="disabledDate"
-              ></el-date-picker>
-            </el-form-item>
-            <el-form-item label="状态" prop="status" :required="true">
-              <el-radio-group v-model="form.status">
-                <el-radio :label="0" >未修复</el-radio>
-                <el-radio :label="1" >已修复</el-radio>
-              </el-radio-group>
+            <el-form-item label="故障简介" prop="describe" :required="true">
+              <el-input v-model="form.describe" 
+                type="textarea" rows="4" placeholder="请简略描述故障" 
+                show-word-limit maxlength="200"
+                :autosize="{minRows:6,maxRows:12}">
+              </el-input>
             </el-form-item>
           </el-form>
           <template #footer>
             <span class="dialog-footer">
               <el-button @click="dialogVisible = false">取 消</el-button>
-              <el-button type="primary" @click="handleAdd">确 定</el-button>
+              <el-button type="primary" @click="confirmEdit">确 定</el-button>
             </span>
           </template>
-        </el-dialog>
+        </el-drawer>
       </div>
       <div class="bottom">
         <el-row class="table">
@@ -76,25 +53,18 @@
             :data="fixData"
             @selection-change="handleSelectionChange"
             style="width: 100%"
-            :header-cell-style="{
-              background: 'rgb(242,243,245)',
-              color: 'rgb(0,0,71)',
-              fonsSize: '18px',
-            }"
+            :header-cell-style="{background: 'rgb(242,243,245)', color: 'rgb(0,0,71)', fonsSize: '18px',}"
             :cell-style="{color: 'rgb(85,68,85)', fontWeight: '350'}"
           >
-            <el-table-column type="selection" width="50"/>
-            <el-table-column prop="id" label="数据编号" width="110px" />
-            <el-table-column
-              prop="name"
-              label="数据名称"
-              width="208px"
-            >
-            </el-table-column>
-            <el-table-column prop="size" label="总大小" width="120px" />
-            <el-table-column prop="type" label="故障类型" width="170px" />
-            <el-table-column prop="createTime" label="创建时间" width="140px" />
-            <el-table-column
+            <el-table-column type="selection" width="40"/>
+            <el-table-column prop="id" label="记录编号" width="100px" />
+            <el-table-column prop="title" label="记录名称" width="200px"/>
+            <el-table-column prop="modelId" label="模型编号" width="120px" />
+            <el-table-column prop="courseId" label="故障类型" width="170px" />
+            <el-table-column prop="describe" label="描述" width="170px" :formatter="format"/>
+            <el-table-column prop="gmtCreate" label="创建时间" width="170px" :formatter="formatDate"/>
+            <el-table-column prop="gmtModified" label="修改时间" width="170px" :formatter="format"/>
+            <!-- <el-table-column
               prop="status"
               label="状态"
               width="110px">
@@ -102,17 +72,19 @@
                 <span v-if="scope.row.status === 0">未修复</span>
                 <span v-else>已修复</span>
               </template>
-            </el-table-column>
-            <el-table-column label="操作" width="210">
+            </el-table-column> -->
+            <el-table-column fixed="right" label="操作" width="220">
               <template v-slot="scope">
-                <el-button link @click="handleDisplay(scope.row)"
+                <!-- <el-button link @click="handleDisplay(scope.row)"
                   ><el-icon><CaretRight /></el-icon></el-button>
                 <el-button link @click="handleDownload(scope.row)"
-                  ><el-icon><Download /></el-icon></el-button>
+                  ><el-icon><Download /></el-icon></el-button> -->
                 <el-button link type="primary" @click="handleCheck(scope.row)"
-                  >查看</el-button>
+                  ><el-icon><View /></el-icon> 查看</el-button>
+                  <el-button link type="success" @click="handleEdit(scope.row)"
+                  ><el-icon><EditPen /></el-icon> 编辑</el-button>
                 <el-button link type="danger" @click="handleDelete(scope.row)"
-                  >删除</el-button>
+                  ><el-icon><Delete /></el-icon> 删除</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -134,65 +106,8 @@
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { ref, reactive, onMounted, computed } from 'vue';
 import router from '../../router';
-// import { apiFun } from '/api/api.js';
-const fixData = [
-  {
-    id: '1',
-    name: 'Tom',
-    createTime: '2016-05-03',
-    size: 10767,
-    type: '规则筛选',
-    status: 0,
-  },
-  {
-    id: '2',
-    createTime: '2016-05-02',
-    name: 'Tom',
-    size: 10767,
-    type: '规则筛选',
-    status: 0,
-  },
-  {
-    id: '3',
-    createTime: '2016-05-04',
-    name: 'Tom',
-    size: 10767,
-    type: '规则筛选',
-    status: 0,
-  },
-  {
-    id: '4',
-    createTime: '2016-05-01',
-    name: 'Tom',
-    size: 10767,
-    type: '人工',
-    status: 1,
-  },
-  {
-    id: '5',
-    createTime: '2016-05-08',
-    name: 'Tom',
-    size: 10767,
-    type: '人工',
-    status: 1,
-  },
-  {
-    id: '6',
-    createTime: '2016-05-06',
-    name: 'Tom',
-    size: 10767,
-    type: '规则筛选',
-    status: 1,
-  },
-  {
-    id: '7',
-    createTime: '2016-05-07',
-    name: 'Tom',
-    size: 10767,
-    type: '规则筛选',
-    status: 1,
-  },
-];
+import apiFun from '../../api/api';
+let fixData = ref([]);
 const multipleSelection = ref([]);
 const pageSize = ref(10);
 let totalNum = ref(200);
@@ -200,28 +115,88 @@ let dialogVisible = ref(false);
 let currentPage = ref(1);
 const form = reactive({
     id: '',
-    name: '',
-    createTime: ref(new Date()),
-    size: null,
-    type: null,
-    status: null,
+    title: '',
+    describe: null,
   },
 );
+const searchText = ref('');
+
 onMounted(() => {
-  const getRecords = (val) => {
-    // const res = getRecordsApi(pageSize, currentPage, searchText);
-  };
   getRecords();
 });
-const handleDisplay = (row) => {
 
-}
-const handleDownload = (row) => {
+const getRecords = () => {
+  apiFun.repair.getRepairRecord(searchText.value, currentPage.value, pageSize.value).then((res) => {
+    if(res.code === 200){
+      fixData.value = res.data.records;
+      totalNum.value = res.data.total;
 
-}
+    }else{
+      ElMessage.error("获取失败");
+    }
+  });
+};
+
+const format = (row, column) => {
+  if(column.property === 'describe'){
+    if(row.describe === '' || row.describe === undefined){
+      return '--'
+    }
+    return row.describe;
+  }else if(column.property === 'gmtModified'){
+    if(row.gmtModified === '' || row.gmtModified === undefined){
+      return '--';
+    }else{
+      return formatDate(row.gmtModified);
+    }
+  }
+};
+
+const formatDate = (date) => {
+  let dateObj = ref('');
+  if(typeof date === 'object'){
+    dateObj = new Date(date.gmtCreate);
+  }else{
+    dateObj = new Date(date);
+  }
+  const year = dateObj.getFullYear();
+  const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+  const day = String(dateObj.getDate()).padStart(2, '0');
+  const hours = String(dateObj.getHours()).padStart(2, '0');
+  const minutes = String(dateObj.getMinutes()).padStart(2, '0');
+  const seconds = String(dateObj.getSeconds()).padStart(2, '0');
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+};
+
+const handleDisplay = (row) => {};
+
+const handleDownload = (row) => {};
+
 const handleCheck = (row) => {
-  router.push('/detail');
-}
+  router.push({
+    path:'/detail', 
+    query:{id: row.id}
+  })
+};
+
+const handleEdit = (row) => {
+  form.id = row.id;
+  form.title = row.title;
+  form.describe = row.describe;
+  dialogVisible.value = true;
+};
+
+const confirmEdit = () => {
+  apiFun.repair.changeMaintain(form).then((res) => {
+    if(res.code === 200){
+      fixData.value = res.data.records;
+      totalNum.value = res.data.total;
+    }else{
+      ElMessage.error("获取失败");
+    }
+  });
+};
+
 const handleDelete = (row) => {
   ElMessageBox.confirm(
     '确定删除吗',
@@ -233,7 +208,6 @@ const handleDelete = (row) => {
   )
   .then(() => {
     // const res = apiFun.fix.deleteFixRecord(row.id);
-
   })
   .catch(() => {
     ElMessage({
@@ -241,16 +215,12 @@ const handleDelete = (row) => {
       message: '取消删除',
     })
   });
-}
-const handleAdd = () => {
-  dialogVisible.value = false;
-}
+};
+
 const handleCurrentChange = (val) => {
-  currentPage = val;
-  // getRecords();
-}
-const nameList = reactive([]);
-const searchText = ref('');
+  currentPage.value = val;
+  getRecords();
+};
 
 const search = () => {
   if(searchText.value === '' || searchText.value === undefined) {
@@ -259,15 +229,15 @@ const search = () => {
       type: 'warning',
     })
   }else{
-    currentPage = 1;
-    // getRecords(searchText);`
+    currentPage.value = 1;
+    getRecords();
   }
-}
+};
 
 const clear = () => {
-  currentPage = 1;
-  // getRecords(searchText);
-}
+  currentPage.value = 1;
+  getRecords();
+};
 
 const handleSelectionChange = (val) => {
   multipleSelection.value = val;
@@ -282,17 +252,7 @@ const batchDownload = () => {
   }else{
 
   }
-}
-
-// 限制选择范围在今天以前
-const disabledDate = (time) => {
-  // 获取当前日期
-  const today = new Date();
-  // 清除时分秒的部分，只保留年月日
-  today.setHours(0, 0, 0, 0);
-  // 禁用今天之后的日期
-  return time.getTime() > today.getTime();
-}
+};
 
 </script>
 <style lang="less" scoped>
@@ -358,8 +318,28 @@ const disabledDate = (time) => {
 .content {
   background-color: #fff;
   padding: 0 50px 0 50px;
+
+  
 }
+:deep(.el-input__inner) {
+  font-size: 15px;
+  font-weight: 400;
+  color: #959494;
+  line-height: 30px;
+}
+
+:deep(.el-textarea__inner) {
+  font-size: 15px;
+  font-weight: 400;
+  color: #959494;
+  line-height: 30px;
+}
+
 h3{
   font-weight: 540;
+}
+:deep(.el-drawer__title)  {
+    font-size: 18px;
+    color: #3b3d3f;
 }
 </style>

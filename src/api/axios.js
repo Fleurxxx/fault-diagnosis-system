@@ -45,7 +45,7 @@ const http = {
       _axios({
         url,
         params,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8', 'token': localGet('token') },
+        headers: { 'Content-Type': 'application/json;charset=UTF-8', 'Authorization': localGet('token') },
         method: 'GET'
       }).then(res => {
         resolve(res.data)
@@ -60,7 +60,7 @@ const http = {
       _axios({
         url,
         data: qs.parse(params),
-        headers: { 'Content-Type': 'application/json;charset=UTF-8', 'token': localGet('token') },
+        headers: { 'Content-Type': 'application/json;charset=UTF-8', 'Authorization': localGet('token') },
         method: 'POST'
       }).then(res => {
         resolve(res.data)
@@ -76,7 +76,7 @@ const http = {
         url,
         data: params,
         params: qs.parse(params),
-        headers: { 'Content-Type': 'application/json;charset=UTF-8', 'token': localGet('token') },
+        headers: { 'Content-Type': 'application/json;charset=UTF-8', 'Authorization': localGet('token') },
         method: 'PUT'
       }).then(res => {
         resolve(res.data)
@@ -91,7 +91,7 @@ const http = {
       _axios({
         url,
         data: params,
-        headers: { 'Content-Type': 'application/json;charset=UTF-8', 'token': localGet('token') },
+        headers: { 'Content-Type': 'application/json;charset=UTF-8', 'Authorization': localGet('token') },
         method: 'DELETE'
       }).then(res => {
         resolve(res.data)

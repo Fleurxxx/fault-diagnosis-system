@@ -2,7 +2,7 @@
   <div class="box">
     <div ref="vantaRef" style="width: 100%; height: 100vh"></div>
     <div class="banner">
-      <h1 style="font-size:99px;">CouldDoctor</h1>
+      <h1 style="font-size:99px;">CloudDoctor</h1>
       <h5>
         &ensp;&ensp;
         分&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;

@@ -13,6 +13,7 @@
                 <Upload
                     multiple
                     type="drag"
+                    accept=".csv"
                     action=""
                    :before-upload="beforeUpload">
                     <div style="padding: 20px 0">
@@ -54,6 +55,8 @@ import {
  TableV2FixedDir,
 } from 'element-plus';
 import { Filter } from '@element-plus/icons-vue';
+import { ElMessage } from 'element-plus';
+import apiFun from '../../api/api';
 
 const generateColumns = (length = 40, prefix = 'column-', props = {}) => {
  return Array.from({ length }).map((_, columnIndex) => ({
@@ -83,30 +86,43 @@ export default {
 
     let columns = ref([]);
     let tableData = ref([]);
+    const uploadUrl = ref('http://192.168.50.35:8080/file/upload');
     let beforeUpload =(file)=> {
-      getArrayFromFile(file).then(data => {
-        let { columns: newColumns, tableData: newTableData } = getTableDataFromArray(data)
-        columns.value = newColumns;
-        tableData.value = newTableData;
-        // tableData.value = generateData(newColumns, 10000);
-        columns.value[0].fixed = true
-        console.log(columns.value)
-        console.log(newTableData)
-        console.log(tableData)
-
-
-      }).catch(() => {
-        // this.$Notice.warning({
-        //   title: '只能上传Csv文件',
-        //   desc: '只能上传Csv文件，请重新上传'
-        // })
-      })
-      return false
-   }
-
+      // getArrayFromFile(file).then(data => {
+      //   let { columns: newColumns, tableData: newTableData } = getTableDataFromArray(data)
+      //   columns.value = newColumns;
+      //   tableData.value = newTableData;
+      //   // tableData.value = generateData(newColumns, 10000);
+      //   columns.value[0].fixed = true
+      //   console.log(columns.value)
+      //   console.log(newTableData)
+      //   console.log(tableData)
+      // }).catch(() => {
+      //   // this.$Notice.warning({
+      //   //   title: '只能上传Csv文件',
+      //   //   desc: '只能上传Csv文件，请重新上传'
+      //   // })
+      // })
+      // return false
+      const allowedType = "text/csv";
+      const fileType = file.type;
+      console.log(fileType);
+      if (fileType !== allowedType) {
+        ElMessage.error("只能上传 csv 格式的文件");
+        return false; // 取消上传
+      }
+      apiFun.repair.upload(file).then((res) => {
+        if(res.code === 200){
+          
+        }else{
+          ElMessage.error("上传文件失败");
+        }
+      });
+    }
 
    return {
      beforeUpload,
+     uploadUrl,
      columns,
      tableData,
    };

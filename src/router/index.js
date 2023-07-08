@@ -112,16 +112,50 @@ const routes = [
                 meta: {
                     title: '故障维修'
                 },
+                // redirect: '/maintain',
+                children: [
+                    
+                ]
             },{ //------- 故障维修中心 -------//
                 path:"/center",
                 component: ()=>import('../views/maintain/Center.vue'),
                 meta: {
                     title: '维修中心'
                 },
+            },{ //------- 故障维修中心 -------//
+                path:"/start",
+                component: ()=>import('../views/maintain/Start.vue'),
+                meta: {
+                    title: '维修中心'
+                },
+                redirect:'/start/upfile',
+                children:[
+                    {
+                        path:"/start/upfile",  //上传
+                        component: ()=>import('../components/updata/Files.vue'),
+                    },{
+                        path:"/start/paste",  //手动上传
+                        component: ()=>import('../components/updata/Hand.vue'),
+                    }
+                ]
+            },{ //------- 故障维修中心 -------//
+                path:"/record",
+                component: ()=>import('../views/maintain/Record.vue'),
+                meta: {
+                    title: '维修中心'
+                },
+            },{ //------- 故障维修中心 -------//
+                path:"/finish",
+                component: ()=>import('../views/maintain/Finish.vue'),
+                meta: {
+                    title: '维修中心'
+                },
             },{
                 path:"/detail",
                 component: ()=>import('../views/maintain/Details.vue'),
-            // }
+                meta: {
+                    title: '维修详情'
+                }
             },{ //------- 组件测试-------//
                 path:"/file",  //上传
                 component: ()=>import('../components/updata/Files.vue'),
