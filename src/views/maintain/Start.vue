@@ -10,24 +10,15 @@
       <div class="box-form">
         <el-form
           label-width="100px"
-          ref="formlabelref"
           :rules="rules"
           :inline="true"
-          :model="formlabel"
+          :model="data"
+          ref="dataForm"
           v-loading="loading" element-loading-text="故障分析中...">
-          <el-form-item label="故障集名称" prop="name" class="form-input" :required="true">
-            <el-input class="input"
-              v-model="data.name"
-              maxlength="30"
-              placeholder="30个字符以内，必须使用中英文或者数字开头，支持小括号、短横线和空格"
-              show-word-limit
-              type="text"/>
-          </el-form-item><br/>
-          <div style="margin: 20px 0" />
-          <el-form-item label="状态"  prop="name" class="form-input" :required="true" style="line-height: 30px;">
-            <el-radio-group v-model="data.name" class="input">
-              <el-radio label="1" size="large">已解决</el-radio>
-              <el-radio label="2" size="large">未解决</el-radio>
+          <el-form-item label="故障状态"  prop="status" class="form-input" :required="true" style="line-height: 30px;">
+            <el-radio-group v-model="data.status" class="input">
+              <el-radio label="true" size="large">已解决</el-radio>
+              <el-radio label="false" size="large">未解决</el-radio>
             </el-radio-group>
           </el-form-item>
           <div style="margin: 20px 0" />
@@ -36,23 +27,27 @@
             <el-button round :class="button2Class"  @click="change(2)">手动上传</el-button>
           </el-form-item><br/>
           <div class="form-update">
-            <router-view ></router-view>
+            <Files v-if="data.cutNum===1" @fileInfo="fileInfo" />
+            <hand v-else />
           </div>
         </el-form>
       </div>
     </div>
     <div>
       <el-button class="lef_btn" @click="backToList">返回列表</el-button>
-      <el-button class="next" @click="next">下一步</el-button>
+      <el-button class="next" @click="next(dataForm)">下一步</el-button>
       </div>
   </div>
 </template>
 <script setup>
-import { ElMessage } from 'element-plus';
+import { ElMessage, ElNotification } from 'element-plus';
 import { ref, reactive, onMounted, computed } from 'vue';
 import MyTimeLine from '../../components/MyTimeLine.vue';
 import Steps from '../../components/Steps.vue';
+import Files from '../../components/updata/Files.vue'
+import Hand from '../../components/updata/Hand.vue'
 import { useRouter, useRoute } from "vue-router";
+import apiFun from '../../api/api';
 const router = useRouter();
 const route = useRoute();
 const steps = reactive([
@@ -63,7 +58,7 @@ const steps = reactive([
   },
   {
     title: '人员分析中',
-    description: '请耐心等待哦',
+    description: '请尽快完成',
     status: 'uncompleted',
   },
   {
@@ -73,37 +68,92 @@ const steps = reactive([
   },
 ]);
 const data = reactive({
-  name:'',
-  introduce:'',
-  centerDialogVisible : false,
-})
+  status: '',
+  cutNum:1,
+  fileInfo:{},
+});
+const dataForm = reactive(null);
 const loading = ref(false)
 const button1Class = ref('edit');
 const button2Class = ref('white-color');
+const validateData = (rule, value, callback) => {
+  if (value === "") {
+    callback(new Error("该项不能为空"));
+  }else{
+    callback()
+  }
+}
+const rules = reactive({
+    name: [
+      { validator: validateData , trigger: "blur" },
+      { required: true, message: '请输入故障集名称', trigger: 'blur'}
+    ],
+    status: [
+      { validator: validateData , trigger: "blur" },
+      { required: true, message: '请输入故障状态', trigger: 'blur'}
+    ],
+    status: [
+      { validator: validateData , trigger: "blur" },
+      { required: true, message: '请输入故障状态', trigger: 'blur'}
+    ]
+})
 
 onMounted(() => {
 })
 
-const change = (buttonNumber) =>{
-  if (buttonNumber === 1) {
+let change = (num) =>{
+  data.cutNum = num
+  if (num === 1) {
     button1Class.value = 'edit';
     button2Class.value = 'white-color';
-    router.push({ path: "/start/upfile", 
-      query:{id: route.query.id}
-    });
-  } else if (buttonNumber === 2) {
+  } else if (num === 2) {
     button1Class.value = 'white-color';
     button2Class.value = 'edit';
-    router.push({ path: "/start/paste", 
-      query:{id: route.query.id}
-    });
   }
 }
-const next = () => {
-  router.push({
-    path:'/record', 
-    query:{id: route.query.id}
-  })
+function fileInfo(val){
+  data.fileInfo = val
+}
+
+const next = async(dataForm) =>{
+  await dataForm.validate((valid,fields) => {
+    if (valid) {
+      let param = {
+        failureId: route.query.id,
+        fileName: data.fileInfo.fileName,
+        url: data.fileInfo.url,
+        size: data.fileInfo.size,
+        isSolve: data.status,
+      }
+      console.log(param)
+      if(param.url === undefined){
+        ElNotification({
+          title: '尚未上传数据集',
+          message: '请上传数据集后再进行下一步此操作',
+          type: 'warning',
+        })
+      }else{
+        loading.value = true;
+        apiFun.repair.reanalysis(param).then((res)=>{
+          console.log(res)
+          if(res.code===200){
+            loading.value = false;
+            // router.push({
+            //   path:'/record', 
+            //   query:{id: route.query.id}
+            // })
+          }else{
+            ElMessage.error(res.message);
+            loading.value = false;
+          }
+        }).catch((err)=>{
+          console.log(err);
+        });
+      }
+    }else{
+      ElMessage.warning('请将表格填写完整');
+    }
+  });
 }
 const backToList = () => {
   router.push({

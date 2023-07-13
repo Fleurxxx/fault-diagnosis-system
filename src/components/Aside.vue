@@ -56,7 +56,6 @@
                           </el-sub-menu>
                       </el-menu>
                   </el-aside>
-
               </el-col>
           </el-row>
       </div>
@@ -102,7 +101,6 @@
   .aside-box{
     height: 100%;
   }
-
 
   /*左侧导航栏*/
   .el-menu-vertical-demo {

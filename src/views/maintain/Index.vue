@@ -262,7 +262,7 @@ const batchDownload = () => {
   position: sticky;
   top:0;
   width:100%;
-  height: 190vh;
+  height: 80vh;
   box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, 0.08);
   .box-title{
     text-align: left;

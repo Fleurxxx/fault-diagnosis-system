@@ -4,303 +4,109 @@
       <p class="title">维修详情</p>
     </div>
     <div class="fault-repair-details">
-      <div class="small-div">
-        <div class="small-div-header">
-            <h3>模型信息</h3>
-        </div>
+      <div class="small-div-body">
+        <el-card class="card" shadow="hover">
+          <template #header>
+            <div class="card-header-2" >
+              <span><i class='fa fa-dot-circle-o'></i>&nbsp;&nbsp;&nbsp;模型详情</span>
+              <el-button class="button" type="primary" text @click="modelDetail">查看更多</el-button>
+            </div>
+          </template>
+          <div class="detail">
+            <el-descriptions :column="2" border size="large">
+              <el-descriptions-item
+                label="模型名称"
+                label-align="center"
+                align="left"
+                label-class-name="my-label"
+                class-name="my-content">
+                {{ state.record.modelId }}
+              </el-descriptions-item>
+              <el-descriptions-item label="模型大小" label-align="center" align="left">
+                {{ state.record.gmtCreate }}
+              </el-descriptions-item>
+              <el-descriptions-item label="创建时间" label-align="center" align="left">
+                {{ state.record.gmtModified }}
+              </el-descriptions-item>
+              <el-descriptions-item label="修改时间" label-align="center" align="left">
+                {{ state.record.gmtModified }}
+              </el-descriptions-item>
+              <el-descriptions-item label="标签" label-align="center">
+                <div class="info-tag">
+                  <el-tag v-for="(item, index) in tags" :key="index" :type="item.type" class="tags">{{ item.text }}</el-tag>
+                </div>
+              </el-descriptions-item>
+            </el-descriptions>
+          </div>
+        </el-card>
+        <el-card class="card" shadow="hover">
+          <template #header>
+            <div class="card-header-2" >
+              <span><i class='fa fa-dot-circle-o'></i>&nbsp;&nbsp;&nbsp;测试集数据</span>
+              <div class="alert">
+                <el-icon><QuestionFilled /></el-icon>
+                点击文件查看详细数据
+              </div>
+            </div>
+          </template>
+          <div class="demo-drawer-profile">
+            <div class="file-box">
+              <div class="file-color" @click="handleClick">
+                <Row>
+                  <Col span="2">
+                    <Avatar :src=avatarUrl shape="square" icon="ios-person" size="large" />
+                  </Col>
+                  <div style="padding-left:10px;"></div>
+                  <Col span="10">
+                      <p>{{ state.record.failureDataSets.fileName }}</p>
+                      <p>{{ state.record.failureDataSets.size }} KB</p>
+                  </Col>
+                </Row>
+              </div>
+            </div>
+          </div>
+        </el-card>
+      </div>
+      <Divider/>
+      <div class="fault-maintain">
         <div class="small-div-body">
           <el-card class="card" shadow="hover">
             <template #header>
               <div class="card-header-2" >
-                <span><i class='fa fa-dot-circle-o'></i>&nbsp;&nbsp;&nbsp;模型详情</span>
-                <el-button class="button" type="primary" text @click="modelDetail">查看更多</el-button>
+                <span><i class='fa fa-dot-circle-o'></i>&nbsp;&nbsp;&nbsp;故障记录</span>
+                <el-button class="button" type="primary" text @click="">添加</el-button>
               </div>
             </template>
             <div class="detail">
-              <el-descriptions :column="2" border size="large">
-                <el-descriptions-item
-                  label="模型名称"
-                  label-align="center"
-                  align="left"
-                  label-class-name="my-label"
-                  class-name="my-content">
-                  {{ state.record.modelId }}
-                </el-descriptions-item>
-                <el-descriptions-item label="模型大小" label-align="center" align="left">
-                  {{ state.record.gmtCreate }}
-                </el-descriptions-item>
-                <el-descriptions-item label="创建时间" label-align="center" align="left">
-                  {{ state.record.gmtModified }}
-                </el-descriptions-item>
-                <el-descriptions-item label="修改时间" label-align="center" align="left">
-                  {{ state.record.gmtModified }}
-                </el-descriptions-item>
-                <el-descriptions-item label="标签" label-align="center">
-                  <div class="info-tag">
-                    <el-tag v-for="(item, index) in tags" :key="index" :type="item.type" class="tags">{{ item.text }}</el-tag>
-                  </div>
-                </el-descriptions-item>
-              </el-descriptions>
+                <el-table :data="state.maintains"
+                  :header-cell-style="{background: 'rgb(242,243,245)', color: 'rgb(0,0,20)', fonsSize: '18px',}"
+                  :cell-style="{color: 'rgb(85,68,85)', fontWeight: '350'}">
+                <el-table-column prop="id" label="记录编号" />
+                <el-table-column prop="failureId" label="故障ID"/>
+                <el-table-column prop="analysis" label="人工分析" :formatter="format"/>
+                <el-table-column prop="isSolve" label="状态">
+                  <template v-slot="scope">
+                    <span v-if="scope.row.isSolve === false">未修复</span>
+                    <span v-else>已修复</span>
+                  </template>
+                </el-table-column>
+                <el-table-column fixed="right" label="操作" width="180">
+                  <template v-slot="scope">
+                    <el-button link type="primary" @click="handleCheck(scope.row)"
+                      ><el-icon><View /></el-icon> </el-button>
+                  </template>
+                </el-table-column>
+              </el-table>
             </div>
           </el-card>
+        </div>
+      </div>
+      <Divider/>
+      <div class="echart">
+        <div class="small-div-body">
           <el-card class="card" shadow="hover">
-            <template #header>
-              <div class="card-header-2" >
-                <span><i class='fa fa-dot-circle-o'></i>&nbsp;&nbsp;&nbsp;测试集数据</span>
-                <div class="alert">
-                  <el-icon><QuestionFilled /></el-icon>
-                  点击文件查看详细数据
-                </div>
-              </div>
-            </template>
-            <div class="demo-drawer-profile">
-              <el-descriptions :column="2" border size="large">
-                <el-descriptions-item
-                  label-align="center"
-                  align="left"
-                  width="10px">
-                  <template #label>
-                    <el-icon><Place /></el-icon>&nbsp;
-                      名称
-                  </template>
-                  {{ state.record.failureDataSets.name }}
-                </el-descriptions-item>
-                <el-descriptions-item label="URL" label-align="center" align="left" width="80px">
-                  <template #label>
-                    <el-icon><ChromeFilled /></el-icon>&nbsp;
-                    URL
-                  </template>
-                  <Paragraph copyable copy-text="custom text" style="color:#3f3fc2;margin-bottom: -5px;" :copy-config="{ tooltips: false }" @click="copyURL(state.record.failureDataSets.url)">查看URL</Paragraph>
-                </el-descriptions-item>
-                <el-descriptions-item label="简述" label-align="center">
-                  <template #label>
-                    <el-icon><Key /></el-icon>&nbsp;
-                    简述
-                  </template>
-                  {{ state.record.failureDataSets.describe }}
-                </el-descriptions-item>
-              </el-descriptions>
-              <Divider />
-              <div class="file-box">
-                <div class="file-color" @click="handleClick">
-                  <Row>
-                    <Col span="2">
-                      <Avatar :src=avatarUrl shape="square" icon="ios-person" size="large" />
-                    </Col>
-                    <div style="padding-left:10px;"></div>
-                    <Col span="10">
-                        <p>{{ state.record.failureDataSets.fileName }}</p>
-                        <p>{{ state.record.failureDataSets.size }} KB</p>
-                    </Col>
-                  </Row>
-                </div>
-              </div>
-            </div>
+            <div id="riskAssess" ref="riskAssessRef" :style="{ width: '100%', height: '650px' }"></div>
           </el-card>
-        </div>
-      </div>
-      <div>
-        <div class="fault-maintain">
-            <div class="small-div">
-                <div class="small-div-header">
-                    <h3>故障信息</h3>
-                </div>
-                <div class="small-div-body">
-                  <el-card class="card" shadow="hover">
-                    <template #header>
-                      <div class="card-header-2" >
-                        <span><i class='fa fa-dot-circle-o'></i>&nbsp;&nbsp;&nbsp;故障记录</span>
-                        <el-button class="button" type="primary" text @click="">添加</el-button>
-                      </div>
-                    </template>
-                    <div class="detail">
-                        <el-table :data="state.maintains"
-                          :header-cell-style="{background: 'rgb(242,243,245)', color: 'rgb(0,0,20)', fonsSize: '18px',}"
-                          :cell-style="{color: 'rgb(85,68,85)', fontWeight: '350'}">
-                        <el-table-column prop="id" label="记录编号" />
-                        <el-table-column prop="failureId" label="故障ID"/>
-                        <el-table-column prop="analysis" label="人工分析" :formatter="format"/>
-                        <el-table-column prop="isSolve" label="状态">
-                          <template v-slot="scope">
-                            <span v-if="scope.row.isSolve === false">未修复</span>
-                            <span v-else>已修复</span>
-                          </template>
-                        </el-table-column>
-                        <el-table-column fixed="right" label="操作" width="180">
-                          <template v-slot="scope">
-                            <el-button link type="primary" @click="handleCheck(scope.row)"
-                              ><el-icon><View /></el-icon> </el-button>
-                          </template>
-                        </el-table-column>
-                      </el-table>
-                    </div>
-                  </el-card>
-                  <div class="content-bottom">
-                    <div class="left">
-                      <el-card class="card" shadow="hover">
-                        <template #header>
-                          <div class="card-header-2" >
-                            <span><i class='fa fa-dot-circle-o'></i>&nbsp;&nbsp;&nbsp;故障原因</span>
-                          </div>
-                        </template>
-                        <div class="small-div-body fault">
-                            {{ faultAnalysis.cause }}
-                        </div>
-                        <div class="small-div-body fault" v-if="faultAnalysis.cause === ''">
-                          <el-empty description="未找到故障原因" image-size="130">
-                          </el-empty>
-                        </div>
-                      </el-card>
-                    </div>
-                    <div class="right">
-                      <el-drawer
-                        v-model="drawVisible"
-                        title="重新上传分析"
-                        width="35%">
-                        <el-form
-                          class="show"
-                          ref="addForm"
-                          :model="form"
-                          label-width="auto"
-                          label-position="left"
-                        >
-                          <el-form-item label="数据集上传" prop="name">
-                            <div class="form-update">
-                              <Upload multiple type="drag" action="" :before-upload="beforeUpload">
-                                <div style="padding: 20px 20px">
-                                  <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
-                                  <p>Click or drag files here to upload</p>
-                                </div>
-                              </Upload>
-                            </div>
-                          </el-form-item>
-                          <el-form-item label="分析描述" prop="status" :required="true">
-                            <el-input v-model="form.name" type="textarea" :autosize="{ minRows: 5, maxRows: 5}"></el-input>
-                          </el-form-item>
-                        </el-form>
-                        <template #footer>
-                          <span class="dialog-footer">
-                            <el-button @click="drawVisible = false">取 消</el-button>
-                            <el-button type="primary" @click="handleAnalysis">确 定</el-button>
-                          </span>
-                        </template>
-                      </el-drawer>
-                      <el-card class="card" shadow="hover">
-                        <template #header>
-                          <div class="card-header-2" >
-                            <span><i class='fa fa-dot-circle-o'></i>&nbsp;&nbsp;&nbsp;解决方案</span>
-                          </div>
-                        </template>
-                        <div class="fault small-div-body ">
-                          {{ faultAnalysis.solution }}
-                        </div>
-                        <div class="fault small-div-body">
-                          <el-empty description="未找到解决方案" image-size="90" v-if="faultAnalysis.solution === ''">
-                            <el-button type="primary" @click="handleAnalysis">重新上传分析</el-button>
-                          </el-empty>
-                        </div>
-                      </el-card>
-                    </div>
-                  </div>
-                </div>
-            </div>
-        </div>
-      </div>
-      <div class="content-bottom">
-        <div class="left">
-          <div class="small-div">
-            <div class="small-div-header">
-              <h3>相似历史故障</h3>
-            </div>
-            <div class="small-div-body">
-              <el-empty description="未找到相似历史故障" v-if="recommendations.length === 0">
-                <el-button type="primary">重新上传分析</el-button>
-              </el-empty>
-              <el-table  class="label" :data="recommendations" style="width: 80%" size="large" @row-click="getRecommendDetail()"
-                :header-cell-style="{
-                  background: 'rgb(242,243,245)',
-                  color: 'rgb(0,0,20)',
-                  fonsSize: '18px',
-                }"
-                :cell-style="{color: 'rgb(85,68,85)', fontWeight: '350'}">
-                <el-table-column prop="fault" label="故障记录" width="210" />
-                <el-table-column prop="fault" label="解决方案" width="300" />
-                <el-table-column prop="mate" label="相似度" />
-              </el-table>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="content-bottom">
-        <div class="left">
-          <div class="small-div">
-            <div class="small-div-header">
-                <h3>人员分析</h3>
-            </div>
-            <el-dialog
-              v-model="dialogVisible"
-              width="55%">
-              <div class="small-div-body fault box-card">
-                <div class="card-header">
-                  <div class="avatar">
-                    <el-image style="width: 100px; height: 120px" :src="persons[0].avatar" :fit="fit" />
-                  </div>
-                  <div class="info">
-                    <ul class="person-info-list">
-                      <li>姓名： {{ persons[0].name }}</li>
-                      <li>年龄： {{ persons[0].age }}</li>
-                      <li>性别： {{ persons[0].gender }}</li>
-                      <li>职业： {{ persons[0].occupation }}</li>
-                    </ul>
-                  </div>
-                </div>
-                <div class="card-bottom">
-                  <div class="title">技能和专长：</div>
-                  <div class="card-content">
-                    <ul class="skills-list">
-                      <li v-for="(skill, index) in persons[0].skills" :key="index">-  {{ skill }}</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </el-dialog>
-            <div class="small-div-body">
-              <el-empty description="暂无人员分析" v-if="persons.length === 0">
-              </el-empty>
-              <el-table  class="label" :data="persons" style="width: 80%" size="large" @row-click="personDetail()"
-                :header-cell-style="{
-                  background: 'rgb(242,243,245)',
-                  color: 'rgb(0,0,20)',
-                  fonsSize: '18px',
-                }"
-                :cell-style="{color: 'rgb(85,68,85)', fontWeight: '350'}">
-                <el-table-column prop="name" label="姓名" width="150" />
-                <el-table-column prop="occupation" label="职业" />
-                <el-table-column prop="gender" label="解决故障" width="300" />
-                <el-table-column prop="gender" label="时间" width="180" />
-              </el-table>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="echart">
-        <div class="small-div">
-          <div class="small-div-header">
-              <h3>故障趋势分析</h3>
-          </div>
-          <div class="small-div-body">
-            <div id="trendAnalysis" ref="trendAnalysisRef" :style="{ width: '100%', height: '400px' }"></div>
-          </div>
-        </div>
-      </div>
-      <div class="echart">
-        <div class="small-div">
-          <div class="small-div-header">
-              <h3>故障风险评估</h3>
-          </div>
-          <div class="small-div-body">
-            <div id="riskAssess" ref="riskAssessRef" :style="{ width: '100%', height: '300px' }"></div>
-          </div>
         </div>
       </div>
     </div>
@@ -350,27 +156,9 @@ const tags = ref([
   { text: '标签2', type: 'info' },
   { text: '标签3', type: 'warning' },
   { text: '标签4', type: 'danger' },
-])
-const faultAnalysis = reactive({
-  // cause: '网络连接故障：可能由于网络中断、不稳定的连接或配置错误导致。资源耗尽：系统资源（如内存、磁盘空间）耗尽，导致应用程序无法正常运行。配置错误：错误的配置参数或设置可能导致系统出现问题。',
-  // solution: '检查网络连接：确保网络连接正常，检查网络设备、电缆和路由器是否正常工作。如果发现问题，修复或更换故障设备。优化资源利用：分析系统资源使用情况，查找资源耗尽的原因。清理不必要的文件或进程，增加可用资源。如果需要，考虑升级硬件或调整系统配置。检查配置设置：仔细检查系统配置文件和参数设置，确保其正确性。如果发现配置错误，及时进行修复并重新启动应用程序。',
-  cause: '',
-  solution: '',
-});
-const recommendations = reactive([
-  {recordId: '111', fault: '规则筛选', mate: '100%'},
-  {recordId: '222', fault: '规则筛选', mate: '99%'},
 ]);
 let dialogVisible = ref(false);
 let drawVisible = ref(false);
-const persons = reactive([{
-  avatar: 'src/assets/image/tx.png',
-  name: "John Doe",
-  age: 30,
-  gender: "男",
-  occupation: "工程师",
-  skills: ["技能1", "技能2", "技能3","技能1", "技能2", "技能3"]
-}]);
 const dateData = reactive(['2023-06-01', '2023-06-02', '2023-06-03', '2023-06-04', '2023-06-05', '2023-06-06']);
 const trendData = reactive([10, 15, 8, 12, 18, 5]);
 const riskData = reactive([
@@ -459,16 +247,18 @@ const getMaintains = async () => {
 }
 
 //查看csv
-const handleClick = () => {// 添加表头信息
+const handleClick = () => {
+  // 添加表头信息
   let keys = Object.keys(data[0]);
-  const header = {};
+  const header = {}
   keys.forEach(item => {
-    header[item] = item;
+    header[item]= item
   })
-  data.unshift(header);
-  Heiho(data,{ max: 100, title: state.record.failureDataSets.name});
-};
+  console.log(header)
+  data.unshift(header)
+  Heiho(data, { max: 100, title: '在线浏览.csv' });
 
+}
 const handleCheck = (row) => {
   router.push({
     path:'/start', 
@@ -493,10 +283,6 @@ const modelDetail = () => {
   router.push('/info')
 };
 
-const personDetail = () => {
-  dialogVisible.value = true;
-}
-
 const copyURL = (url) =>{
   var input = document.createElement("input"); // 创建input对象
   input.value = url; // 设置复制内容
@@ -512,15 +298,33 @@ const copyURL = (url) =>{
 
 //初始化echarts
 function initChart() {
-  let trendAnalysis = echarts.init(document.getElementById("trendAnalysis"));
-  trendAnalysis.setOption(trendAnalysisOption(dateData, trendData));
+  // let trendAnalysis = echarts.init(document.getElementById("trendAnalysis"));
+  // trendAnalysis.setOption(trendAnalysisOption(dateData, trendData));
   let riskAssess = echarts.init(document.getElementById("riskAssess"));
   riskAssess.setOption(riskAssessmentOption(riskData));
   window.onresize = function() {
     //自适应大小
-    trendAnalysis.resize();
+    // trendAnalysis.resize();
     riskAssess.resize();
   };
+  riskAssess.on('updateAxisPointer', function (event) {
+    const xAxisInfo = event.axesInfo[0];
+    if (xAxisInfo) {
+      const dimension = xAxisInfo.value + 1;
+      riskAssess.setOption({
+        series: {
+          id: 'pie',
+          label: {
+            formatter: '{b}: {@[' + dimension + ']} ({d}%)'
+          },
+          encode: {
+            value: dimension,
+            tooltip: dimension
+          }
+        }
+      });
+    }
+  });
 }
 
 const getRecommendDetail = (row) => {
@@ -536,6 +340,7 @@ const getRecommendDetail = (row) => {
   top:0;
   width:100%;
   box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, 0.08);
+  // overflow: auto;
   .box-title{
     text-align: left;
     padding-top: 22px;
@@ -545,10 +350,11 @@ const getRecommendDetail = (row) => {
     font-size:18px;
     font-weight:bold;
   }
+  .fault-repair-details {
+    padding: 22px 50px 10px 50px;
+  }
 }
-.fault-repair-details {
-  padding: 22px 50px 10px 50px;
-}
+
 .header {
   display: flex;
   justify-content: space-between;

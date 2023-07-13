@@ -2,7 +2,7 @@
  * @Author: Fleurxxx 984209872@qq.com
  * @Date: 2023-06-01 20:28:39
  * @LastEditors: Fleurxxx 984209872@qq.com
- * @LastEditTime: 2023-07-03 19:17:41
+ * @LastEditTime: 2023-07-07 22:59:41
  * @FilePath: \maintenance\src\router\index.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -21,7 +21,7 @@ import { start, close } from "../utils/nprogress";
 
 const routes = [
     {
-        path: '/',
+        path: '/h',
         redirect:'/home',
         component: () => import('../views/home/Index.vue'),
         children:[
@@ -34,20 +34,10 @@ const routes = [
                 },
             },{ //------- 模型训练 -------//
                 path:"/model",   //在线训练
-                redirect:'/model/upfile',
                 component: ()=>import('../views/model/OnlineTraining.vue'),
                 meta: {
                     title: '在线训练'
-                },
-                children:[
-                    {
-                        path:"/model/upfile",  //上传
-                        component: ()=>import('../components/updata/Files.vue'),
-                    },{
-                        path:"/model/paste",  //手动上传
-                        component: ()=>import('../components/updata/Hand.vue'),
-                    }
-                ]
+                }
             },{
                 path:"/analysis",  //数据分析
                 component: ()=>import('../views/model/DataAnalysis.vue'),
@@ -67,27 +57,29 @@ const routes = [
                     title: '模型管理'
                 },
             },{
-              path:"/info",  //训练完成
-              component: ()=>import('../views/model/Info.vue'),
+              path:"/info",  //模型详情
+              redirect:'/info/modelInfo',
               meta: {
-                  title: '在线训练'
+                  title: '模型详情'
               },
+              children:[
+                  {
+                      path:"modelInfo",
+                      component: ()=>import('../views/model/Info.vue'),
+                  },{
+                    path:"update",
+                    component: ()=>import('../views/model/VersionUpdates.vue'),
+                    meta: {
+                        title: '模型更新'
+                    },
+                }
+              ]
           },{ //------- 故障诊断 -------//
               path:"/diagnose",
-              redirect:'/diagnose/upfile',
               component: ()=>import('../views/diagnose/OnlineDiagnose.vue'),
               meta: {
                   title: '在线诊断'
               },
-              children:[
-                  {
-                      path:"/diagnose/upfile",  //上传
-                      component: ()=>import('../components/updata/Files.vue'),
-                  },{
-                      path:"/diagnose/paste",  //手动上传
-                      component: ()=>import('../components/updata/Hand.vue'),
-                  }
-              ]
           },{
             path:"/fault",
             component: ()=>import('../views/diagnose/FaultAnalysis.vue'),
@@ -169,6 +161,12 @@ const routes = [
                     title: '模型信息'
                 },
             },{
+                path:"/maintain-detail",  //上传
+                component: ()=>import('../views/maintain/MaintainDetail.vue'),
+                meta: {
+                    title: '模型信息'
+                },
+            },{
               path:"/data",  //基于codemirror实现的代码编辑器
               component: ()=>import('../components/data/DataCard.vue'),
               meta: {
@@ -183,6 +181,12 @@ const routes = [
           },{
             path:"/txt2",
             component: ()=>import('../test/txt2.vue'),
+            meta: {
+                title: '代码编辑器'
+            }
+          },{
+            path:"/txt3",
+            component: ()=>import('../test/txt3.vue'),
             meta: {
                 title: '代码编辑器'
             }
@@ -246,7 +250,7 @@ const routes = [
         path:"/timeline",
         component: ()=>import('../components/MyTimeLine.vue'),
     },{
-      path:"/login",
+      path:"/",
       component: ()=>import('../views/login/Login.vue'),
     },{
       path:"/timeline",
@@ -259,7 +263,7 @@ export const router = createRouter({
   routes
 })
 
- 
+
 
 router.beforeEach((to, from, next) => {
   start();

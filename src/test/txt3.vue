@@ -1,87 +1,77 @@
-<!--
- * @Author: Fleurxxx
- * @Date: 2022-06-13 11:03:49
- * @LastEditors: Fleurxxx 984209872@qq.com
- * @LastEditTime: 2023-06-14 15:36:56
- * @Description: 测试echarts
--->
 <template>
-  <div>
-    <div id="chartTest"></div>
+  <div class="min-box">
+    <json-viewer
+              :value="jsonData"
+              :expand-depth="5"
+              class="viewer"
+              copyable
+              boxed
+              sort
+              :expanded="expanded"
+              :key="expanded">
+              </json-viewer>
+              <a-button type="primary" @click="toggleExpanded" >{{expanded ? '收起' : '展开'}}</a-button>
+
   </div>
 </template>
 
 <script>
-import { getChart } from "@/apis/mockTest";
-import { reactive, toRefs, onMounted } from "vue";
-import echarts from "../utils/echartsUtil";
-// 引入柱状图图表，图表后缀都为 Chart
-import { BarChart } from "echarts/charts";
-// 注册必须的组件
-echarts.use([BarChart]);
+import jsonView from '../components/JsonView.vue'
 export default {
-  setup() {
-    const state = reactive({});
-
-    onMounted(() => {
-      getChart().then((res) => {
-        initChart(res.data.xDatas, res.data.yDatas);
-      });
-    });
-
-    /**
-     * @description: 渲染图表
-     * @param {*} xDatas x轴数据
-     * @param {*} yDatas y轴数据
-     * @return {*}
-     * @Author: liuxin
-     */
-    const initChart = (xDatas, yDatas) => {
-      // 接下来的使用就跟之前一样，初始化图表，设置配置项
-      const myChart = echarts.init(document.getElementById("chartTest"));
-      myChart.setOption({
-        grid: {
-          containLabel: true,
-        },
-        tooltip: {
-          trigger: "axis",
-        },
-        legend: {
-          show: false,
-        },
-        xAxis: {
-          type: "category",
-          name: "日期",
-          data: xDatas,
-          axisLabel: {
-            rotate: xDatas.length > 10 ? -20 : 0,
-          },
-        },
-        yAxis: {
-          type: "value",
-          name: "人数",
-        },
-        series: [
-          {
-            name: "客流流量",
-            data: yDatas,
-            type: "bar",
-            barMaxWidth: "40%",
-          },
-        ],
-      });
-    };
-
-    return {
-      ...toRefs(state),
-    };
+  name: '',
+  components: {
+    jsonView
   },
-};
+  data () {
+    return {
+      visible: false,
+      expanded: false,
+      jsonStr:"{\r\n    \"success\": true,\r\n    \"code\": 200,\r\n    \"msg\": \"操作成功\",\r\n    \"data\": \"\"\r\n}",
+      jsonData: {
+        "name": "小明",
+        "age": 24,
+        "gender": true,
+        "height": 1.85,
+        "weight": null,
+        "skills": [
+          {
+            "PHP": [
+              "Laravel",
+              "Composer"
+            ]
+          },
+          {
+            "JavaScript": [
+              "jQuery",
+              "Vue",
+              "React"
+            ]
+          },
+          "Golang",
+          "Python",
+          "Lua"
+        ]
+      }
+    }
+  },
+  methods: {
+    toggleExpanded() {
+      this.expanded = !this.expanded
+    }
+  }
+}
 </script>
 
-<style lang="scss" scoped>
-#chartTest {
-  width: 100%;
-  height: 600px;
+<style lang='less'>
+.min-box{
+  height: 400px;
+  width: 700px;
+}
+.viewer{
+  width: 60%;
+  min-width: 3.125rem;
+  text-align: left;
+  padding-left: 50px;
+  padding-bottom: 30px;
 }
 </style>

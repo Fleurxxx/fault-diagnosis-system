@@ -2,7 +2,7 @@
  * @Author: Fleurxxx 984209872@qq.com
  * @Date: 2023-03-24 15:06:21
  * @LastEditors: Fleurxxx 984209872@qq.com
- * @LastEditTime: 2023-07-03 10:23:59
+ * @LastEditTime: 2023-07-05 17:02:21
  * @FilePath: \oss-backstage\src\api\axios.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -16,10 +16,14 @@ import { localGet } from './index'
 let baseURL = 'http://192.168.50.35:8080/' //后端开发环境地址(部署后端到本机后只需修改此地址)
 let config = {
   baseURL: baseURL,
-  timeout: 30000    //设置最大请求时间
+  timeout: 50000    //设置最大请求时间
 }
 const _axios = axios.create(config);
 
+const header = {
+  'Content-Type': 'application/json;charset=UTF-8',
+  'Authorization': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MiwiZXhwIjoxNjg4NDAxODUxLCJ1c2VybmFtZSI6IjEifQ.2qh-ySFAWsydu-i7jUZpGxYknH-di9RrIQW4sH4Pxes'
+}
 
 // // 接收请求拦截器，内部根据返回值，重新组装，统一管理。
 // _axios.interceptors.response.use(res => {
@@ -42,6 +46,7 @@ const _axios = axios.create(config);
 const http = {
   get(url = '', params = {}) {
     return new Promise((resolve, reject) => {
+      // console.log(header)
       _axios({
         url,
         params,

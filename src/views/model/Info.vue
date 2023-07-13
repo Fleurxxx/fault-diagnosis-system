@@ -7,18 +7,19 @@
     <div class="box-reminder">
       <div class="reminder">
         <div class="top">
-          <el-avatar :fit="fit" :size="35" src='https://dev-file.iviewui.com/userinfoPDvn9gKWYihR24SpgC319vXY8qniCqj4/avatar'/>
-          <p >Fleurxxx · 更新于<Time :time="data.time" /> · 私人</p>
+          <el-avatar :fit="fit" :size="35" :src=headImg />
+          <p v-if="isPublic">Fleurxxx · 更新于<Time :time="data.time" /> · 公开</p>
+          <p v-else>Fleurxxx · 更新于<Time :time="data.time" /> · 私人</p>
         </div>
         <div class="info" >
-          <h1>{{data.name}}</h1>
+            <h1>{{data.name}}</h1>
           <p @click="change('txt1')" class="cur"><i class="fa fa-pencil-square-o"></i> {{ data.introduce }}</p>
           <div class="info-tag">
             <el-tag v-for="(item, index) in tags" :key="index" :type="item.type" class="tags">{{ item.text }}</el-tag>
           </div>
         </div>
         <div class="analyse ">
-          <Button class="analyse-but" type="primary" shape="circle" @click="download()">&nbsp;<Icon type="md-download" />&nbsp;下载（{{data.filesize}}）&nbsp;</Button>
+          <Button class="analyse-but" type="primary" shape="circle" @click="download(data.modelDataSets.url,data.modelDataSets.fileName)">&nbsp;<Icon type="md-download" />&nbsp;下载（{{data.filesize}}）&nbsp;</Button>
           <Tabs v-model="activeTab" class="custom-tabs">
               <TabPane label="数据卡" name="name1" >
                 <div style="height:20px;"></div>
@@ -62,11 +63,11 @@
                                     />
                         </el-form-item><br/>
                         <div style="margin: 10px 0" />
-                        <el-form-item label="模型介绍"  prop="introduce" class="form-input" >
+                        <el-form-item label="隐私设置"  prop="introduce" class="form-input" >
                           <div class="mb-2 flex items-center text-sm">
-                            <el-radio-group v-model="radio1" class="ml-4">
+                            <el-radio-group v-model="data.radio" class="ml-4">
                               <el-radio label="1" size="large">公开</el-radio>
-                              <el-radio label="2" size="large">私密</el-radio>
+                              <el-radio label="0" size="large">私密</el-radio>
                             </el-radio-group>
                           </div>
                         </el-form-item><br/>
@@ -104,7 +105,7 @@
               </TabPane>
               <TabPane label="版本" name="name4">
                 <div class="hint">
-                  <Version :showimg="true"/>
+                  <Version :showimg="true" v-model:modelId=data.modelId />
                 </div>
               </TabPane>
           </Tabs>
@@ -129,6 +130,9 @@ import DataCard from '../../components/data/DataCard.vue'
 import Version from '../../components/data/ModelVersion.vue'
 import Process from '../../components/deployment/Process.vue'
 import DeploymentSettings from '../../components/deployment/DeploymentSettings.vue'
+import api from "../../api/api";
+import headImg from '../../assets/icon/head/羊1.png'
+import modelstore from "../../store/model.js";
 
 /**
 * 仓库
@@ -147,15 +151,70 @@ const router = useRouter();
 * 数据部分
 */
 const data = reactive({
+  radio:"1",
   name:'模型数据1',
   introduce:'添加描述信息',
   filesize:'5MB',
   time: (new Date()).getTime() - 60 * 3 * 1000,
+  isPublic:false,
+  modelId: '',
+  modelDataSets:{}
 })
 const radio1 = ref('1')
 
-const submit =()=>{
+/* 文件大小数据转化 */
+function formatBytes(bytes, decimals = 2) {
+  if (bytes === 0) return '0 Bytes';
+  const k = 1024;
+  const dm = decimals < 0 ? 0 : decimals;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+}
+
+const modelStore = modelstore();
+//获取模型信息
+function getModels() {
+  console.log(data.modelId)
+  api.model.getModel(data.modelId).then((res)=>{
+    console.log(res)
+    if(res.code===200){
+      data.name = res.data.name
+      data.introduce = res.data.name
+      data.filesize = formatBytes(res.data.modelDataSets.size)
+      data.isPublic = res.data.isPublic
+      data.modelDataSets = res.data.modelDataSets
+      if(res.data.isPublic===false){
+        data.radio = "0"
+      }else{
+        data.radio = "1"
+      }
+      modelStore.name = data.name;
+      modelStore.describe = data.introduce;
+    }else{
+      ElMessage.error(res.message)
+    }
+  }).catch((err)=>{
+    console.log(err);
+  })
+}
+
+//修改模型信息
+const submit =(index)=>{
+  if(index.radio === "1"){
+    index.isPublic = true
+  }else{
+    index.isPublic = false
+  }
+  let params = {
+    name:index.name,
+    introduce:index.introduce,
+    isPublic:index.isPublic,
+    modelId:index.modelId,
+
+  }
   // router.push({ path: "/info" });
+  console.log(index)
   ElMessage({
     message: '保存成功',
     type: 'success',
@@ -182,17 +241,29 @@ const change = (index) => {
         myInput.value.focus();
   });
 
-
-
-
-
-
 };
 
-const download = () =>{
-  ElMessage({
-    message: '下载成功',
-    type: 'success',
+
+//下载文件
+const download = (fileUrl,fileName) =>{
+  console.log(fileName)
+  api.train.download(fileUrl,fileName).then((res)=>{
+    console.log(res)
+    const blob = new Blob([res]);
+    const elink = document.createElement('a');
+    elink.download = fileName;
+    elink.style.display = 'none';
+    elink.href = URL.createObjectURL(blob);
+    document.body.appendChild(elink);
+    elink.click();
+    URL.revokeObjectURL(elink.href); // 释放URL 对象
+    document.body.removeChild(elink);
+    // ElMessage({
+    //   message: '下载成功',
+    //   type: 'success',
+    // })
+  }).catch((err)=>{
+    console.log(err);
   })
 }
 
@@ -238,6 +309,8 @@ onBeforeMount(() => {
 })
 onMounted(() => {
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
+  data.modelId = modelStore.id
+  getModels()
 })
 watchEffect(()=>{
 })
@@ -289,13 +362,18 @@ defineExpose({
       font-weight:bold;
     }
 
-
     .info{
       margin-top: 90px;
     }
     .info p{
       padding-top: 35px;
     }
+    .info-tag{
+      padding-top: 20px;
+      .tags{
+        margin-right: 10px;
+      }
+
     .info-tag{
       padding-top: 20px;
       .tags{
@@ -369,10 +447,10 @@ defineExpose({
     margin-top: 40px;
     margin-left: 15px;
     .edit-title1{
-      margin-bottom: 40px;
+      margin-bottom: 40px;;
     }
     .edit-title2{
-      margin-bottom: 20px;
+      margin-bottom: 20px;;
     }
     .edit-content{
       margin-left: -30px;
@@ -384,7 +462,7 @@ defineExpose({
       margin-left: 420px;
     }
   }
-
+  }
 }
 
 /deep/.step-line {

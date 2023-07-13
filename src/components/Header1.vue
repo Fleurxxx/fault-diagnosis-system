@@ -19,7 +19,7 @@
             <div class="flex-grow" />
             <el-dropdown @command="handleCommand">
                     <span class="el-dropdown-link">
-                          <img class="user" src="../assets/image/tx.png">
+                          <img class="user" src="../assets/icon/head/羊1.png">
                     </span>
                 <template v-slot:dropdown>
                     <el-dropdown-menu >

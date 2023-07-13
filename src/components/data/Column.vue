@@ -133,7 +133,7 @@ onBeforeMount(() => {
 onMounted(() => {
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
   axios.post("/echarts/bar").then((res) => {
-    console.log("测试数据", res);
+    console.log("模拟测试数据", res);
   });
 
 })

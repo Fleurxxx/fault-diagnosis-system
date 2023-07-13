@@ -2,16 +2,17 @@
  * @Author: Fleurxxx 984209872@qq.com
  * @Date: 2023-06-05 22:52:58
  * @LastEditors: Fleurxxx 984209872@qq.com
- * @LastEditTime: 2023-06-17 20:41:17
+ * @LastEditTime: 2023-07-08 01:37:14
  * @FilePath: \maintenance\src\components\DataCard.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
   <div class="box">
-    <Tabs value="name1">
-        <TabPane label="详细" name="name1">
+    <span @click="goUpdate" class="cur uppdate" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-superpowers" >&nbsp;&nbsp;更新数据集</i></span>
+    <Tabs value="name2">
+        <!-- <TabPane label="详细" name="name1">
           标签一的内容
-        </TabPane>
+        </TabPane> -->
         <TabPane label="简洁" name="name2">
           <Data />
         </TabPane>
@@ -45,6 +46,13 @@ const router = useRouter();
 * 数据部分
 */
 const data = reactive({})
+
+//跳转到更新页面
+const goUpdate = () =>{
+  router.push({ path: "/info/update" });
+}
+
+
 onBeforeMount(() => {
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
@@ -63,5 +71,13 @@ defineExpose({
 <style scoped lang='less'>
 .box{
   height: 100%;
+}
+.cur{
+  cursor: pointer; /*鼠标悬停变小手*/
+}
+.uppdate{
+  position: absolute;
+  right: 130px;
+  z-index:999;
 }
 </style>

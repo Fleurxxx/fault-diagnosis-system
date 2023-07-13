@@ -9,17 +9,17 @@
         <el-button class="download" @click="batchDownload">批量下载</el-button>
       </div>
       <div class="right">
-      <el-input placeholder="请输入内容进行搜索" v-model="searchText" clearable @clear="clear" >
+      <el-input placeholder="请输入内容进行搜索" v-model="page.key" clearable @clear="clear" >
         <template #append>
           <el-button @click="search">搜索</el-button>
         </template>
       </el-input>
     </div>
-      <basic-container >
+      <basic-container class="content">
         <el-row :gutter="12" v-loading="loading" style="padding:20px ">
           <!-- date遍历循环的数据 -->
-          <el-col :span="6" v-for="item in data" :key="item.id" style="padding-bottom: 12px;">
-            <el-card shadow="hover" ><!--style="background-color: #5daf34"  灰 #e1e1e1 绿 #5daf34-->
+          <el-col :span="6" v-for="item in page.list" :key="item.id" style="padding-bottom: 12px;">
+            <el-card shadow="hover"  class="cards"><!--style="background-color: #5daf34"  灰 #e1e1e1 绿 #5daf34-->
               <!-- 卡片的头部位 -->
               <template #header>
                 <div class="card-header">
@@ -36,16 +36,16 @@
                     <!-- 删除按钮 -->
                     <el-button type="text" class="button" @click="rowDel(item.id)"><el-icon style="font-size: 15px"><DeleteFilled /></el-icon></el-button>
                     <!-- 开关按钮 -->
-                    <el-button type="text" class="button" @click="switchBut(item)"><i :class="item.status===1 ? 'fa fa-pause' : 'fa fa-play'"></i></el-button>
+                    <el-button type="text" class="button" @click="switchBut(item)"><i :class="item.versionNumber===1 ? 'fa fa-pause' : 'fa fa-play'"></i></el-button>
                   </div>
                 </div>
               </template>
               <!-- 卡片显示的内容 -->
-              <div class="card-content" v-on:click="handleClick">
+              <div class="card-content" v-on:click="handleClick(item.id)">
                 <h2>{{ item.name }}</h2>
-                <p>{{ item.introduction }}</p>
+                <p>{{ item.describe }}</p>
                 <div class="card-status">
-                  <Badge :status="item.status === 1 ? 'success' : 'default'" :text="item.status === 1 ? '运行中' : '未运行'" />
+                  <Badge :status="item.versionNumber === 1 ? 'success' : 'default'" :text="item.versionNumber === 1 ? '运行中' : '未运行'" />
                 </div>
               </div>
               <template #footer>
@@ -60,14 +60,12 @@
         <!-- 分页 -->
         <div class="blockPage">
           <el-pagination
-            @size-change="sizeChange"
-            @current-change="currentChange"
-            :page-sync="page"
-            :pager-count="10"
-            :page-sizes="[12,24,36,48]"
+            :current-page="page.currentPage"
             :page-size="page.pageSize"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="page.total">
+            :background="true"
+            layout="total, prev, pager, next"
+            :total="page.total"
+            @current-change="handleCurrentChange">
           </el-pagination>
         </div>
       </basic-container>
@@ -82,6 +80,8 @@ import { useStore } from 'vuex';
 import  {Message} from 'view-ui-plus'
 import { ElMessageBox,ElMessage } from 'element-plus';
 import { useRoute, useRouter } from 'vue-router';
+import api from "../../api/api";
+import modelstore from "../../store/model.js";
 // import { add, getDetail, getList, remove, update } from "@/api/接口js文件";
 
 /**
@@ -99,35 +99,37 @@ const router = useRouter();
 
 const checked = ref(false);
 const page = reactive({
-  pageSize: 12,
+  pageSize: 8,
   currentPage: 1,
   total: 0,
+  key:'',
+  list:[]
 });
 const selectionList = ref([]);
 const data = ref([]);
 
-// 添加20个数据到data变量
-for (let i = 0; i < 20; i++) {
-  if(i===0){
-      data.value.push({
-      id: i + 1,
-      checked: false,
-      name:"数据模型",
-      introduction:"这是一段对于模型的简单描述",
-      status:1,
-      // 其他属性...
-    });
-  }else{
-      data.value.push({
-      id: i + 1,
-      checked: false,
-      name:"数据模型",
-      introduction:"这是一段对于模型的简单描述",
-      status:0,
-      // 其他属性...
-    });
-  }
-}
+// // 添加20个数据到data变量
+// for (let i = 0; i < 20; i++) {
+//   if(i===0){
+//       data.value.push({
+//       id: i + 1,
+//       checked: false,
+//       name:"数据模型",
+//       introduction:"这是一段对于模型的简单描述",
+//       status:1,
+//       // 其他属性...
+//     });
+//   }else{
+//       data.value.push({
+//       id: i + 1,
+//       checked: false,
+//       name:"数据模型",
+//       introduction:"这是一段对于模型的简单描述",
+//       status:0,
+//       // 其他属性...
+//     });
+//   }
+// }
 
 // 获取数组中数值的下标
 function indexOf(val, ids) {
@@ -173,7 +175,6 @@ function rowUpdate(row, index) {
 
 // 删除接口
 function rowDel(row) {
-  
   // remove(row.id)
   //   .then(() => {
   //     onLoad(page);
@@ -191,12 +192,6 @@ function switchBut(row){
 
 }
 
-//点击卡片跳转页面
-const handleClick = () => {
-  // 处理点击事件的逻辑
-  console.log('Div clicked!');
-  router.push({ path: "/info" });
-}
 
 function searchReset() {
   // query = {};
@@ -213,30 +208,46 @@ function selectionClear() {
   // $refs.crud.toggleSelection();
 }
 
-function currentChange(currentPage) {
+function handleCurrentChange(currentPage) {
+  // console.log(currentPage)
   page.currentPage = currentPage;
+  getModels();
 }
 
-function sizeChange(pageSize) {
-  page.pageSize = pageSize;
+
+//获取模型信息
+function getModels() {
+  let params = {
+    key:page.key,
+    current:page.currentPage,
+    size:page.pageSize
+  }
+  // console.log(data)
+  api.model.getModels(params).then((res)=>{
+    console.log(res)
+    if(res.code===200){
+      page.list = res.data.records
+      console.log(page.list)
+      page.total = res.data.total
+    }else{
+      ElMessage.error(res.message)
+    }
+  }).catch((err)=>{
+    console.log(err);
+  })
 }
 
-function refreshChange() {
-  // onLoad(page, query);
+const modelStore = modelstore();
+//点击卡片跳转页面
+const handleClick = (itemId) => {
+  modelStore.id = itemId;
+  router.push({ path: "/info/modelInfo"});
+  // router.push({ path: "/info/modelInfo", query: { id: itemId}});
 }
 
-// 分页接口
-function onLoad(page, params = {}) {
-  // loading = true;
-  // getList(page.currentPage, page.pageSize, Object.assign(params, query))
-  //   .then(res => {
-  //     const data = res.data.data;
-  //     page.total = data.total;
-  //     data.value = data.records;
-  //     loading = false;
-  //     selectionClear();
-  //   });
-}
+onMounted(() => {
+  getModels();
+})
 </script>
 <style lang="less" scoped>
 .box{
@@ -259,9 +270,9 @@ function onLoad(page, params = {}) {
 
   .middle{
     // display: flex;
-    position: absolute;
+    position: relative;
     justify-content: space-between;
-    top: 30px;
+    top: 50px;
 
   }
   .left{
@@ -269,14 +280,19 @@ function onLoad(page, params = {}) {
     // flex-wrap:flex-wrap;
     // flex-direction: row;
     position: relative;
-    left: -38.7%;
+    left: -46%;
     top:30px;
   }
   .right{
     position: relative;
-    left: 77.7%;
+    left: 77%;
+    top:-20px;
     width:250px;
-    background-color: rgb(242,243,245);
+    // background-color: rgb(242,243,245);
+  }
+  .content{
+    position: relative;
+    top:-10px;
   }
   .create {
     background-color: rgb(34,101,255);
@@ -290,12 +306,15 @@ function onLoad(page, params = {}) {
     color: rgb(96,119,169);
     border: rgb(247,248,250);
   }
+  .cards{
+    width:280px;
+  }
   .card-header{
     height: 15px;
   }
   .card-content{
     padding-top:10px;
-    height: 100px;
+    height: 110px;
     cursor: pointer; /*悬停变小手的属性*/
     p{
       padding-top: 5px;
@@ -328,8 +347,12 @@ function onLoad(page, params = {}) {
     // outline: none; /* 去掉点击后的外边框 */
   }
   .blockPage{
-    float: right;
-    margin-right: 30px;;
+    position: absolute;
+    bottom: 0;
+    top:460px;
+    right: 30px;
+    // float: right;
+    // margin-right: 30px;;
   }
 
 
