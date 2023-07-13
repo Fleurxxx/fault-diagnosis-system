@@ -15,6 +15,7 @@ let apiFun = {
   train:{}, //训练
   diagnose:{}, //诊断
   repair:{}, //维修
+
   test:{},
 };
 
@@ -55,6 +56,7 @@ apiFun.user.login = params => {
 apiFun.user.enroll = params => {
   return http.post('/user/register',params)
 }
+
 
 /**
  * 模型接口

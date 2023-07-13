@@ -15,6 +15,7 @@
         </template>
       </el-input>
     </div>
+
       <basic-container class="content">
         <el-row :gutter="12" v-loading="loading" style="padding:20px ">
           <!-- date遍历循环的数据 -->
@@ -175,7 +176,6 @@ function rowUpdate(row, index) {
 
 // 删除接口
 function rowDel(row) {
-
   // remove(row.id)
   //   .then(() => {
   //     onLoad(page);

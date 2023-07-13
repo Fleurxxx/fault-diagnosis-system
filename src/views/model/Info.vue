@@ -166,6 +166,7 @@ const showDate = reactive({
   isPublic:false,
 })
 
+
 /* 文件大小数据转化 */
 function formatBytes(bytes, decimals = 2) {
   if (bytes === 0) return '0 Bytes';
@@ -392,6 +393,11 @@ defineExpose({
     .info p{
       padding-top: 35px;
     }
+    .info-tag{
+      padding-top: 20px;
+      .tags{
+        margin-right: 10px;
+      }
 
     .info-tag{
       padding-top: 20px;
@@ -415,7 +421,6 @@ defineExpose({
       .tab-card{
         box-shadow:0 0 0 #fff; /*去掉阴影 */;
       }
-
     }
     .hint{
       float: center;
