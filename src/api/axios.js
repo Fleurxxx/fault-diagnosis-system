@@ -2,7 +2,7 @@
  * @Author: Fleurxxx 984209872@qq.com
  * @Date: 2023-03-24 15:06:21
  * @LastEditors: Fleurxxx 984209872@qq.com
- * @LastEditTime: 2023-07-05 17:02:21
+ * @LastEditTime: 2023-07-13 01:01:04
  * @FilePath: \oss-backstage\src\api\axios.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -14,6 +14,7 @@ import { localGet } from './index'
 
 
 let baseURL = 'http://192.168.50.35:8080/' //后端开发环境地址(部署后端到本机后只需修改此地址)
+
 let config = {
   baseURL: baseURL,
   timeout: 50000    //设置最大请求时间

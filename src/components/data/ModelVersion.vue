@@ -54,6 +54,7 @@ import { useStore } from 'vuex';
 import { ElMessageBox,ElMessage,ElInput } from 'element-plus';
 import { useRoute, useRouter } from 'vue-router';
 import api from "../../api/api";
+import modelstore from "../../store/model.js";
 
 const props = defineProps({  //获取传参的数据
   showimg:String,
@@ -128,9 +129,10 @@ const open = () =>{
   })
 }
 
+const modelStore = modelstore();
 const getVersions = () => {
-  console.log(data.id)
-  api.model.getVersions(props.modelId).then((res)=>{
+  console.log(modelStore.id)
+  api.model.getVersions(modelStore.id).then((res)=>{
     console.log(res)
     if(res.code===200){
       // for(let i=0; i<res.data.length; i++){
@@ -154,9 +156,9 @@ function renderTime(date) {
     return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
 }
 
-
 onBeforeMount(() => {
-  data.modelId = props.modelId
+  // console.log( modelStore.id)
+  data.modelId = modelStore.id;
   if(data.modelId !== undefined){ //会传两次值，第一次是undefined
     getVersions();
   }

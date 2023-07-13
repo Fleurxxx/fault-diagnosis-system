@@ -2,7 +2,7 @@
  * @Author: Fleurxxx 984209872@qq.com
  * @Date: 2023-06-01 20:28:39
  * @LastEditors: Fleurxxx 984209872@qq.com
- * @LastEditTime: 2023-07-07 22:59:41
+ * @LastEditTime: 2023-07-12 11:33:54
  * @FilePath: \maintenance\src\router\index.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -113,8 +113,13 @@ const routes = [
             },{
                 path:"/detail",
                 component: ()=>import('../views/maintain/Details.vue'),
-            // }
-            },{ //------- 组件测试-------//
+            },{ //------- 数据看板 -------//
+              path:"/spectaculars",
+              component: ()=>import('../views/spectaculars/Index.vue'),
+              meta: {
+                  title: '数据看板'
+              },
+          },{ //------- 组件测试-------//
                 path:"/file",  //上传
                 component: ()=>import('../components/updata/Files.vue'),
                 meta: {
@@ -164,7 +169,7 @@ const routes = [
             }
           },{
             path:"/zhu",
-            component: ()=>import('../components/chart/BuildEletricCharts.vue'),
+            component: ()=>import('../components/chart/RadarChart.vue'),
             meta: {
                 title: '代码编辑器'
             }

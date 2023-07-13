@@ -7,9 +7,9 @@
     <div class="box-reminder">
       <div class="reminder">
         <p class="title">操作指导</p>
-        <p>1. 填写模型信息并上传数据集</p>
-        <p>2. 进行在线数据分析，若数据异常请及时进行数据矫正。</p>
-        <p>3. 模型训练完成，下载训练模型。</p>
+        <p>1. 填写模型信息并上传数据集。</p>
+        <p>2. 在线数据分析，进行数据矫正。</p>
+        <p>3. 在线训练模型。</p>
       </div>
     </div>
     <div class="box-form">
@@ -166,45 +166,48 @@ function fileInfo(val){
 
 let fromData = reactive(null)
 let submit = async(fromData) =>{
-  await fromData.validate((valid,fields) => {
-    if (valid) {
-      console.log(data.radio)
-      if(data.radio === "1"){
-        data.isPublic = true
-      }else{
-        data.isPublic = false
-      }
-      let param = {
-        name: data.name,
-        describe: data.introduce,
-        fileName: data.fileInfo.fileName,
-        url: data.fileInfo.url,
-        size: data.fileInfo.size,
-        isPublic: data.isPublic,
-      }
-      // ElMessage.success("验证成功")
-      console.log(param)
-      if(param.url === undefined){
-        ElNotification({
-          title: '尚未上传数据集',
-          message: '请上传数据集后再进行下一步此操作',
-          type: 'warning',
-        })
-      }else{
-        api.train.submitForm(param).then((res)=>{
-          console.log(res)
-          if(res.code===200){
-            router.push({ path: "/analysis" });
-          }else{
-            ElMessage.error(res.message)
-          }
-        }).catch((err)=>{
-        console.log(err);
-        })
-      }
 
-    }
-  });
+  router.push({ path: "/analysis" });
+
+  // await fromData.validate((valid,fields) => {
+  //   if (valid) {
+  //     console.log(data.radio)
+  //     if(data.radio === "1"){
+  //       data.isPublic = true
+  //     }else{
+  //       data.isPublic = false
+  //     }
+  //     let param = {
+  //       name: data.name,
+  //       describe: data.introduce,
+  //       fileName: data.fileInfo.fileName,
+  //       url: data.fileInfo.url,
+  //       size: data.fileInfo.size,
+  //       isPublic: data.isPublic,
+  //     }
+  //     // ElMessage.success("验证成功")
+  //     console.log(param)
+  //     if(param.url === undefined){
+  //       ElNotification({
+  //         title: '尚未上传数据集',
+  //         message: '请上传数据集后再进行下一步此操作',
+  //         type: 'warning',
+  //       })
+  //     }else{
+  //       api.train.submitForm(param).then((res)=>{
+  //         console.log(res)
+  //         if(res.code===200){
+  //           router.push({ path: "/analysis" });
+  //         }else{
+  //           ElMessage.error(res.message)
+  //         }
+  //       }).catch((err)=>{
+  //       console.log(err);
+  //       })
+  //     }
+
+  //   }
+  // });
 
 // Message.error("错误");
 }

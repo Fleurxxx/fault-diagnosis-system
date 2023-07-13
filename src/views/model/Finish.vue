@@ -8,11 +8,26 @@
       <div class="reminder">
         <p class="title">操作指导</p>
         <p>1. 填写模型信息并上传数据集</p>
-        <p>2. 进行在线数据分析，若数据异常请及时进行数据矫正。</p>
-        <p>3. 模型训练完成，下载训练模型。</p>
+        <p>2. 在线数据分析，进行数据矫正。</p>
+        <p>3. 在线训练模型。</p>
       </div>
     </div>
     <div class="box-table">
+      <!-- <p class="t-title">训练结果：</p>
+      <div class="file-box">
+        <div class="file-color" @click="handleClick">
+          <Row>
+              <Col span="2">
+                <Avatar :src=avatarUrl shape="square" icon="ios-person" size="large" />
+              </Col>
+              <div style="padding-left:10px;"></div>
+              <Col span="10">
+                  <p>模型测试样例.csv</p>
+                  <p>13.56 KB</p>
+              </Col>
+          </Row>
+        </div>
+      </div> -->
       <div class="container">
         <img src="../../assets/image/成功.png" alt="Image" class="center-image">
         <div class="text">
@@ -21,8 +36,7 @@
         </div>
         <div class="text">
           <el-button @click="back()" style="width: 80px;">查看详情</el-button>
-          <el-button type="primary" @click="submit()" style="width: 80px;">下载模型</el-button>
-
+          <el-button type="primary" @click="downloadZip()" style="width: 80px;">下载模型</el-button>
         </div>
       </div>
     </div>
@@ -35,7 +49,9 @@ import { useStore } from 'vuex';
 import  {Message} from 'view-ui-plus'
 import { ElMessageBox,ElMessage } from 'element-plus';
 import { useRoute, useRouter } from 'vue-router';
-
+import jsonView from '../../components/JsonView.vue'
+import avatarUrl from '../../assets/icon/csv.png'
+import axios from 'axios';
 /**
 * 仓库
 */
@@ -55,8 +71,33 @@ const router = useRouter();
 const data = reactive({
   name:'',
   introduce:'',
+  jsonData: {}
 
 })
+
+
+const initialize = () =>{
+  axios.get('src/assets/result1.json')
+      .then(response => {
+        data.jsonData = response.data;
+      })
+      .catch(error => {
+        console.error('Error retrieving JSON data:', error);
+      });
+}
+
+const downloadZip = () => {
+    const zipUrl = 'src/assets/korean_PP-OCRv3_rec_infer.zip';
+    // 创建下载链接
+    const downloadLink = document.createElement('a');
+    downloadLink.href = zipUrl;
+    downloadLink.download = 'file.zip';
+
+    // 触发下载
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+}
 
 const back =()=>{
   router.push({ path: "/info" });
@@ -66,7 +107,7 @@ onBeforeMount(() => {
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
 onMounted(() => {
-  //console.log('3.-组件挂载到页面之后执行-------onMounted')
+  initialize()
 })
 watchEffect(()=>{
 })
@@ -112,8 +153,7 @@ defineExpose({
   }
 
   .box-table{
-    margin-top: 70px;
-
+    margin: 70px 220px 0 220px;
     .container {
       // display: flex;
       flex-direction: column;
@@ -140,7 +180,38 @@ defineExpose({
 
   }
 }
+.t-title{
+  font-size: 18px;
+  font-weight: bolder;
+  padding-left: 5px;
+  text-align: left;
+}
+.t-json{
+  padding-left: 50px;
+}
+.viewer{
+  width: 60%;
+  min-width: 3.125rem;
+  text-align: left;
+  padding-left: 50px;
+  padding-bottom: 30px;
+}
 
-
+.file-box{
+  padding:30px 10px 0 10px;
+  .file-color{
+    z-index:9999;
+    padding:15px 0px 15px 20px;
+    background-color: rgba(10, 10, 10, 0.064);
+    cursor: pointer; /*鼠标悬停变小手*/
+    p:nth-child(1){
+      font-size:16px;
+      font-weight: bold;
+    }
+    p:nth-child(2){
+      font-size:13px;
+    }
+  }
+}
 
 </style>

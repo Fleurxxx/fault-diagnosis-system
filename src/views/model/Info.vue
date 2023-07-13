@@ -8,12 +8,12 @@
       <div class="reminder">
         <div class="top">
           <el-avatar :fit="fit" :size="35" :src=headImg />
-          <p v-if="isPublic">Fleurxxx · 更新于<Time :time="data.time" /> · 公开</p>
+          <p v-if="showDate.isPublic">Fleurxxx · 更新于<Time :time="data.time" /> · 公开</p>
           <p v-else>Fleurxxx · 更新于<Time :time="data.time" /> · 私人</p>
         </div>
         <div class="info" >
-            <h1>{{data.name}}</h1>
-          <p @click="change('txt1')" class="cur"><i class="fa fa-pencil-square-o"></i> {{ data.introduce }}</p>
+            <h1>{{showDate.name}}</h1>
+          <p @click="change('txt1')" class="cur"><i class="fa fa-pencil-square-o"></i> {{ showDate.introduce }}</p>
           <div class="info-tag">
             <el-tag v-for="(item, index) in tags" :key="index" :type="item.type" class="tags">{{ item.text }}</el-tag>
           </div>
@@ -160,6 +160,11 @@ const data = reactive({
   modelId: '',
   modelDataSets:{}
 })
+const showDate = reactive({
+  name:'模型数据1',
+  introduce:'添加描述信息',
+  isPublic:false,
+})
 
 /* 文件大小数据转化 */
 function formatBytes(bytes, decimals = 2) {
@@ -174,12 +179,15 @@ function formatBytes(bytes, decimals = 2) {
 const modelStore = modelstore();
 //获取模型信息
 function getModels() {
-  console.log(data.modelId)
+  console.log(modelStore.id)
   api.model.getModel(data.modelId).then((res)=>{
     console.log(res)
     if(res.code===200){
+      showDate.name = res.data.name
+      showDate.introduce = res.data.describe
+      showDate.isPublic = res.data.isPublic
       data.name = res.data.name
-      data.introduce = res.data.name
+      data.introduce = res.data.describe
       data.filesize = formatBytes(res.data.modelDataSets.size)
       data.isPublic = res.data.isPublic
       data.modelDataSets = res.data.modelDataSets
@@ -197,9 +205,15 @@ function getModels() {
     console.log(err);
   })
 }
+// // 解构modelStore里面的变量和方法 toRefs作用是让解构出来的变量具有响应性
+// const {id, name, describe} = toRefs(modelStore);
+
+
+
 
 //修改模型信息
 const submit =(index)=>{
+  console.log(index)
   if(index.radio === "1"){
     index.isPublic = true
   }else{
@@ -207,17 +221,27 @@ const submit =(index)=>{
   }
   let params = {
     name:index.name,
-    introduce:index.introduce,
+    describe:index.introduce,
     isPublic:index.isPublic,
-    modelId:index.modelId,
+    id:index.modelId,
 
   }
-  // router.push({ path: "/info" });
-  console.log(index)
-  ElMessage({
-    message: '保存成功',
-    type: 'success',
+  api.model.submitInfo(params).then((res)=>{
+    console.log(res)
+    if(res.code===200){
+      ElMessage({
+        message: '保存成功',
+        type: 'success',
+      })
+      getModels()
+      // router.push({ path: "/info" });
+    }else{
+      ElMessage.error(res.message)
+    }
+  }).catch((err)=>{
+    console.log(err);
   })
+
 }
 
 //简介跳转
@@ -307,7 +331,7 @@ onBeforeMount(() => {
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
 onMounted(() => {
-  //console.log('3.-组件挂载到页面之后执行-------onMounted')
+  console.log(modelStore.id)
   data.modelId = modelStore.id
   getModels()
 })
@@ -318,6 +342,7 @@ watchEffect(()=>{
 defineExpose({
   ...toRefs(data)
 })
+
 
 </script>
 <style scoped lang='less'>

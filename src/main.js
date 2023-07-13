@@ -2,7 +2,7 @@
  * @Author: Fleurxxx 984209872@qq.com
  * @Date: 2023-05-30 20:36:57
  * @LastEditors: Fleurxxx 984209872@qq.com
- * @LastEditTime: 2023-07-07 22:44:17
+ * @LastEditTime: 2023-07-10 10:01:32
  * @FilePath: \maintenance\src\main.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -11,6 +11,8 @@ import './style.css'
 import router from "./router"
 import App from './App.vue'
 import Vuex from 'vuex'
+// ======= pinia
+import store from './store'
 
 //全局引入mock(这里只需要这一行引入)
 import "./mock/index.js";
@@ -18,10 +20,6 @@ import "./mock/index.js";
 // ======= iView
 import ViewUIPlus from 'view-ui-plus'
 import 'view-ui-plus/dist/styles/viewuiplus.css'
-
-// ======= pinia
-import { createPinia } from 'pinia'
-const state = createPinia()
 
 // ======= awesome字体图标
 import 'font-awesome/css/font-awesome.min.css'
@@ -70,7 +68,7 @@ zhCn.el.pagination.total = '共 ' + '{total}' + ' 条';
 //挂载
 app.use(router)
     .use(Vuex)
-    .use(state)
+    .use(store)
     .use(ElementPlus, { locale: zhCn })
     .use(VueCodeMirror)
     .use(JsonViewer)

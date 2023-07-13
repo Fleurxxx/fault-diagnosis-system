@@ -8,13 +8,24 @@
       <div class="reminder">
         <p class="title">操作指导</p>
         <p>1. 填写模型信息并上传数据集</p>
-        <p>2. 进行在线数据分析，若数据异常请及时进行数据矫正。</p>
-        <p>3. 模型训练完成，下载训练模型。</p>
+        <p>2. 在线数据分析，进行数据矫正。</p>
+        <p>3. 在线训练模型。</p>
       </div>
     </div>
+    <div class="content">
+      <Column />
+    </div>
+    <div class="content tips">
+      <Alert  show-icon>
+          提示
+          <template #desc>
+              检测出您上传的数据集存在空串或者未能识别的符号串，为了确保数据的准确性和完整性，我们会自动处理这些数据并将其排除。您是否愿意继续操作？ <Icon type="help-circled" size="14"></Icon>
+          </template>
+      </Alert>
+    </div>
     <div class="box-table">
-      <el-button type="primary" @click="submit()" style="width: 80px;">下一步</el-button>
       <el-button  @click="back()" style="width: 80px;">返回</el-button>
+      <el-button type="primary" @click="submit()" style="width: 80px;">下一步</el-button>
     </div>
     <div>
           <el-dialog
@@ -51,6 +62,7 @@ import { useStore } from 'vuex';
 import  {Message} from 'view-ui-plus'
 import { ElMessageBox,ElMessage } from 'element-plus';
 import { useRoute, useRouter } from 'vue-router';
+import Column from '../../components/data/Column.vue'
 
 /**
 * 仓库
@@ -104,11 +116,31 @@ const cancel = () =>{
   percent.value = 0;
 }
 //倒计时
+// function countdown() {
+//   let seconds = 10;
+//   const timer = setInterval(() => {
+//     console.log(seconds)
+//     percent.value += 10;
+//     if (seconds === 0) {
+//       clearInterval(timer);
+//       console.log("Countdown complete!");
+//     } else {
+//       console.log(`Remaining seconds: ${seconds}`);
+//       seconds--;
+//     }
+//     if(percent.value === 100){
+//       cancel()
+//       ElMessage.success({ message: '创建成功!'});
+//       router.push({ path: "/trained" });
+//     }
+//   }, 1000);
+// }
+
 function countdown() {
-  let seconds = 10;
+  let seconds = 100;
   const timer = setInterval(() => {
-    console.log(seconds)
-    percent.value += 10;
+    console.log(seconds);
+    percent.value += 1; // 每秒增加 3.125，共 32 秒增加 100
     if (seconds === 0) {
       clearInterval(timer);
       console.log("Countdown complete!");
@@ -116,12 +148,12 @@ function countdown() {
       console.log(`Remaining seconds: ${seconds}`);
       seconds--;
     }
-    if(percent.value === 100){
-      cancel()
-      ElMessage.success({ message: '创建成功!'});
+    if (percent.value === 100) {
+      cancel();
+      ElMessage.success({ message: '创建成功!' });
       router.push({ path: "/trained" });
     }
-  }, 1000);
+  }, 312.5);
 }
 
 
@@ -158,7 +190,9 @@ defineExpose({
   position: sticky;
   top:0;
   width:100%;
-  height: 190vh;
+  // height: 190vh;
+  // height:100%;
+  padding-bottom: 70px;
   box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, 0.08);
   .box-title{
     float: left;
@@ -185,12 +219,24 @@ defineExpose({
   }
 
   .box-table{
-    margin-top: 70px;
+    margin-top: 50px;
 
 
   }
+
 }
 
+.content{
+  margin:30px 160px 0 160px;
+}
+.tips{
+  text-align:left;
+}
+/deep/.analysis-name {
+    margin-right: 68%;
 
-
+}
+/deep/.analysis {
+    width: 458px;
+}
 </style>
