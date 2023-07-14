@@ -63,7 +63,9 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 import zhCn from 'element-plus/dist/locale/zh-cn'
 zhCn.el.pagination.total = '共 ' + '{total}' + ' 条';
 
-
+// 引入 mavon-editor
+// import mavonEditor from 'mavon-editor'
+// import 'mavon-editor/dist/css/index.css'
 
 //挂载
 app.use(router)
@@ -73,4 +75,5 @@ app.use(router)
     .use(VueCodeMirror)
     .use(JsonViewer)
     .use(ViewUIPlus)
-    .mount('#app')
+    // .use(mavonEditor)
+    .mount('#app');

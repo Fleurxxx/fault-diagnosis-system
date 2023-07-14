@@ -134,21 +134,28 @@ const next = async(dataForm) =>{
         })
       }else{
         loading.value = true;
-        apiFun.repair.reanalysis(param).then((res)=>{
-          console.log(res)
-          if(res.code===200){
-            loading.value = false;
-            // router.push({
-            //   path:'/record', 
-            //   query:{id: route.query.id}
-            // })
-          }else{
-            ElMessage.error(res.message);
-            loading.value = false;
-          }
-        }).catch((err)=>{
-          console.log(err);
-        });
+        setTimeout(() => {
+          ElMessage.success('分析完成');
+          loading.value = false;
+          router.push({
+            path:'/record', 
+            query:{id: route.query.id}
+          })
+        }, 10000);
+        // apiFun.repair.reanalysis(param).then((res)=>{
+        //   if(res.code===200){
+        //     loading.value = false;
+        //     router.push({
+        //       path:'/record', 
+        //       query:{id: route.query.id}
+        //     })
+        //   }else{
+        //     ElMessage.error(res.message);
+        //     loading.value = false;
+        //   }
+        // }).catch((err)=>{
+        //   console.log(err);
+        // });
       }
     }else{
       ElMessage.warning('请将表格填写完整');
@@ -160,16 +167,6 @@ const backToList = () => {
     path:'/detail', 
     query:{id: route.query.id}
   })
-}
-//获取所有订单
-const orderFocus = () => {
-
-}
-const printResult = () => {
-
-}
-const toInfo = () => {
-
 }
 </script>
 <style lang="less" scoped>

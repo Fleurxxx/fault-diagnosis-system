@@ -4,7 +4,7 @@ export const riskAssessmentOption = (data) => {
     title: [
       {
         left: 'center',
-        text: '故障风险评估 & 趋势分析'
+        text: '风险评估 & 趋势分析'
       },
     ],
     legend: {
@@ -33,19 +33,22 @@ export const riskAssessmentOption = (data) => {
         type: 'line',
         smooth: true,
         seriesLayoutBy: 'row',
-        emphasis: { focus: 'series' }
+        emphasis: { focus: 'series' },
+        color: '#0F6BAE', // 设置第一个系列的颜色为红色
       },
       {
         type: 'line',
         smooth: true,
         seriesLayoutBy: 'row',
-        emphasis: { focus: 'series' }
+        emphasis: { focus: 'series' },
+        color: '#248BD6', // 设置第二个系列的颜色为绿色
       },
       {
         type: 'line',
         smooth: true,
         seriesLayoutBy: 'row',
-        emphasis: { focus: 'series' }
+        emphasis: { focus: 'series' },
+        color: '#83B8FF', // 设置第三个系列的颜色为蓝色
       },
       {
         type: 'pie',
@@ -62,7 +65,8 @@ export const riskAssessmentOption = (data) => {
           itemName: 'year',
           value: '2012',
           tooltip: '2012'
-        }
+        },
+        color: ['#0F6BAE', '#248BD6', '#83B8FF'], // 设置饼状图扇区的颜色
       }
     ]
   }

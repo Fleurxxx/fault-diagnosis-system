@@ -8,9 +8,9 @@
         <el-image style="width: 60px" :src="url" :fit="fit" />
       </div>
       <div class="step-content">
-          <div class="step-title">{{ steps[status - 1].title }}</div>
-          <div class="step-description">{{ steps[status - 1].description }}</div>
-        </div>
+        <div class="step-title">{{ steps[status - 1].title }}</div>
+        <div class="step-description">{{ steps[status - 1].description }}</div>
+      </div>
       <div>
         <el-button class="lef_btn" v-if="status === 4" @click="printResult">打印结果</el-button>
         <el-button class="lef_btn" v-else @click="toInfo">查看详情</el-button>

@@ -22,71 +22,79 @@
     </div>
     <div class="bottom">
       <div class="content-bottom">
-        <div class="left">
-          <el-card class="card" shadow="hover">
-            <template #header>
-              <div class="card-header-2" >
-                <span><i class='fa fa-dot-circle-o'></i>&nbsp;&nbsp;&nbsp;故障原因</span>
-              </div>
-            </template>
-            <div class="small-div-body fault">
-                {{ faultAnalysis.cause }}
-            </div>
-            <div class="small-div-body fault" v-if="faultAnalysis.cause === ''">
-              <el-empty description="未找到故障原因" image-size="130">
-              </el-empty>
-            </div>
-          </el-card>
-        </div>
-        <div class="right">
-          <el-drawer
-            v-model="drawVisible"
-            title="重新上传分析"
-            width="35%">
-            <el-form
-              class="show"
-              ref="addForm"
-              :model="form"
-              label-width="auto"
-              label-position="left"
-            >
-              <el-form-item label="数据集上传" prop="name">
-                <div class="form-update">
-                  <Upload multiple type="drag" action="" :before-upload="beforeUpload">
-                    <div style="padding: 20px 20px">
-                      <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
-                      <p>Click or drag files here to upload</p>
-                    </div>
-                  </Upload>
+        <Tabs v-model="activeTab" class="custom-tabs">
+          <TabPane label="分析结果" name="name1" >
+            <div class="left">
+              <el-card class="card" shadow="hover">
+                <template #header>
+                  <div class="card-header-2" >
+                    <span><i class='fa fa-dot-circle-o'></i>&nbsp;&nbsp;&nbsp;分析结果</span>
+                  </div>
+                </template>
+                <div class="small-div-body fault">
+                    {{ faultAnalysis.cause }}
                 </div>
-              </el-form-item>
-              <el-form-item label="分析描述" prop="status" :required="true">
-                <el-input v-model="form.name" type="textarea" :autosize="{ minRows: 5, maxRows: 5}"></el-input>
-              </el-form-item>
-            </el-form>
-            <template #footer>
-              <span class="dialog-footer">
-                <el-button @click="drawVisible = false">取 消</el-button>
-                <el-button type="primary" @click="handleAnalysis">确 定</el-button>
-              </span>
-            </template>
-          </el-drawer>
-          <el-card class="card" shadow="hover">
-            <template #header>
-              <div class="card-header-2" >
-                <span><i class='fa fa-dot-circle-o'></i>&nbsp;&nbsp;&nbsp;解决方案</span>
-              </div>
-            </template>
-            <div class="fault small-div-body ">
-              {{ faultAnalysis.solution }}
+                <div class="small-div-body fault" v-if="faultAnalysis.cause === ''">
+                  <el-empty description="未找到故障原因" image-size="130">
+                  </el-empty>
+                </div>
+              </el-card>
             </div>
-            <div class="fault small-div-body">
-              <el-empty description="未找到解决方案" image-size="90" v-if="faultAnalysis.solution === ''">
-                <el-button type="primary" @click="handleAnalysis">重新上传分析</el-button>
-              </el-empty>
+          </TabPane>
+          <TabPane label="解决方案" name="name2">
+            <div class="right">
+              <el-drawer
+                v-model="drawVisible"
+                title="重新上传分析"
+                width="35%">
+                <el-form
+                  class="show"
+                  ref="addForm"
+                  :model="form"
+                  label-width="auto"
+                  label-position="left"
+                >
+                  <el-form-item label="数据集上传" prop="name">
+                    <div class="form-update">
+                      <Upload multiple type="drag" action="" :before-upload="beforeUpload">
+                        <div style="padding: 20px 20px">
+                          <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                          <p>Click or drag files here to upload</p>
+                        </div>
+                      </Upload>
+                    </div>
+                  </el-form-item>
+                  <el-form-item label="分析描述" prop="status" :required="true">
+                    <el-input v-model="form.name" type="textarea" :autosize="{ minRows: 5, maxRows: 5}"></el-input>
+                  </el-form-item>
+                </el-form>
+                <template #footer>
+                  <span class="dialog-footer">
+                    <el-button @click="drawVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="handleAnalysis">确 定</el-button>
+                  </span>
+                </template>
+              </el-drawer>
+              <el-card class="card" shadow="hover">
+                <template #header>
+                  <div class="card-header-2" >
+                    <span><i class='fa fa-dot-circle-o'></i>&nbsp;&nbsp;&nbsp;解决方案</span>
+                  </div>
+                </template>
+                <!-- <div class="fault small-div-body ">
+                  {{ faultAnalysis.solution }}
+                </div> -->
+                <div class="fault small-div-body" v-if="valueHtml === null">
+                  <el-empty description="未找到解决方案" image-size="90" v-if="valueHtml === ''">
+                    <el-button type="primary" @click="handleAnalysis">重新上传分析</el-button>
+                  </el-empty>
+                </div>
+                <!-- 展示已经写完的内容 -->
+                <div v-else v-html="valueHtml" class="way"></div>
+              </el-card>
             </div>
-          </el-card>
-        </div>
+          </TabPane>
+        </Tabs>
       </div>
     </div>
   </div>
@@ -97,6 +105,7 @@ import { ref, reactive, onMounted, computed } from 'vue';
 import MyTimeLine from '../../components/MyTimeLine.vue';
 import Steps from '../../components/Steps.vue';
 import { useRouter, useRoute } from "vue-router";
+
 const router = useRouter();
 const route = useRoute();
 const status = ref(2);
@@ -133,6 +142,13 @@ const faultAnalysis = reactive({
   cause: '',
   solution: '',
 });
+// 内容 HTML
+const valueHtml = ref('');
+
+onMounted(() => {
+  // valueHtml.value = Vue.compile(route.query.value).render;
+  valueHtml.value = route.query.value;
+})
 
 const backToList = () => {
   router.push({
@@ -149,6 +165,14 @@ const toInfo = () => {
 }
 </script>
 <style lang="less" scoped>
+/deep/code{
+  // text-align: left;
+  // word-wrap:break-word;
+  // word-break: break-all;
+  
+white-space: normal;
+word-break: break-all;
+}
 .box{
   flex-direction: column;
   box-sizing: border-box;
@@ -240,7 +264,8 @@ h3{
   width: 100%;
   display: flex;
   gap: 25px;
-  padding: 0 20px 0 20px;
+  padding: 0 180px 0 180px;
+  flex-direction: column;
 
   .left {
     flex: 1;
@@ -302,6 +327,12 @@ h3{
       max-height: 300px;
       text-align: left;
       overflow: auto;
+    }
+    .way {
+      text-align: left;
+      white-space:"pre-wrap";
+      font-size: 14px;
+      padding: 10px;
     }
   }
 }

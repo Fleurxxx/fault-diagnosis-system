@@ -13,7 +13,8 @@
         </div>
         <div class="info" >
             <h1>{{data.name}}</h1>
-            <vue-markdown :source="markdownText"></vue-markdown>
+            <!-- <vue-markdown :source="markdownText"></vue-markdown> -->
+            <!-- <v-md-editor v-model="text" height="400px"></v-md-editor> -->
         </div>
       </div>
     </div>
@@ -34,24 +35,7 @@ import DeploymentSettings from '../../components/deployment/DeploymentSettings.v
 import api from "../../api/api";
 import headImg from '../../assets/icon/head/羊1.png'
 import modelstore from "../../store/model.js";
-import VueMarkdown from 'vue-markdown'
 
-/**
-* 仓库
-*/
-const store = useStore();
-/**
-* 路由对象
-*/
-const route = useRoute();
-/**
-* 路由实例
-*/
-const router = useRouter();
-//console.log('1-开始创建组件-setup')
-/**
-* 数据部分
-*/
 const data = reactive({
   radio:"1",
   name:'模型数据1',
@@ -62,6 +46,8 @@ const data = reactive({
   modelId: '',
   modelDataSets:{}
 });
+
+const txt = ref('## 叮当')
 
 /* 文件大小数据转化 */
 function formatBytes(bytes, decimals = 2) {

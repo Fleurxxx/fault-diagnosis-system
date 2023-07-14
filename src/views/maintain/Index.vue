@@ -95,8 +95,7 @@
             :page-size="pageSize"
             layout="total, prev, pager, next"
             :total="totalNum"
-            @current-change="handleCurrentChange"
-          />
+            @current-change="handleCurrentChange"/>
         </div>
       </div>
     </div>
