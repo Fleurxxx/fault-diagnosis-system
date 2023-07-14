@@ -7,12 +7,23 @@
     <div class="box-reminder">
       <Steps v-bind:steps="steps"/>
     </div>
-    <div>
+    <!-- <div>
       <i class="fa fa-refresh fa-spin"></i>
+    </div> -->
+    <div class="content">
+      <Column />
+    </div>
+    <div class="content tips">
+      <Alert  show-icon>
+          提示
+          <template #desc>
+              检测出您上传的数据集存在空串或者未能识别的符号串，为了确保数据的准确性和完整性，我们会自动处理这些数据并将其排除。您是否愿意继续操作？ <Icon type="help-circled" size="14"></Icon>
+          </template>
+      </Alert>
     </div>
     <div class="box-table">
-      <el-button type="primary" @click="submit()" style="width: 80px;">下一步</el-button>
       <el-button  @click="back()" style="width: 80px;">返回</el-button>
+      <el-button type="primary" @click="submit()" style="width: 80px;">下一步</el-button>
     </div>
     <div>
           <el-dialog
@@ -53,6 +64,7 @@ import  {Message} from 'view-ui-plus'
 import { ElMessageBox,ElMessage } from 'element-plus';
 import { useRoute, useRouter } from 'vue-router';
 import Steps from '../../components/Steps.vue';
+import Column from '../../components/data/Column.vue'
 
 /**
 * 仓库
@@ -125,10 +137,10 @@ const cancel = () =>{
 }
 //倒计时
 function countdown() {
-  let seconds = 10;
+  let seconds = 100;
   const timer = setInterval(() => {
-    console.log(seconds)
-    percent.value += 10;
+    console.log(seconds);
+    percent.value += 2; // 每秒增加 3.125，共 32 秒增加 100
     if (seconds === 0) {
       clearInterval(timer);
       console.log("Countdown complete!");
@@ -136,14 +148,13 @@ function countdown() {
       console.log(`Remaining seconds: ${seconds}`);
       seconds--;
     }
-    if(percent.value === 100){
-      cancel()
-      ElMessage.success({ message: '诊断完成!'});
+    if (percent.value === 100) {
+      cancel();
+      ElMessage.success({ message: '创建成功!' });
       router.push({ path: "/fini" });
     }
-  }, 1000);
+  }, 75);
 }
-
 
 const submit =()=>{
   data.centerDialogVisible = true
@@ -178,7 +189,8 @@ defineExpose({
   position: sticky;
   top:0;
   width:100%;
-  height: 190vh;
+  // height: 190vh;
+  padding-bottom: 70px;
   box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, 0.08);
   .box-title{
     float: left;
@@ -205,12 +217,24 @@ defineExpose({
   }
 
   .box-table{
-    margin-top: 70px;
+    margin-top: 50px;
 
 
   }
 }
 
+.content{
+  margin:30px 160px 0 160px;
+}
+.tips{
+  text-align:left;
+}
+/deep/.analysis-name {
+    margin-right: 68%;
 
+}
+/deep/.analysis {
+    width: 458px;
+}
 
 </style>

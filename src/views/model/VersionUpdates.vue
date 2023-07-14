@@ -143,7 +143,7 @@ let submit = async(fromData) =>{
     if (valid) {
       let param = {
         modelId:data.modelId,
-        name: data.name,
+        title: data.name,
         describe: data.introduce,
         fileName: data.fileInfo.fileName,
         url: data.fileInfo.url,
@@ -151,7 +151,7 @@ let submit = async(fromData) =>{
       }
       // ElMessage.success("验证成功")
       console.log(param)
-      api.train.submitForm(param).then((res)=>{
+      api.model.dataUpdate(param).then((res)=>{
       console.log(res)
       if(res.code===200){
         router.push({ path: "/analysis" });

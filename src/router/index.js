@@ -2,16 +2,8 @@
  * @Author: Fleurxxx 984209872@qq.com
  * @Date: 2023-06-01 20:28:39
  * @LastEditors: Fleurxxx 984209872@qq.com
- * @LastEditTime: 2023-07-07 22:59:41
+ * @LastEditTime: 2023-07-12 11:33:54
  * @FilePath: \maintenance\src\router\index.js
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
- */
-/*
- * @Author: Fleurxxx 984209872@qq.com
- * @Date: 2023-02-11 05:34:11
- * @LastEditors: Fleurxxx 984209872@qq.com
- * @LastEditTime: 2023-07-02 11:14:15
- * @FilePath: \oss-backstage\src\router\index.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 import { createRouter, createWebHashHistory } from 'vue-router'
@@ -104,10 +96,6 @@ const routes = [
                 meta: {
                     title: '故障维修'
                 },
-                // redirect: '/maintain',
-                children: [
-                    
-                ]
             },{ //------- 故障维修中心 -------//
                 path:"/center",
                 component: ()=>import('../views/maintain/Center.vue'),
@@ -148,7 +136,13 @@ const routes = [
                 meta: {
                     title: '维修详情'
                 }
-            },{ //------- 组件测试-------//
+            },{ //------- 数据看板 -------//
+              path:"/spectaculars",
+              component: ()=>import('../views/spectaculars/Index.vue'),
+              meta: {
+                  title: '数据看板'
+              },
+          },{ //------- 组件测试-------//
                 path:"/file",  //上传
                 component: ()=>import('../components/updata/Files.vue'),
                 meta: {
@@ -204,7 +198,7 @@ const routes = [
             }
           },{
             path:"/zhu",
-            component: ()=>import('../components/chart/BuildEletricCharts.vue'),
+            component: ()=>import('../components/chart/RadarChart.vue'),
             meta: {
                 title: '代码编辑器'
             }
@@ -253,7 +247,7 @@ const routes = [
       path:"/",
       component: ()=>import('../views/login/Login.vue'),
     },{
-      path:"/timeline",
+      path:"/register",
       component: ()=>import('../views/login/Register.vue'),
     }
 ]

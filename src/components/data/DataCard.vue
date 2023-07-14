@@ -2,7 +2,7 @@
  * @Author: Fleurxxx 984209872@qq.com
  * @Date: 2023-06-05 22:52:58
  * @LastEditors: Fleurxxx 984209872@qq.com
- * @LastEditTime: 2023-07-08 01:37:14
+ * @LastEditTime: 2023-07-11 22:43:45
  * @FilePath: \maintenance\src\components\DataCard.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -10,13 +10,14 @@
   <div class="box">
     <span @click="goUpdate" class="cur uppdate" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-superpowers" >&nbsp;&nbsp;更新数据集</i></span>
     <Tabs value="name2">
-        <!-- <TabPane label="详细" name="name1">
-          标签一的内容
-        </TabPane> -->
-        <TabPane label="简洁" name="name2">
+        <TabPane label="数据预览" name="name2">
           <Data />
         </TabPane>
+        <!-- <TabPane label="数据分布" name="name1">
+          <MassData />
+        </TabPane> -->
         <TabPane label="图示分析" name="name3">
+          <div style="height: 20px;"></div>
           <Column />
         </TabPane>
     </Tabs>
@@ -29,6 +30,7 @@ import { useStore } from 'vuex';
 import { useRoute, useRouter } from 'vue-router';
 import Column from './Column.vue'
 import Data from './Data.vue'
+import MassData from '../../components/chart/MassData.vue'
 /**
 * 仓库
 */

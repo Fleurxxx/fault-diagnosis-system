@@ -8,7 +8,26 @@
       <Steps v-bind:steps="steps"/>
     </div>
     <div class="box-table">
-      <div class="container">
+      <p class="t-title">训练结果：</p>
+      <Table class="t-table" :columns="data.columns" :data="data.data"></Table>
+    </div>
+    <div class="box-table">
+      <p class="t-title">结果集：</p>
+      <Button :size="buttonSize" class="t-but" icon="ios-download-outline" type="primary">结果下载</Button>
+      <div class="t-json">
+        <json-viewer
+              :value="data.jsonData"
+              :expand-depth="5"
+              class="viewer"
+              copyable
+              boxed
+              sort
+              :expanded="expanded"
+              :key="expanded"
+            ></json-viewer>
+
+        </div>
+      <!-- <div class="container">
         <img src="../../assets/image/成功.png" alt="Image" class="center-image">
         <div class="text">
           <div class="line1">诊断完成</div>
@@ -17,9 +36,8 @@
         <div class="text">
           <el-button @click="back()" style="width: 80px;">查看详情</el-button>
           <el-button type="primary" @click="submit()" style="width: 80px;">下载模型</el-button>
-
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -31,6 +49,7 @@ import  {Message} from 'view-ui-plus'
 import { ElMessageBox,ElMessage } from 'element-plus';
 import { useRoute, useRouter } from 'vue-router';
 import Steps from '../../components/Steps.vue';
+import axios from 'axios';
 
 /**
 * 仓库
@@ -51,6 +70,42 @@ const router = useRouter();
 const data = reactive({
   name:'',
   introduce:'',
+  columns: [
+      {
+          title: 'Value',
+          key: 'value'
+      },
+      {
+          title: 'Count',
+          key: 'count'
+      }
+  ],
+  data: [
+      {
+        value: '0',
+        count: 322,
+      },
+      {
+        value: '1',
+        count: 341,
+      },
+      {
+        value: '2',
+        count: 327,
+      },
+      {
+        value: '3',
+        count: 307,
+      },
+      {
+        value: '4',
+        count: 389,
+      },
+      {
+        value: '5',
+        count: 328,
+      }
+  ]
 
 })
 
@@ -72,6 +127,15 @@ const steps = reactive([
   },
 ]);
 
+const initialize = () =>{
+  axios.get('src/assets/result1.json')
+      .then(response => {
+        data.jsonData = response.data;
+      })
+      .catch(error => {
+        console.error('Error retrieving JSON data:', error);
+      });
+}
 
 const back =()=>{
   router.push({ path: "/info" });
@@ -81,7 +145,7 @@ onBeforeMount(() => {
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
 onMounted(() => {
-  //console.log('3.-组件挂载到页面之后执行-------onMounted')
+  initialize()
 })
 watchEffect(()=>{
 })
@@ -127,7 +191,7 @@ defineExpose({
   }
 
   .box-table{
-    margin-top: 70px;
+    margin: 70px 220px 0 220px;
 
     .container {
       // display: flex;
@@ -156,6 +220,32 @@ defineExpose({
   }
 }
 
+.t-title{
+  font-size: 18px;
+  font-weight: bolder;
+  padding-left: 5px;
+  padding-bottom: 20px;
+  text-align: left;
+}
+.t-table{
+  margin-left: 80px;
+  margin-right: 80px;
+}
+.t-but{
+  position: absolute;
+  top:576px;
+  left: 303px;
+}
+.t-json{
+  padding-left: 80px;
+}
+.viewer{
+  width: 80%;
+  min-width: 3.125rem;
+  text-align: left;
+  padding-left: 50px;
+  padding-bottom: 30px;
+}
 
 
 </style>

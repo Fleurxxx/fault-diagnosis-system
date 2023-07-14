@@ -5,13 +5,13 @@
     </div>
     <div class="middle">
       <div class="left">
-        <el-button class="create"  @click="dialogVisible = true"><el-icon><Plus /></el-icon>&nbsp&nbsp新建</el-button>
+        <el-button class="create"  @click="dialogVisible = true"><el-icon><Plus /></el-icon>&nbsp;&nbsp;新建</el-button>
         <el-button class="download" @click="batchDownload">批量下载</el-button>
       </div>
       <div class="right">
         <el-input placeholder="请输入内容进行搜索" v-model="searchText" clearable @input="clear" @clear="clear">
           <template #append>
-            <el-button @click="search">搜索</el-button> 
+            <el-button @click="search">搜索</el-button>
           </template>
         </el-input>
       </div>
@@ -53,9 +53,9 @@
             :data="fixData"
             @selection-change="handleSelectionChange"
             style="width: 100%"
-            :header-cell-style="{background: 'rgb(242,243,245)', color: 'rgb(0,0,71)', fonsSize: '18px',}"
-            :cell-style="{color: 'rgb(85,68,85)', fontWeight: '350'}"
-          >
+            :header-cell-style="{background: 'rgb(242,243,245)', color: 'rgb(0,0,71)', fonsSize: '22px', height: '60px'}"
+            :cell-style="{color: 'rgb(85,68,85)', fontWeight: '350', fonsSize: '18px'}"
+            :row-style="{height: '50px'}">
             <el-table-column type="selection" width="40"/>
             <el-table-column prop="id" label="记录编号" width="100px" />
             <el-table-column prop="title" label="记录名称" width="200px"/>
@@ -108,7 +108,7 @@ import router from '../../router';
 import apiFun from '../../api/api';
 let fixData = ref([]);
 const multipleSelection = ref([]);
-const pageSize = ref(10);
+const pageSize = ref(5);
 let totalNum = ref(200);
 let dialogVisible = ref(false);
 let currentPage = ref(1);

@@ -12,11 +12,24 @@
               </json-viewer>
               <a-button type="primary" @click="toggleExpanded" >{{expanded ? '收起' : '展开'}}</a-button>
 
+              <json-viewer
+                :value="jsonData"
+                :expand-depth="5"
+                class="viewer"
+                copyable
+                boxed
+                sort
+                :expanded="expanded"
+                :key="expanded"
+              ></json-viewer>
+
   </div>
 </template>
 
 <script>
 import jsonView from '../components/JsonView.vue'
+import axios from 'axios';
+
 export default {
   name: '',
   components: {
@@ -53,6 +66,15 @@ export default {
         ]
       }
     }
+  },
+  mounted() {
+    axios.get('src/assets/result1.json')
+      .then(response => {
+        this.jsonData = response.data;
+      })
+      .catch(error => {
+        console.error('Error retrieving JSON data:', error);
+      });
   },
   methods: {
     toggleExpanded() {

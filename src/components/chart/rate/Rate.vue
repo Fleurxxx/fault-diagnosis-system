@@ -1,5 +1,5 @@
 <template>
-  <div id="main" class="pic"></div>
+  <div id="rate_main" class="pic"></div>
 </template>
 
 <script>
@@ -10,7 +10,7 @@ export default {
   mounted() {
     const ROOT_PATH = 'https://echarts.apache.org/examples';
 
-    const chartDom = document.getElementById('main');
+    const chartDom = document.getElementById('rate_main');
     const myChart = echarts.init(chartDom);
     let option;
     myChart.showLoading();

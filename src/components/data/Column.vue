@@ -1,4 +1,4 @@
-<!-- 柱状图数据分析
+<!-- 柱状图数据分析(部分正确版)
  * @Author: Fleurxxx 984209872@qq.com
  * @Date: 2023-06-12 22:49:14
  * @LastEditors: Fleurxxx 984209872@qq.com
@@ -9,29 +9,25 @@
 <template>
   <div class="box">
     <div>
-      <!-- <BarChart /> -->
-      <!-- <el-divider></el-divider> -->
-      <div style="height: 20px;"></div>
       <el-row type="flex" justify="center">
         <el-col :span="24">
           <el-card class="box-card" shadow="hover"  v-for="item in data" :key="item.id">
-            <!-- <div v-for="o in 4" :key="o" class="text item">{{ 'List item ' + o }}</div> -->
             <template #header>
               <div class="card-header" >
-                <span><i :class="item.activeIndex === 0 ? 'fa fa-key':'fa fa-dot-circle-o'"></i>&nbsp;&nbsp;&nbsp;Card name</span>
-                <el-button class="button" text>Operation button</el-button>
+                <span><i :class="item.activeIndex === 0 ? 'fa fa-key':'fa fa-dot-circle-o'"></i>&nbsp;&nbsp;&nbsp;{{ item.name }}</span>
+                <!-- <el-button class="button" text>Operation button</el-button> -->
               </div>
             </template>
             <div class="left">
-              <el-alert  title="success alert" :type="item.state === true ? 'success':'error'" :closable="false" />
+              <el-alert  :title="item.tips" :type="item.state === true ? 'success':'error'" :closable="false" />
               <div style="margin:20px auto;"></div>
-              <!-- <el-alert  title="warninsg alert" type="warning" /> -->
-              <Bar :ids="item.ids"/>
+              <Bar :ids="item.ids" />
             </div>
             <div class="right">
               <div class="content">
                 <div class="demo-progress">
-                  <el-progress :percentage="100">
+                  <el-progress :percentage="item.rate1" >
+                  <!-- <el-progress :percentage="100" > -->
                     <el-button text></el-button>
                   </el-progress>
                 </div>
@@ -45,20 +41,20 @@
                   </Space>
                   <Space direction="vertical" >
                     <Space class="analysis-data">
-                      <p>6739</p>
-                      <p>100%</p>
+                      <p>{{ item.data1 }}</p>
+                      <p>{{ item.rate1 }}%</p>
                     </Space>
                     <Space class="analysis-data">
-                      <p>0</p>
-                      <p>0%</p>
+                      <p>{{ item.data2 }}</p>
+                      <p>{{ item.rate2 }}%</p>
                     </Space>
                     <Space class="analysis-data">
-                      <p>0</p>
-                      <p>0%</p>
+                      <p>{{ item.data3 }}</p>
+                      <p>{{ item.rate3 }}%</p>
                     </Space>
                     <br />
                     <div >
-                      <p>87%</p>
+                      <p>{{ item.standard }}</p>
                     </div>
                   </Space>
                 </div>
@@ -68,6 +64,12 @@
         </el-col>
       </el-row>
 
+      <el-pagination
+          background
+          layout="prev, pager, next"
+          :total="220"
+          class="mt-4 paging"
+        />
     </div>
   </div>
 </template>
@@ -99,32 +101,111 @@ const router = useRouter();
 */
 // const data = reactive({})
 const data = ref([]);
-
-// 添加20个数据到data变量
-for (let i = 0; i < 20; i++) {
-  if(i==0){
-    data.value.push({
-      id: i + 1,
-      checked: false,
-      activeIndex:0,
-      state:true,
-      ids:"str"+ i
-      // name:"23547375424",
-      // 其他属性...
-    });
-  }else{
-    data.value.push({
-      id: i + 1,
-      checked: false,
-      activeIndex:1,
-      state:false,
-      ids:"str"+ i
-      // name:"23547375424",
-      // 其他属性...
-    });
+const sum1 = ref([]);
+const info = () =>{
+  // 计算随机的20个分割点
+  for (let i = 0; i < 20; i++) {
+    const randomPoint = Math.floor(Math.random() * 10000);
+    sum1.value.push(randomPoint);
   }
 
+  // 添加20个数据到data变量
+  for (let i = 0; i < 5; i++) {
+    // console.log(sum1.value[i])
+    // const randomValue = Math.floor(10000 / 20); // 将10000分成20份，每份的随机值
+    // let sum = Math.floor(Math.random() * randomValue); // sum是随机值，范围为0到randomValue
+    // let sum = sum1.value[i];
+    let sum = Math.floor(Math.random() * (5320 - 4980 + 1)) + 4980;
+    let data2 = Math.floor(Math.random() * (sum * 0.25));
+    let data3 = Math.floor(Math.random() * (sum * 0.25));
+    let zero = Math.random(); // 生成0的概率
+    let zeros = 0.8; // 0的概率大于80%
+    let tips = ''
+    let state = true
+    // 根据0的概率判断是否设置为0
+    if (zero < zeros) {
+      data2 = 0;
+      data3 = 0;
+      tips = '该特征所有节点健康'
+      state = true
+    }else{
+      tips = '出现意外的文本节点类型'
+      state = false
+    }
+    let data1 = sum - data2 - data3;
+    let rate1 = Math.round(data1 / sum * 10000) / 100 ;
+    let rate2 = Math.round(data2 / sum * 10000) / 100 ;
+    let rate3 = Math.round(data3 / sum * 10000) / 100 ;
+
+    let endNumber = generateRandomNumber(3, 8635283); // 生成结尾的随机数
+    let formattedEndNumber = formatNumberWithCount(endNumber);
+    // console.log(endNumber)
+
+    data.value.push({
+      id: i + 1,
+      checked: false,
+      activeIndex: 1,
+      state: state,
+      ids: "str" + i,
+      name: "feature" + i,
+      tips: tips,
+      data1: data1,
+      data2: data2,
+      data3: data3,
+      rate1: rate1,
+      rate2: rate2,
+      rate3: rate3,
+      standard:formattedEndNumber
+    });
+
+    // if(i==0){
+    //   data.value.push({
+    //     id: i + 1,
+    //     checked: false,
+    //     activeIndex:0,
+    //     state:true,
+    //     ids:"str"+ i,
+    //     name: "feature"+i,
+    //     tips:'该特征所有节点健康',
+    //     data1:'',
+    //     data2:'',
+    //     data3:'',
+    //     // 其他属性...
+    //   });
+    // }else{
+
+    // }
+
+  }
 }
+
+
+
+const generateRandomNumber = (min, max) => {
+  return Math.floor(Math.random() * (max - min + 1)) + min; //均匀分布
+};
+
+//大数单位转换
+const formatNumberWithCount = (number) => {
+      let absNumber = Math.abs(number);
+      let units = ["", "k", "m", "b", "t", "e"];
+      let unitIndex = 0;
+
+      while (absNumber >= 1000 && unitIndex < units.length - 1) {
+        absNumber /= 1000;
+        unitIndex++;
+      }
+
+      let formattedNumber = absNumber.toFixed(1);
+      let unit = units[unitIndex];
+
+      if(number>0){
+         return `${formattedNumber}${unit}`;
+      }else{
+        return `-${formattedNumber}${unit}`;
+      }
+
+    };
 
 
 onBeforeMount(() => {
@@ -135,6 +216,7 @@ onMounted(() => {
   axios.post("/echarts/bar").then((res) => {
     console.log("模拟测试数据", res);
   });
+  info();
 
 })
 watchEffect(()=>{
@@ -147,9 +229,9 @@ defineExpose({
 
 </script>
 <style scoped lang='less'>
-// .box{
-//   height: 100%;
-// }
+.box{
+  height: 100%;
+}
 .card-header {
   display: flex;
   justify-content: space-between;
@@ -173,7 +255,7 @@ defineExpose({
   width:40%;
   height:100%;
   float: left;
-  margin-right: 50px;
+  margin-right: 60px;
 }
 .right{
   display: flex;
@@ -198,4 +280,20 @@ defineExpose({
 .analysis-data{
   text-align:right;
 }
+
+/* 当前状态颜色 */
+/deep/ .el-progress-bar__outer {
+  background-color: rgba(255, 2, 2, 0.542);
+}
+// /* 进度条的背景色 */
+// /deep/ .el-progress-bar__inner {
+//   background-color: #ba1010;
+// }
+
+.paging{
+  padding-top:20px;
+  padding-right: 10px;
+  float:right;
+}
+
 </style>
