@@ -2,7 +2,7 @@
  * @Author: Fleurxxx 984209872@qq.com
  * @Date: 2023-06-01 20:28:39
  * @LastEditors: Fleurxxx 984209872@qq.com
- * @LastEditTime: 2023-07-12 11:33:54
+ * @LastEditTime: 2023-07-16 04:23:26
  * @FilePath: \maintenance\src\router\index.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -198,7 +198,7 @@ const routes = [
             }
           },{
             path:"/zhu",
-            component: ()=>import('../components/chart/RadarChart.vue'),
+            component: ()=>import('../components/chart/bar1/Bar.vue'),
             meta: {
                 title: '代码编辑器'
             }
@@ -249,12 +249,17 @@ const routes = [
     },{
       path:"/register",
       component: ()=>import('../views/login/Register.vue'),
-    }
+    },
 ]
 
 export const router = createRouter({
   history: createWebHashHistory(), // hash模式：createWebHashHistory，history模式：createWebHistory
-  routes
+  routes,
+  scrollBehavior(to, from, savedPosition) {
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+    }, 1000); // 调整延时时间
+  },
 })
 
 

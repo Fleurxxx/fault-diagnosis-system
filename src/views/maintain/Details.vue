@@ -74,7 +74,7 @@
             <template #header>
               <div class="card-header-2" >
                 <span><i class='fa fa-dot-circle-o'></i>&nbsp;&nbsp;&nbsp;故障记录</span>
-                <el-button class="button" type="primary" text @click="">添加</el-button>
+                <el-button class="button" type="primary" text>添加</el-button>
               </div>
             </template>
             <div class="detail">
@@ -261,7 +261,7 @@ const handleClick = () => {
 }
 const handleCheck = (row) => {
   router.push({
-    path:'/start', 
+    path:'/start',
     query:{id: row.id}
   })
   // console.log(row);
@@ -275,7 +275,7 @@ const handleCheck = (row) => {
 };
 
 const handleAnalysis = () => {
-  
+
   drawVisible.value = true;
 }
 
@@ -480,7 +480,7 @@ h3 {
     justify-content: space-between;
     align-items: center;
     height: 10px;
-    
+
     .alert {
       font-size: 10px;
     }
