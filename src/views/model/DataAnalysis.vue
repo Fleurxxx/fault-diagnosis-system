@@ -1,6 +1,6 @@
 
 <template>
-  <div class="box">
+  <div class="box" id="data_box">
     <div class="box-title">
       <p class="title">在线训练</p>
     </div>
@@ -171,6 +171,7 @@ onBeforeMount(() => {
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
 onMounted(() => {
+  document.querySelector("#data_box").scrollIntoView(true);
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
 })
 watchEffect(()=>{

@@ -8,8 +8,8 @@
       <div class="reminder">
         <p class="title">操作指导</p>
         <p>1. 填写模型信息并上传数据集</p>
-        <p>2. 在线数据分析，进行数据矫正。</p>
-        <p>3. 在线训练模型。</p>
+        <p>2. 进行在线数据分析，若数据异常请及时进行数据矫正。</p>
+        <p>3. 模型训练完成，下载训练模型。</p>
       </div>
     </div>
     <div class="box-table">
@@ -36,7 +36,7 @@
         </div>
         <div class="text">
           <el-button @click="back()" style="width: 80px;">查看详情</el-button>
-          <el-button type="primary" @click="downloadZip()" style="width: 80px;">下载模型</el-button>
+          <el-button type="primary" @click="submit()" style="width: 80px;">下载模型</el-button>
         </div>
       </div>
     </div>
@@ -84,19 +84,6 @@ const initialize = () =>{
       .catch(error => {
         console.error('Error retrieving JSON data:', error);
       });
-}
-
-const downloadZip = () => {
-    const zipUrl = 'src/assets/korean_PP-OCRv3_rec_infer.zip';
-    // 创建下载链接
-    const downloadLink = document.createElement('a');
-    downloadLink.href = zipUrl;
-    downloadLink.download = 'file.zip';
-
-    // 触发下载
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
-    document.body.removeChild(downloadLink);
 }
 
 const back =()=>{

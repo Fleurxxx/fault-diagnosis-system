@@ -18,7 +18,7 @@
         </Space>
       </div>
     </div>
-    <div class="hint"  v-if="wholeData.cardState!==1">
+    <div class="hint"  v-if="wholeData.cardState==3">
       <div class="reminder">
         <div class="rectangle">
           <div class="left-side">
@@ -39,9 +39,9 @@
           </div>
           <div class="right-side">
             <Space direction="vertical" class="right-content">
-              <p>创建时间： 2023-04-17 10:31</p>
+              <p>创建时间： 2023-07-14 21:04:07</p>
               <p>API key： 77d2652e-7ea1-495a-994a-c03bd215c699</p>
-              <p>服务地址： https://http://127.0.0.1:5173/serving/online/54</p>
+              <p>服务地址： http://127.0.0.1:5173/serving/online/54</p>
             </Space>
           </div>
         </div>
@@ -97,7 +97,7 @@
         </div>
       </div>
     </div>
-    <div class="hint">
+    <div class="hint" v-if="wholeData.cardState!==1">
       <div class="box-top">
         <ButtonGroup>
             <Button type="primary">沙盒</Button>
@@ -108,7 +108,7 @@
             </div>
         </ButtonGroup>
       </div>
-      <div class="box-bottom">
+      <div class="box-bottom" >
         <el-row class="table">
           <el-table
             :data="fixData"
@@ -136,7 +136,7 @@
             <el-table-column prop="status" label="状态" width="">
               <template v-slot="scope">
                 <span v-if="scope.row.status === 0">运行中</span>
-                <span v-else>已修复</span>
+                <span v-else>待运行</span>
               </template>
             </el-table-column>
             <el-table-column prop="remaining" label="剩余时间" width="120px" >
@@ -185,10 +185,10 @@
             <div class="demo-drawer-profile">
                 <Row>
                     <Col span="12">
-                        名称： Programmer
+                        名称： {{ drawer.dataInfo.name }}
                     </Col>
                     <Col span="12">
-                        更迭时间： 2023-05-14 14:05:11
+                        更迭时间： {{ drawer.dataInfo.time }}
                     </Col>
                 </Row>
                 <!-- <Row>
@@ -196,7 +196,10 @@
                         标签： Map visualization
                     </Col>
                 </Row> -->
-                简述： C / C + +, data structures, software engineering, operating systems, computer networks, databases, compiler theory, computer architecture, Microcomputer Principle and Interface Technology, Computer English, Java, ASP, etc.
+                <p style="line-height:24px;">
+                  简述：{{ drawer.dataInfo.intruction }}
+                </p>
+
                 <div class="file-box">
                   <div class="file-color" @click="handleClick">
                     <Row>
@@ -299,6 +302,7 @@ const DeleteServer = () =>{
   })
 }
 
+
 //步骤条
 const steps = reactive([
  {
@@ -323,43 +327,43 @@ const fixData = [
   {
     id: '1',
     name: 'test',
-    createTime: '2016-05-03 12:04:07',
+    createTime: '2023-07-14 21:04:07',
     size: 10767,
     url: 'http://127.0.0.1:5173/#/home',
     status: 0,
   },
-  {
-    id: '2',
-    createTime: '2016-05-02',
-    name: 'test',
-    size: 10767,
-    url: 'http://127.0.0.1:5173/#/home',
-    status: 0,
-  },
-  {
-    id: '3',
-    createTime: '2016-05-04',
-    name: 'test',
-    size: 10767,
-    url: 'http://127.0.0.1:5173/#/home',
-    status: 0,
-  },
-  {
-    id: '4',
-    createTime: '2016-05-01',
-    name: 'test',
-    size: 10767,
-    url: '查看URL',
-    status: 1,
-  },
-  {
-    id: '5',
-    createTime: '2016-05-08',
-    name: 'test',
-    size: 10767,
-    url: '查看URL',
-    status: 1,
-  }
+  // {
+  //   id: '2',
+  //   createTime: '2016-05-02',
+  //   name: 'test',
+  //   size: 10767,
+  //   url: 'http://127.0.0.1:5173/#/home',
+  //   status: 0,
+  // },
+  // {
+  //   id: '3',
+  //   createTime: '2016-05-04',
+  //   name: 'test',
+  //   size: 10767,
+  //   url: 'http://127.0.0.1:5173/#/home',
+  //   status: 0,
+  // },
+  // {
+  //   id: '4',
+  //   createTime: '2016-05-01',
+  //   name: 'test',
+  //   size: 10767,
+  //   url: '查看URL',
+  //   status: 1,
+  // },
+  // {
+  //   id: '5',
+  //   createTime: '2016-05-08',
+  //   name: 'test',
+  //   size: 10767,
+  //   url: '查看URL',
+  //   status: 1,
+  // }
 ];
 
 //复制链接
@@ -396,11 +400,14 @@ const handleDelete = () =>{
   })
 }
 
-const handleDeployment = () =>{
+const handleDeployment = (index) =>{
   steps[0].status = 'uncompleted'
   steps[1].status = 'uncompleted'
   steps[2].status = 'in-progress'
   wholeData.cardState = 3;
+  console.log(index)
+  status=1  //没用
+  fixData[0].status = 0;
   ElMessage({
     message: '部署成功',
     type: 'success',
@@ -431,8 +438,15 @@ const drawer = reactive({
       lineHeight: '24px',
       display: 'block',
       marginBottom: '16px'
+  },
+  dataInfo: {
+    name:'模型数据1',
+    time:'2023-07-14 14:05:11',
+    intruction:'基于机器学习的分布式系统故障诊断模型可以有效地提高故障诊断的效率和准确性，降低系统维护的成本和风险。该模型可以自动学习和适应系统的变化，具有较好的可扩展性和适应性，可以应用于各种规模和复杂度的分布式系统。',
   }
 })
+
+
 
 
 
@@ -523,6 +537,7 @@ const submit = () =>{
   steps[1].status = 'in-progress'
   steps[2].status = 'uncompleted'
   wholeData.cardState = 2;
+  fixData[0].status = 1;
   drawer.value = false
 }
 
