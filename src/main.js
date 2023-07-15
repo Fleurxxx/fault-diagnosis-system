@@ -2,7 +2,7 @@
  * @Author: Fleurxxx 984209872@qq.com
  * @Date: 2023-05-30 20:36:57
  * @LastEditors: Fleurxxx 984209872@qq.com
- * @LastEditTime: 2023-07-10 10:01:32
+ * @LastEditTime: 2023-07-16 02:40:24
  * @FilePath: \maintenance\src\main.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -32,7 +32,9 @@ import 'codemirror/lib/codemirror.css'
 
 // ======= echarts
 import * as echarts from 'echarts'
-import 'echarts-gl'
+import 'echarts-gl' // 3d图表库
+
+
 
 // ======= element
 import ElementPlus from 'element-plus'
@@ -50,8 +52,8 @@ import 'driver.js/dist/driver.min.css'
 
 const app = createApp(App)
 
-app.config.globalProperties.$echarts = echarts
-// app.prototype.$echarts = echarts
+app.config.globalProperties.$echarts = echarts //Vue3
+// app.prototype.$echarts = echarts //Vue2
 
 // 图标
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {

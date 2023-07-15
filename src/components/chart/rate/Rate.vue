@@ -24,7 +24,7 @@ export default {
     myChart.setOption(
       (option = {
         title: {
-          text: '模型泛型与精确度',
+          text: '模型泛化与精确度',
           subtext: '历史记录',
           left: 'center'
         },

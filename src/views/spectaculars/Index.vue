@@ -2,7 +2,7 @@
  * @Author: Fleurxxx 984209872@qq.com
  * @Date: 2023-07-12 10:55:58
  * @LastEditors: Fleurxxx 984209872@qq.com
- * @LastEditTime: 2023-07-12 16:42:12
+ * @LastEditTime: 2023-07-15 21:49:45
  * @FilePath: \maintenance\src\views\spectaculars\index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -20,6 +20,14 @@
           <TabPane label="历史模型准确度" name="name2">
             <div style="height: 20px;" ></div>
             <Rate />
+          </TabPane>
+          <TabPane label="系统资源中心" name="name3">
+            <div style="height: 20px;" ></div>
+            <div class="title1-box">
+              <p class="title1">实时性能监控</p>
+            </div>
+            <div style="height: 40px;" ></div>
+            <img src="src\assets\image\cpu.gif" style="width:100%;height: 50vh;">
           </TabPane>
       </Tabs>
     </div>
@@ -87,5 +95,17 @@ defineExpose({
   .box-content{
     padding:20px 50px 0 50px;
   }
+}
+.title1-box{
+  width: 300px;
+  height: 20px;
+  border-left: 5px solid #6C91c2; //实线
+}
+.title1{
+  padding-left: 10px;;
+  text-align: left;
+  font-weight: bolder;
+  font-size: 20;
+  padding-bottom: 5px;
 }
 </style>
