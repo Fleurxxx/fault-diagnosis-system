@@ -24,22 +24,27 @@
       <div class="content-bottom">
         <Tabs v-model="activeTab" class="custom-tabs">
           <TabPane label="分析结果" name="name1" >
-            <div class="left">
-              <el-card class="card" shadow="hover">
-                <template #header>
-                  <div class="card-header-2" >
-                    <span><i class='fa fa-dot-circle-o'></i>&nbsp;&nbsp;&nbsp;分析结果</span>
-                  </div>
-                </template>
-                <div class="small-div-body fault">
-                    {{ faultAnalysis.cause }}
+            <el-card class="box-card" shadow="hover">
+              <template #header>
+                <div class="card-header" >
+                  <span><i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;&nbsp;分析结果</span>
                 </div>
-                <div class="small-div-body fault" v-if="faultAnalysis.cause === ''">
-                  <el-empty description="未找到故障原因" image-size="130">
-                  </el-empty>
+              </template>
+              <div class="box-table">
+                <Table class="t-table" :columns="data.columns" :data="data.data"></Table>
+              </div>
+            </el-card>
+            <el-card class="box-card" shadow="hover">
+              <template #header>
+                <div class="card-header" >
+                  <span><i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;&nbsp;分析结果</span>
                 </div>
-              </el-card>
-            </div>
+              </template>
+              <div style="padding-top:50px;">
+                <RadarChart  style="margin: 0 auto;"/>
+                <Bubble />
+              </div>
+            </el-card>
           </TabPane>
           <TabPane label="解决方案" name="name2">
             <div class="right">
@@ -104,8 +109,9 @@ import { ElMessage } from 'element-plus';
 import { ref, reactive, onMounted, computed } from 'vue';
 import MyTimeLine from '../../components/MyTimeLine.vue';
 import Steps from '../../components/Steps.vue';
+import RadarChart from '../../components/chart/RadarChart.vue'
+import Bubble from '../../components/chart/Bubble.vue';
 import { useRouter, useRoute } from "vue-router";
-
 const router = useRouter();
 const route = useRoute();
 const status = ref(2);
@@ -136,6 +142,46 @@ const steps = reactive([
     status: 'completed',
   },
 ]);
+const data = reactive({
+  name:'',
+  introduce:'',
+  columns: [
+      {
+          title: '故障标签',
+          key: 'value'
+      },
+      {
+          title: '数量',
+          key: 'count'
+      }
+  ],
+  data: [
+      {
+        value: '0',
+        count: 322,
+      },
+      {
+        value: '1',
+        count: 341,
+      },
+      {
+        value: '2',
+        count: 327,
+      },
+      {
+        value: '3',
+        count: 307,
+      },
+      {
+        value: '4',
+        count: 389,
+      },
+      {
+        value: '5',
+        count: 328,
+      }
+  ]
+});
 const faultAnalysis = reactive({
   // cause: '网络连接故障：可能由于网络中断、不稳定的连接或配置错误导致。资源耗尽：系统资源（如内存、磁盘空间）耗尽，导致应用程序无法正常运行。配置错误：错误的配置参数或设置可能导致系统出现问题。',
   // solution: '检查网络连接：确保网络连接正常，检查网络设备、电缆和路由器是否正常工作。如果发现问题，修复或更换故障设备。优化资源利用：分析系统资源使用情况，查找资源耗尽的原因。清理不必要的文件或进程，增加可用资源。如果需要，考虑升级硬件或调整系统配置。检查配置设置：仔细检查系统配置文件和参数设置，确保其正确性。如果发现配置错误，及时进行修复并重新启动应用程序。',
@@ -179,7 +225,7 @@ word-break: break-all;
   position: sticky;
   top:0;
   width:100%;
-  height: 190vh;
+  // height: 190vh;
   box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, 0.08);
   .box-title{
     text-align: left;
@@ -191,6 +237,14 @@ word-break: break-all;
     font-weight:bold;
   }
 }
+.box-card{
+  margin: 10px 0 10px 0;
+  .card-header {
+    text-align: left;
+  }
+}
+
+
 .header {
   display: flex;
   justify-content: space-between;
