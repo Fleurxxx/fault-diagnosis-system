@@ -7,19 +7,19 @@
     <div class="box-reminder">
       <Steps v-bind:steps="steps"/>
     </div>
-    <!-- <div>
-      <i class="fa fa-refresh fa-spin"></i>
-    </div> -->
-    <div class="content">
-      <Column />
-    </div>
-    <div class="content tips">
-      <Alert  show-icon>
+    <div class="content tips" style="padding-top: 50px;padding-bottom: 60px;">
+      <Alert type="success" show-icon>
+          提示
+          <template #desc>
+            您上传的全部数据节点均健康，继续操作检测错误。
+          </template>
+      </Alert>
+      <!-- <Alert  show-icon>
           提示
           <template #desc>
               检测出您上传的数据集存在空串或者未能识别的符号串，为了确保数据的准确性和完整性，我们会自动处理这些数据并将其排除。您是否愿意继续操作？ <Icon type="help-circled" size="14"></Icon>
           </template>
-      </Alert>
+      </Alert> -->
     </div>
     <div class="box-table">
       <el-button  @click="back()" style="width: 80px;">返回</el-button>
@@ -151,14 +151,15 @@ function countdown() {
     if (percent.value === 100) {
       cancel();
       // ElMessage.success({ message: '诊断成功!' });
-      router.push({ path: "/fini" });
+
     }
   }, 75);
 }
 
 const submit =()=>{
   data.centerDialogVisible = true
-  countdown();
+  router.push({ path: "/onefini" }); //单挑
+  // countdown();
 
 }
 const back =()=>{
@@ -190,7 +191,7 @@ defineExpose({
   position: sticky;
   top:0;
   width:100%;
-  // height: 190vh;
+  height: 90vh;
   padding-bottom: 70px;
   box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, 0.08);
   .box-title{

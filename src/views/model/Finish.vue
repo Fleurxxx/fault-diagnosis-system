@@ -36,7 +36,7 @@
         </div>
         <div class="text">
           <el-button @click="back()" style="width: 80px;">查看详情</el-button>
-          <el-button type="primary" @click="submit()" style="width: 80px;">下载模型</el-button>
+          <el-button type="primary" @click="downloadZip()" style="width: 80px;">下载模型</el-button>
         </div>
       </div>
     </div>
@@ -51,6 +51,7 @@ import { ElMessageBox,ElMessage } from 'element-plus';
 import { useRoute, useRouter } from 'vue-router';
 import jsonView from '../../components/JsonView.vue'
 import avatarUrl from '../../assets/icon/csv.png'
+import modelstore from "../../store/model.js";
 import axios from 'axios';
 /**
 * 仓库
@@ -85,8 +86,19 @@ const initialize = () =>{
         console.error('Error retrieving JSON data:', error);
       });
 }
+//下载模型
+const downloadZip = () => {
+  const zipFileUrl = 'src/assets/korean_PP-OCRv3_rec_infer.zip';
+  const link = document.createElement('a');
+  link.href = zipFileUrl;
+  link.target = '_blank'; // 在新标签页中打开链接
+  link.setAttribute('download', 'your-file-name.zip'); // 将 'your-file-name' 替换为您期望的文件名。
+  link.click();
+}
 
+const modelStore = modelstore();
 const back =()=>{
+  modelStore.id = 10017;
   router.push({ path: "/info" });
 }
 
@@ -94,6 +106,7 @@ onBeforeMount(() => {
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
 onMounted(() => {
+  document.querySelector(".box").scrollIntoView(true);
   initialize()
 })
 watchEffect(()=>{

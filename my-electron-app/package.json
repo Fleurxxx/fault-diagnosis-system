@@ -1,0 +1,24 @@
+{
+  "scripts": {
+    "electron:build": "vue-cli-service electron:build",
+    "electron:serve": "vue-cli-service electron:serve",
+    "electron:start": "electron ."
+  },
+  "build": {
+    "appId": "com.my.electron.app",
+    "productName": "My Electron App",
+    "files": [
+      "dist/**/*",
+      "my-electron-app/main.js"
+    ],
+    "directories": {
+      "output": "dist_electron"
+    },
+    "extends": null
+  },
+  "main": "my-electron-app/main.js",
+  "devDependencies": {
+    "electron": "^17.0.0",
+    "electron-builder": "^22.13.1"
+  }
+}

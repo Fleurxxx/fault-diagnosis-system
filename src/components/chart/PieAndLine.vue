@@ -41,48 +41,109 @@ onMounted(() => {
           type: 'line',
           smooth: true,
           seriesLayoutBy: 'row',
-          color: '#84A3A9',
+          // color: '#84A3A9',
+          color:  new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              {
+                offset: 0,
+                color: '#fee140'
+              },
+              // {
+              //   offset: 1,
+              //   color: '#fa709a'
+              // }
+            ]),
           emphasis: { focus: 'series' }
         },
         {
           type: 'line',
           smooth: true,
           seriesLayoutBy: 'row',
-          color: '#DCD7C1',
+          // color: '#DCD7C1',
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              {
+                offset: 0,
+                color: 'rgb(243, 58, 161)'
+              },
+              // {
+              //   offset: 1,
+              //   color: 'rgb(109, 152, 244)'
+              // }
+            ]),
           emphasis: { focus: 'series' }
         },
         {
           type: 'line',
           smooth: true,
           seriesLayoutBy: 'row',
-          color: '#BFB1D0',
+          // color: '#BFB1D0',
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              {
+                offset: 0,
+                color: 'rgb(116, 33, 219)'
+              },
+              // {
+              //   offset: 1,
+              //   color: 'rgb(109, 152, 244)'
+              // }
+            ]),
           emphasis: { focus: 'series' }
         },
         {
           type: 'line',
           smooth: true,
           seriesLayoutBy: 'row',
-          color: '#6C91C2',
+          // color: '#6C91C2',
+          color:  new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              {
+                offset: 0,
+                color:  '#48c6ef'
+              },
+              // {
+              //   offset: 1,
+              //   color: '#6f86d6'
+              // }
+            ]),
           emphasis: { focus: 'series' }
         },
         {
           type: 'line',
           smooth: true,
           seriesLayoutBy: 'row',
-          color: '#A7c0DE',
+          // color: '#A7c0DE',
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              {
+                offset: 0,
+                color:  '#96fbc4'
+              },
+              // {
+              //   offset: 1,
+              //   color: 'rgb(71, 203, 250)'
+              // }
+            ]),
           emphasis: { focus: 'series' }
         },
         {
           type: 'line',
           smooth: true,
           seriesLayoutBy: 'row',
-          color: '#b3d6ad',
+          // color: '#b3d6ad',
+          color:new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            {
+                offset: 0,
+                color: 'rgb(254, 237, 123)'
+              },
+              // {
+              //   offset: 1,
+              //   color: 'rgb(251, 188, 60)'
+              // }
+            ]),
           emphasis: { focus: 'series' }
         },
         {
           type: 'pie',
           id: 'pie',
-          radius: '30%',
+          // radius: '30%',
+          radius: ['15%',"30%"],
           center: ['50%', '25%'],
           emphasis: {
             focus: 'self'
@@ -95,7 +156,71 @@ onMounted(() => {
             value: '2012',
             tooltip: '2012'
           },
-          color: ['#84A3A9','#DCD7C1','#BFB1D0', '#6C91C2','#A7c0DE','#b3d6ad'] // 修改为红色和绿色
+          // color: ['#FEED7B','#FBBC3C','#F033A1', '#6D98F4','#47CBFA','#77EECA'] // 修改为红色和绿色
+          color: [ // 设置饼图的颜色为渐变色
+            new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              {
+                offset: 0,
+                color: '#fee140'
+              },
+              {
+                offset: 1,
+                color: '#fa709a'
+              }
+            ]),
+            new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              {
+                offset: 0,
+                color: 'rgb(243, 58, 161)'
+              },
+              {
+                offset: 1,
+                color: 'rgb(109, 152, 244)'
+              }
+            ]),
+            new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              {
+                offset: 0,
+                color: 'rgb(116, 33, 219)'
+              },
+              {
+                offset: 1,
+                color: 'rgb(109, 152, 244)'
+              }
+            ]),
+            new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              {
+                offset: 0,
+                color:  '#48c6ef'
+              },
+              {
+                offset: 1,
+                color: '#6f86d6'
+              }
+            ]),
+            new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              {
+                offset: 0,
+                color:  '#96fbc4'
+              },
+              {
+                offset: 1,
+                color: 'rgb(71, 203, 250)'
+              }
+            ]),
+            new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            {
+                offset: 0,
+                color: 'rgb(254, 237, 123)'
+              },
+              {
+                offset: 1,
+                color: 'rgb(251, 188, 60)'
+              }
+            ]),
+          ]
+
+
         }
       ]
     };

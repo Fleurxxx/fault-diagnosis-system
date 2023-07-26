@@ -1,3 +1,11 @@
+<!--
+ * @Author: Fleurxxx 984209872@qq.com
+ * @Date: 2023-07-11 20:58:33
+ * @LastEditors: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
+ * @LastEditTime: 2023-07-26 12:50:42
+ * @FilePath: \maintenance\src\components\chart\HalfDoughnut.vue
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
 <template>
   <!-- 半环球图 -->
   <div class="box">
@@ -27,13 +35,13 @@ const info = () => {
     },
     series: [
       {
-        name: 'Access From',
+        name: '',
         type: 'pie',
         radius: ['40%', '70%'],
         center: ['50%', '90%'],
         // adjust the start angle
-        // color:['#555e8d','#9c88b3'],
-        color:['#0444AB','#80A6E2'],
+        color:['RGBA(36, 80, 171, 1)','#6395F9'],
+        // color:['#0444AB','#80A6E2'],
         startAngle: 180,
         label: {
           show: true,
