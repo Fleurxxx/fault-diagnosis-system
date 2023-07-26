@@ -8,8 +8,8 @@
       <div class="reminder">
         <p class="title">操作指导</p>
         <p>1. 填写模型信息并上传数据集</p>
-        <p>2. 在线数据分析，进行数据矫正。</p>
-        <p>3. 在线训练模型。</p>
+        <p>2. 进行在线数据分析，若数据异常请及时进行数据矫正。</p>
+        <p>3. 模型训练完成，下载训练模型。</p>
       </div>
     </div>
     <div class="box-table">
@@ -51,6 +51,7 @@ import { ElMessageBox,ElMessage } from 'element-plus';
 import { useRoute, useRouter } from 'vue-router';
 import jsonView from '../../components/JsonView.vue'
 import avatarUrl from '../../assets/icon/csv.png'
+import modelstore from "../../store/model.js";
 import axios from 'axios';
 /**
 * 仓库
@@ -85,21 +86,19 @@ const initialize = () =>{
         console.error('Error retrieving JSON data:', error);
       });
 }
-
+//下载模型
 const downloadZip = () => {
-    const zipUrl = 'src/assets/korean_PP-OCRv3_rec_infer.zip';
-    // 创建下载链接
-    const downloadLink = document.createElement('a');
-    downloadLink.href = zipUrl;
-    downloadLink.download = 'file.zip';
-
-    // 触发下载
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
-    document.body.removeChild(downloadLink);
+  const zipFileUrl = 'src/assets/korean_PP-OCRv3_rec_infer.zip';
+  const link = document.createElement('a');
+  link.href = zipFileUrl;
+  link.target = '_blank'; // 在新标签页中打开链接
+  link.setAttribute('download', 'your-file-name.zip'); // 将 'your-file-name' 替换为您期望的文件名。
+  link.click();
 }
 
+const modelStore = modelstore();
 const back =()=>{
+  modelStore.id = 10017;
   router.push({ path: "/info" });
 }
 
@@ -107,6 +106,7 @@ onBeforeMount(() => {
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
 onMounted(() => {
+  document.querySelector(".box").scrollIntoView(true);
   initialize()
 })
 watchEffect(()=>{

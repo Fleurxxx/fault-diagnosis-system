@@ -114,7 +114,7 @@
                         </el-empty>
                       </div>
                       <!-- 展示已经写完的内容 -->
-                      <div v-else v-html="valueHtml" class="way"></div>
+                      <!-- <div v-else v-html="valueHtml" class="way"></div> -->
                       <div class="info-content" v-else>
                         <Editor
                           style="height: 500px; width: 100%; overflow-x: hidden;"

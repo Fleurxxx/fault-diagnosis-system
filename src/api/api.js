@@ -1,8 +1,8 @@
 /*
  * @Author: Fleurxxx 984209872@qq.com
  * @Date: 2023-06-01 20:28:39
- * @LastEditors: Fleurxxx 984209872@qq.com
- * @LastEditTime: 2023-07-10 10:42:57
+ * @LastEditors: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
+ * @LastEditTime: 2023-07-25 15:51:07
  * @FilePath: \maintenance\src\api\api.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -11,6 +11,7 @@ import http from './axios.js'
 let apiFun = {
   //自定义对象，命名隔离，消除重名影响
   user:{},
+  interface:{},
   model:{}, //模型
   train:{}, //训练
   diagnose:{}, //诊断

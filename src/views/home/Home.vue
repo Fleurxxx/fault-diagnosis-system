@@ -1,8 +1,8 @@
 <!--
  * @Author: Fleurxxx 984209872@qq.com
  * @Date: 2023-06-01 20:28:39
- * @LastEditors: Fleurxxx 984209872@qq.com
- * @LastEditTime: 2023-07-12 16:39:13
+ * @LastEditors: error: error: git config user.name & please set dead value or install git && error: git config user.email & please set dead value or install git & please set dead value or install git
+ * @LastEditTime: 2023-07-26 13:06:23
  * @FilePath: \maintenance\src\views\home\Home.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -17,14 +17,18 @@
       <Row :gutter="14">
         <Col span="7">
             <Card >
-              <p class="title">总访问量及独立访客量</p>
+              <div class="title-box">
+                <p class="title" >总访问量及独立访客量</p>
+              </div>
               <HalfDoughnut />
             </Card>
             <div style="height: 15px;" ></div>
             <Card >
               <div class="t_top_box" >
                   <!-- <img class="t_l_line" src="../../assets/image/left_line.png" alt=""> -->
-                  <p class="title">故障分布</p>
+                  <div class="title-box">
+                    <p class="title">故障分布</p>
+                  </div>
                   <RadarChart />
                   <!-- <img class="t_r_line line1" src="../../assets/image/r_line1.png" alt=""> -->
               </div>
@@ -83,7 +87,12 @@
         </Col>
         <Col span="7">
           <Card >
-            <div class="secondLeftTab">
+            <div class="title-box">
+              <p class="title">故障维修统计</p>
+            </div>
+            <img src="src/assets/image/color.jpg" class="color_img">
+            <Bar  style="width:390px;height:170px;"/>
+            <!-- <div class="secondLeftTab">
                 <div class="fig">
                     <p>当日纳税人咨询最热问题 TOP5</p>
                 </div>
@@ -92,15 +101,17 @@
                     <li><span>2</span><p>如何代开发票？</p><a href="">了解详情</a></li>
                     <li><span>3</span><p>如何代开发票？</p><a href="">了解详情</a></li>
                     <li><span>4</span><p>如何代开发票？</p><a href="">了解详情</a></li>
-                    <!-- <li><span>5</span><p>如何代开发票？</p><a href="">了解详情</a></li> -->
+                    <li><span>5</span><p>如何代开发票？</p><a href="">了解详情</a></li>
                 </ul>
-            </div>
+            </div> -->
           </Card>
         </Col>
     </Row>
     <div class="ball">
       <Card>
-        <p class="title">近期故障分布趋势</p>
+        <div class="title-box">
+          <p class="title">近期故障分布趋势</p>
+        </div>
         <div class="ball_box" >
             <!-- <Bubble  style="width:700px;"/> -->
             <StackArea style="width:700px;"/>
@@ -158,6 +169,7 @@ import RadarChart from '../../components/chart/RadarChart.vue'
 import Bubble from '../../components/chart/Bubble.vue';
 import HalfDoughnut from '../../components/chart/HalfDoughnut.vue';
 import StackArea from '../../components/chart/StackArea.vue';
+import Bar from '../../components/chart/bar1/Bar.vue';
 
 onMounted(() => {
   // showTips()
@@ -250,7 +262,11 @@ div#driver-highlighted-element-stage {
 // .content{
 //   padding: 10px;
 // }
-
+.title-box{
+  width: 300px;
+  height: 20px;
+  border-left: 5px solid #6C91c2; //实线
+}
 .title{
   text-align: left;
   font-weight: bolder;
@@ -422,5 +438,9 @@ div#driver-highlighted-element-stage {
   position: relative;
   left:40px;
 }
-
+.color_img{
+  width: 110px;
+  position: absolute;
+  right: 10px;
+}
 </style>

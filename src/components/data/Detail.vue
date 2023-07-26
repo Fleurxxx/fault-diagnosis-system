@@ -79,7 +79,7 @@ import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed 
 import { useStore } from 'vuex';
 import axios from "axios";
 import { useRoute, useRouter } from 'vue-router';
-import BarChart from '../chart/bar/BarChart.vue';
+import BarChart from '../chart/bar/Bar.vue';
 import Bar from '../chart/BarGraph.vue'
 // import { id } from 'element-plus/es/locale';
 
