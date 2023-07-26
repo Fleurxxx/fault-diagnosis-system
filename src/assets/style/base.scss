@@ -71,18 +71,14 @@ $back-color: #F0F2F8;
      border-radius: 50%;
      border: 1px solid #c4c4c4;
   }
-  // .el-dialog__header {
-  //   background: rgb(90, 137, 247);
-  //   text-align: center;
-  //   margin: 0;
-  // }
-  // .el-dialog__title {
-  //   color: aliceblue;
-  //   font-weight: 600;
-  // }
   .el-card__body {
     display: flex;
     gap: 30px;
     flex-direction: column;
     width: 100%;
   }
+
+  //el-table内容过长省略显示，关闭悬浮框
+  // .el-popper{
+  //   display: none; //去掉悬浮显示
+  // }

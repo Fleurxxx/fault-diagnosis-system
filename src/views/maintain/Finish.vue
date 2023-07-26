@@ -22,99 +22,142 @@
     </div>
     <div class="bottom">
       <div class="content-bottom">
-        <Tabs v-model="activeTab" class="custom-tabs">
-          <TabPane label="分析结果" name="name1" >
-            <el-card class="box-card" shadow="hover">
-              <template #header>
-                <div class="card-header" >
-                  <span><i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;&nbsp;分析结果</span>
-                </div>
-              </template>
-              <div class="box-table">
-                <Table class="t-table" :columns="data.columns" :data="data.data"></Table>
-              </div>
-            </el-card>
-            <el-card class="box-card" shadow="hover">
-              <template #header>
-                <div class="card-header" >
-                  <span><i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;&nbsp;分析结果</span>
-                </div>
-              </template>
-              <div style="padding-top:50px;">
-                <RadarChart  style="margin: 0 auto;"/>
-                <Bubble />
-              </div>
-            </el-card>
-          </TabPane>
-          <TabPane label="解决方案" name="name2">
-            <div class="right">
-              <el-drawer
-                v-model="drawVisible"
-                title="重新上传分析"
-                width="35%">
-                <el-form
-                  class="show"
-                  ref="addForm"
-                  :model="form"
-                  label-width="auto"
-                  label-position="left"
-                >
-                  <el-form-item label="数据集上传" prop="name">
-                    <div class="form-update">
-                      <Upload multiple type="drag" action="" :before-upload="beforeUpload">
-                        <div style="padding: 20px 20px">
-                          <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
-                          <p>Click or drag files here to upload</p>
-                        </div>
-                      </Upload>
-                    </div>
-                  </el-form-item>
-                  <el-form-item label="分析描述" prop="status" :required="true">
-                    <el-input v-model="form.name" type="textarea" :autosize="{ minRows: 5, maxRows: 5}"></el-input>
-                  </el-form-item>
-                </el-form>
-                <template #footer>
-                  <span class="dialog-footer">
-                    <el-button @click="drawVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="handleAnalysis">确 定</el-button>
-                  </span>
-                </template>
-              </el-drawer>
-              <el-card class="card" shadow="hover">
-                <template #header>
-                  <div class="card-header-2" >
-                    <span><i class='fa fa-dot-circle-o'></i>&nbsp;&nbsp;&nbsp;解决方案</span>
-                  </div>
-                </template>
-                <!-- <div class="fault small-div-body ">
-                  {{ faultAnalysis.solution }}
-                </div> -->
-                <div class="fault small-div-body" v-if="valueHtml === null">
-                  <el-empty description="未找到解决方案" image-size="90" v-if="valueHtml === ''">
-                    <el-button type="primary" @click="handleAnalysis">重新上传分析</el-button>
-                  </el-empty>
-                </div>
-                <!-- 展示已经写完的内容 -->
-                <div v-else v-html="valueHtml" class="way"></div>
-              </el-card>
+        <div class="box-reminder">
+          <div class="reminder">
+            <div class="top">
+              <el-avatar :fit="fit" :size="35" :src = way.avatar />
+              <span class="top_name">{{ way.author }}</span>
             </div>
-          </TabPane>
-        </Tabs>
+            <div class="analyse ">
+              <Tabs v-model="activeTab" class="custom-tabs">
+                <TabPane label="分析结果" name="name1" >
+                  <el-card class="box-card" shadow="hover">
+                    <template #header>
+                      <div class="card-header" >
+                        <span><i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;&nbsp;分析结果</span>
+                      </div>
+                    </template>
+                    <div class="box-table">
+                      <Table class="t-table" :columns="data.columns" :data="data.data"></Table>
+                    </div>
+                  </el-card>
+                  <el-card class="box-card" shadow="hover">
+                    <template #header>
+                      <div class="card-header" >
+                        <span><i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;&nbsp;分析结果</span>
+                      </div>
+                    </template>
+                    <div style="padding-top:50px;">
+                      <RadarChart  style="margin: 0 auto;"/>
+                      <Bubble />
+                    </div>
+                  </el-card>
+                </TabPane>
+                <TabPane label="解决方案" name="name2">
+                  <div class="right">
+                    <el-drawer
+                      v-model="drawVisible"
+                      title="重新上传分析"
+                      width="35%">
+                      <el-form
+                        class="show"
+                        ref="addForm"
+                        :model="form"
+                        label-width="auto"
+                        label-position="left"
+                      >
+                        <el-form-item label="数据集上传" prop="name">
+                          <div class="form-update">
+                            <Upload multiple type="drag" action="" :before-upload="beforeUpload">
+                              <div style="padding: 20px 20px">
+                                <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                                <p>Click or drag files here to upload</p>
+                              </div>
+                            </Upload>
+                          </div>
+                        </el-form-item>
+                        <el-form-item label="分析描述" prop="status" :required="true">
+                          <el-input v-model="form.name" type="textarea" :autosize="{ minRows: 5, maxRows: 5}"></el-input>
+                        </el-form-item>
+                      </el-form>
+                      <template #footer>
+                        <span class="dialog-footer">
+                          <el-button @click="drawVisible = false">取 消</el-button>
+                          <el-button type="primary" @click="handleAnalysis">确 定</el-button>
+                        </span>
+                      </template>
+                    </el-drawer>
+                    <Alert show-icon class="alert">
+                      提示
+                      <template #icon>
+                          <Icon type="ios-bulb-outline"></Icon>
+                      </template>
+                      <template #desc>感谢提供的关于解决故障的详细信息。用户可以参考系统推荐的相似历史故障的解决方案，解决自己的故障</template>
+                    </Alert>
+                    <el-card class="card" shadow="hover">
+                      <template #header>
+                        <div class="card-header-2" >
+                          <div>
+                            <span><i class='fa fa-dot-circle-o'></i>&nbsp;&nbsp;&nbsp;解决方案</span>
+                          </div>
+                          <div class="card-header-2-right">
+                            <span style="cursor: pointer;" @click="likeChange">
+                              <i :class="way.flag === false ? 'fa fa-thumbs-o-up' : 'fa fa-thumbs-up'" @click="likeChange"></i> {{ way.like }}
+                            </span>
+                            <span class="top_date">{{ way.date }}</span>
+                          </div>
+                        </div>
+                      </template>
+                      <div class="fault small-div-body" v-if="valueHtml === null">
+                        <el-empty description="未找到解决方案" image-size="90" v-if="valueHtml === ''">
+                          <el-button type="primary" @click="handleAnalysis">重新上传分析</el-button>
+                        </el-empty>
+                      </div>
+                      <!-- 展示已经写完的内容 -->
+                      <div v-else v-html="valueHtml" class="way"></div>
+                      <div class="info-content" v-else>
+                        <Editor
+                          style="height: 500px; width: 100%; overflow-x: hidden;"
+                          v-model="valueHtml"
+                          :defaultConfig="editorConfig"
+                          :mode="mode"
+                          @onCreated="handleCreated"/>
+                      </div>
+                    </el-card>
+                  </div>
+                </TabPane>
+              </Tabs>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 <script setup>
 import { ElMessage } from 'element-plus';
-import { ref, reactive, onMounted, computed } from 'vue';
+import { ref, reactive, onMounted, computed, shallowRef, onBeforeMount } from 'vue';
 import MyTimeLine from '../../components/MyTimeLine.vue';
 import Steps from '../../components/Steps.vue';
 import RadarChart from '../../components/chart/RadarChart.vue'
 import Bubble from '../../components/chart/Bubble.vue';
+import avatar from '../../assets/icon/head/羊1.png'
+import '@wangeditor/editor/dist/css/style.css' // 引入 css
+import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
 import { useRouter, useRoute } from "vue-router";
 const router = useRouter();
 const route = useRoute();
 const status = ref(2);
+let way = reactive({
+  author: null,
+  avatar: null,
+  date: null,
+  view: 0,
+  like: 0,
+  flag: false,
+  way: null,
+  detail: null,
+});
 const url = ref('src/assets/image/correct.svg');
 const form = reactive({
     order: '',
@@ -182,25 +225,48 @@ const data = reactive({
       }
   ]
 });
-const faultAnalysis = reactive({
-  // cause: '网络连接故障：可能由于网络中断、不稳定的连接或配置错误导致。资源耗尽：系统资源（如内存、磁盘空间）耗尽，导致应用程序无法正常运行。配置错误：错误的配置参数或设置可能导致系统出现问题。',
-  // solution: '检查网络连接：确保网络连接正常，检查网络设备、电缆和路由器是否正常工作。如果发现问题，修复或更换故障设备。优化资源利用：分析系统资源使用情况，查找资源耗尽的原因。清理不必要的文件或进程，增加可用资源。如果需要，考虑升级硬件或调整系统配置。检查配置设置：仔细检查系统配置文件和参数设置，确保其正确性。如果发现配置错误，及时进行修复并重新启动应用程序。',
-  cause: '',
-  solution: '',
-});
 // 内容 HTML
-const valueHtml = ref('');
+let valueHtml = ref('');
+// 编辑器实例，必须用 shallowRef
+const editorRef = shallowRef();
+const editorConfig = {readOnly: true }
+
+onBeforeMount(() => {
+  // const editor = editorRef.value
+  // if (editor == null) return
+  // editor.destroy()
+  way.author = JSON.parse(route.query.value).author;
+  way.avatar = JSON.parse(route.query.value).avatar;
+  way.date = JSON.parse(route.query.value).date;
+  way.view  = JSON.parse(route.query.value).view;
+  way.like = JSON.parse(route.query.value).like;
+  way.flag = JSON.parse(route.query.value).flag;
+  way.way = JSON.parse(route.query.value).way;
+  way.detail = JSON.parse(route.query.value).detail;
+})
 
 onMounted(() => {
-  // valueHtml.value = Vue.compile(route.query.value).render;
-  valueHtml.value = route.query.value;
+  valueHtml.value = way.detail;
 })
+
+const handleCreated = (editor) => {
+  editorRef.value = editor // 记录 editor 实例，重要！
+}
 
 const backToList = () => {
   router.push({
     path:'/detail', 
     query:{id: route.query.id}
   })
+}
+
+const likeChange = () => {
+  if(way.flag === false){
+    way.like++;
+  }else{
+    way.like--;
+  }
+  way.flag = !way.flag;
 }
 
 const printResult = () => {
@@ -318,7 +384,7 @@ h3{
   width: 100%;
   display: flex;
   gap: 25px;
-  padding: 0 180px 0 180px;
+  padding: 0 20% 0 20%;
   flex-direction: column;
 
   .left {
@@ -332,7 +398,7 @@ h3{
   .right {
     flex: 1;
     display: flex;
-    gap: 25px;
+    gap: 10px;
     flex-direction: column;
     height: 100%;
 
@@ -345,26 +411,24 @@ h3{
   }
 
   .card {
-    margin: 20px 0 20px 0;
-    .demo-drawer-profile{
-      font-size: 16px;
-      text-align: left;
-    }
+    margin: 0 0 20px 0;
     .card-header-2 {
       display: flex;
       justify-content: space-between;
       align-items: center;
       height: 10px;
+
+      .card-header-2-right span {
+        display: inline-block;
+        width: 80px;
+      }
       
       .alert {
         font-size: 10px;
       }
-    }
 
-    .detail {
-      .status-create {
-        display: flex;
-        justify-content: space-between;
+      span {
+        width: 100px;
       }
     }
 
@@ -388,7 +452,82 @@ h3{
       font-size: 14px;
       padding: 10px;
     }
+
+    // .info-content{
+    //   // margin-left: -30px;
+    //   box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, 0.06);
+    //   border: 1px solid #ccc;
+    //   width: 100%;
+    //   .editor {
+    //     width: 100%;
+    //     height: 500px;
+    //     box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, 0.06)
+    //   }
+    // }
   }
+}
+
+.box-reminder{
+    .reminder{
+      text-align: left;
+    }
+    .top {
+      display: flex;
+      align-items: center;
+    }
+
+    .top_name {
+      min-width: 90px;
+      word-break: break-all;
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .top_date {
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .el-avatar {
+      margin-right: 10px; /* 根据需要调整元素之间的间距 */
+    }
+    .top p{
+      margin:3px 10px;
+      font-size:16px;
+      font-weight:bold;
+    }
+
+    .analyse{
+      margin-top: 35px;
+    }
+  }
+
+  // 美化滚动条
+::-webkit-scrollbar {
+  width: 3px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  width: 2px;
+  background: rgba(#101F1C, 0.1);
+  -webkit-border-radius: 2em;
+  -moz-border-radius: 2em;
+  border-radius: 2em;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(144,147,153,.5);
+  background-clip: padding-box;
+  min-height: 28px;
+  -webkit-border-radius: 2em;
+  -moz-border-radius: 2em;
+  border-radius: 2em;
+  transition: background-color .3s;
+  cursor: pointer;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(144,147,153,.3);
 }
 </style>
 <style src="src/assets/style/base.scss"></style>

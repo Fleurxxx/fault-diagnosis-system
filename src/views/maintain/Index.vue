@@ -5,8 +5,8 @@
     </div>
     <div class="middle">
       <div class="left">
-        <el-button class="create"  @click="dialogVisible = true"><el-icon><Plus /></el-icon>&nbsp;&nbsp;新建</el-button>
-        <el-button class="download" @click="batchDownload">批量下载</el-button>
+        <!-- <el-button class="create"  @click="dialogVisible = true"><el-icon><Plus /></el-icon>&nbsp;&nbsp;新建</el-button> -->
+        <!-- <el-button class="download" @click="batchDownload">批量下载</el-button> -->
       </div>
       <div class="right">
         <el-input placeholder="请输入内容进行搜索" v-model="searchText" clearable @input="clear" @clear="clear">
@@ -190,6 +190,7 @@ const confirmEdit = () => {
     if(res.code === 200){
       fixData.value = res.data.records;
       totalNum.value = res.data.total;
+      dialogVisible.value = false;
     }else{
       ElMessage.error("获取失败");
     }
