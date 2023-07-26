@@ -28,11 +28,11 @@ export default {
       this.seriesData = [
         {
           name: "未解决故障",
-          value: 38,
+          value: 56,
         },
         {
           name: "已解决故障",
-          value: 35,
+          value: 40,
         },
         // {
         //   name: "canshu3",
@@ -58,8 +58,13 @@ export default {
       //   "RGBA(123, 198, 239, 1)",
       // ];
       let colors = [
-        "RGBA(36, 100, 171, 1)",
-        "RGBA(177, 24, 45, 1)",
+       "#B42222",
+        // "RGBA(177, 14, 5, 1)",
+        "RGBA(36, 80, 171, 1)",
+
+        "#4f85df",
+        "#6395F9",
+
       ];
       const getPie3D = (pieData, internalDiameterRatio) => {
         //internalDiameterRatio:透明的空心占比

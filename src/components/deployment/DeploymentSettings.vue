@@ -18,6 +18,24 @@
         </Space>
       </div>
     </div>
+    <div class="hint line" v-if="wholeData.cardState==3" >
+      <div class="title1-box">
+        <p class="title1">服务器使用情况</p>
+      </div>
+      <LineNow />
+      <!-- <Row>
+        <Col span="4">
+          <div style="padding-top:99px;">
+            <div>服务器上模型使用比例</div><br />
+            <h1 style="font-size:55px;">28%</h1><br />
+
+          </div>
+        </Col>
+        <Col span="20">
+          <LineNow />
+        </Col>
+      </Row> -->
+    </div>
     <div class="hint"  v-if="wholeData.cardState==3">
       <div class="reminder">
         <div class="rectangle">
@@ -244,6 +262,8 @@ import { ElMessage } from 'element-plus'
 import MineSteps from '../../components/Steps.vue'
 import avatarUrl from '../../assets/icon/csv.png'
 import Version from '../../components/data/ModelVersion.vue'
+import Line from '../chart/Line.vue';
+import LineNow from '../chart/LineNow.vue';
 /**
 * 仓库
 */
@@ -406,7 +426,7 @@ const handleDeployment = (index) =>{
   steps[2].status = 'in-progress'
   wholeData.cardState = 3;
   console.log(index)
-  status=1  //没用
+  status.value=1;  //没用
   fixData[0].status = 0;
   ElMessage({
     message: '部署成功',
@@ -451,30 +471,270 @@ const drawer = reactive({
 
 
 const data = [
-    {
-        "id": "112345",
-        "name": "Roberta",
-        "age": "39",
-        "gender": "M"
-    },
-    {
-        "id": "221433",
-        "name": "Oliver",
-        "age": "25",
-        "gender": "M"
-    },
-    {
-        "id": "33257879",
-        "name": "Shayna",
-        "age": "18",
-        "gender": "F"
-    },
-    {
-        "id": "4345785",
-        "name": "Fechin",
-        "age": "18",
-        "gender": "M"
-    }
+  {
+    "sample_id": 0,
+    "feature0": 51.56724987,
+    "feature1": 288358.4,
+    "feature2": "nan",
+    "feature3": 1.855899851,
+    "feature4": 201.4601694,
+    "feature5": 6.582260591,
+    "feature6": -0.516321231,
+    "feature7": 563677000000,
+    "feature8": 222221.2109
+  },
+  {
+    "sample_id": 1,
+    "feature0": 63.80487396,
+    "feature1": 288358.4,
+    "feature2": 1.10680249,
+    "feature3": 1.050386639,
+    "feature4": 391.6053751,
+    "feature5": 13.32343925,
+    "feature6": 4.662871314,
+    "feature7": "nan",
+    "feature8": -144247.3576
+  },
+  {
+    "sample_id": 2,
+    "feature0": 49.13852695,
+    "feature1": 288358.4,
+    "feature2": 1.11164904,
+    "feature3": 0.767126838,
+    "feature4": 130.7080672,
+    "feature5": 6.485547005,
+    "feature6": 5.696815199,
+    "feature7": 547460000000,
+    "feature8": -428840.327
+  },
+  {
+    "sample_id": 3,
+    "feature0": "nan",
+    "feature1": 288358.4,
+    "feature2": 1.109168509,
+    "feature3": "",
+    "feature4": 258.5210761,
+    "feature5": 0.716737178,
+    "feature6": 23.23846148,
+    "feature7": -353989000000,
+    "feature8": ""
+  },
+  {
+    "sample_id": 4,
+    "feature0": 76.52083097,
+    "feature1": 288358.4,
+    "feature2": 1.113410267,
+    "feature3": 5.795408332,
+    "feature4": 256.0389965,
+    "feature5": -1.803482668,
+    "feature6": 14.04049464,
+    "feature7": -107101000000,
+    "feature8": 649972.2666
+  },
+  {
+    "sample_id": 5,
+    "feature0": 69.38270767,
+    "feature1": 288358.4,
+    "feature2": 1.104776532,
+    "feature3": "",
+    "feature4": 305.6980442,
+    "feature5": 13.08362527,
+    "feature6": 1.245861564,
+    "feature7": "nan",
+    "feature8": ""
+  },
+  {
+    "sample_id": 6,
+    "feature0": 52.02835017,
+    "feature1": "",
+    "feature2": 1.103117418,
+    "feature3": 1.547828124,
+    "feature4": 209.218614,
+    "feature5": 1.852463541,
+    "feature6": 7.632214349,
+    "feature7": -594573000000,
+    "feature8": -60071.82736
+  },
+  {
+    "sample_id": 7,
+    "feature0": 73.83668243,
+    "feature1": 288358.4,
+    "feature2": 1.107633509,
+    "feature3": 0.633408002,
+    "feature4": 184.5618278,
+    "feature5": 12.5619859,
+    "feature6": -0.905920701,
+    "feature7": 443568000000,
+    "feature8": -284754.6744
+  },
+  {
+    "sample_id": 8,
+    "feature0": 112.0472228,
+    "feature1": 288358.4,
+    "feature2": 1.102054073,
+    "feature3": "",
+    "feature4": 194.1994673,
+    "feature5": 22.00642215,
+    "feature6": -17.00117944,
+    "feature7": 110223000000,
+    "feature8": -145636.4213
+  },
+  {
+    "sample_id": 9,
+    "feature0": 65.01815139,
+    "feature1": 288358.4,
+    "feature2": 1.103728047,
+    "feature3": 4.751556355,
+    "feature4": 158.1415087,
+    "feature5": 21.13976938,
+    "feature6": -11.4397777,
+    "feature7": -453298000000,
+    "feature8": -428159.4668
+  },
+  {
+    "sample_id": 10,
+    "feature0": 57.98995708,
+    "feature1": 288358.4,
+    "feature2": 1.109555169,
+    "feature3": 0.199094212,
+    "feature4": 183.746607,
+    "feature5": 26.22768229,
+    "feature6": 7.070650226,
+    "feature7": 277743000000,
+    "feature8": -613443.3935
+  },
+  {
+    "sample_id": 11,
+    "feature0": "nan",
+    "feature1": 288358.4,
+    "feature2": 1.110710654,
+    "feature3": "",
+    "feature4": 273.995882,
+    "feature5": 4.353947074,
+    "feature6": -14.16457216,
+    "feature7": -144457000000,
+    "feature8": -984608.651
+  },
+  {
+    "sample_id": 12,
+    "feature0": 32.76011871,
+    "feature1": 288358.4,
+    "feature2": 1.102317132,
+    "feature3": 0.822616805,
+    "feature4": 243.1901191,
+    "feature5": 5.556984341,
+    "feature6": -1.806020374,
+    "feature7": 1193610000000,
+    "feature8": -689194.0221
+  },
+  {
+    "sample_id": 13,
+    "feature0": 67.60798772,
+    "feature1": 288358.4,
+    "feature2": 1.107323753,
+    "feature3": 0.28710576,
+    "feature4": "",
+    "feature5": 6.780638699,
+    "feature6": -2.153108338,
+    "feature7": -407618000000,
+    "feature8": -99330.09749
+  },
+  {
+    "sample_id": 14,
+    "feature0": 48.94548134,
+    "feature1": 288358.4,
+    "feature2": 1.110150873,
+    "feature3": 0.381190852,
+    "feature4": 238.2528177,
+    "feature5": 4.444870357,
+    "feature6": 14.02829924,
+    "feature7": 106530000000,
+    "feature8": -888877.9005
+  },
+  {
+    "sample_id": 15,
+    "feature0": 118.2410869,
+    "feature1": 288358.4,
+    "feature2": 1.106468068,
+    "feature3": 1.172701198,
+    "feature4": 119.3490943,
+    "feature5": 12.3998887,
+    "feature6": 1.766084894,
+    "feature7": "nan",
+    "feature8": 451170.4605
+  },
+  {
+    "sample_id": 16,
+    "feature0": 72.33358503,
+    "feature1": 288358.4,
+    "feature2": 1.104363484,
+    "feature3": 1.309631466,
+    "feature4": 160.7371996,
+    "feature5": 4.047478784,
+    "feature6": 18.54007343,
+    "feature7": -2200839432,
+    "feature8": 290787.7912
+  },
+  {
+    "sample_id": 17,
+    "feature0": 86.00452467,
+    "feature1": 288358.4,
+    "feature2": 1.102093445,
+    "feature3": 1.440522395,
+    "feature4": 223.2538512,
+    "feature5": 6.844563764,
+    "feature6": 11.66319779,
+    "feature7": 259984000000,
+    "feature8": -126969.9038
+  },
+  {
+    "sample_id": 18,
+    "feature0": 61.4999325,
+    "feature1": 288358.4,
+    "feature2": 1.10867657,
+    "feature3": 2.218416551,
+    "feature4": 181.6275698,
+    "feature5": 6.839794059,
+    "feature6": 2.333473572,
+    "feature7": -376003000000,
+    "feature8": -537347.8377
+  },
+  {
+    "sample_id": 19,
+    "feature0": 90.45035112,
+    "feature1": 288358.4,
+    "feature2": 1.107547223,
+    "feature3": 0.022798946,
+    "feature4": 148.5409018,
+    "feature5": 6.877127665,
+    "feature6": 13.09115445,
+    "feature7": -12273300182,
+    "feature8": 329460.1273
+  },
+  {
+    "sample_id": 20,
+    "feature0": 78.51489557,
+    "feature1": "",
+    "feature2": 1.105645573,
+    "feature3": 0.2552591,
+    "feature4": 180.294017,
+    "feature5": -0.746576543,
+    "feature6": -4.782139304,
+    "feature7": -233763000000,
+    "feature8": 136823.2704
+  },
+  {
+    "sample_id": 21,
+    "feature0": 45.44118749,
+    "feature1": 288358.4,
+    "feature2": 1.108719271,
+    "feature3": 1.166946964,
+    "feature4": 134.5606084,
+    "feature5": 17.420866,
+    "feature6": 0.360110002,
+    "feature7": "nan",
+    "feature8": -58708.34565
+  }
 ]
 //查看csv
 const handleClick = () => {
@@ -566,6 +826,10 @@ defineExpose({
 .title{
    font-size:18px;
    font-weight:bold;
+ }
+ .line{
+  margin-bottom: -40px;
+  margin-top:40px;
  }
 .hint{
  float: center;
@@ -718,5 +982,18 @@ defineExpose({
 }
 /deep/ #heiho-view {
   z-index: 2000;
+}
+
+.title1-box{
+  width: 300px;
+  height: 20px;
+  border-left: 5px solid #6C91c2; //实线
+}
+.title1{
+  padding-left: 10px;;
+  text-align: left;
+  font-weight: bolder;
+  font-size: 20;
+  padding-bottom: 5px;
 }
 </style>

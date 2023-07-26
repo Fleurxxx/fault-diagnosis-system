@@ -2,7 +2,7 @@
  * @Author: Fleurxxx 984209872@qq.com
  * @Date: 2023-05-31 15:26:03
  * @LastEditors: Fleurxxx 984209872@qq.com
- * @LastEditTime: 2023-06-15 21:07:43
+ * @LastEditTime: 2023-07-16 08:50:42
  * @FilePath: \maintenance\src\views\diagnose\Index.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -42,7 +42,7 @@
                 <el-radio label="2" size="large">自定义密码</el-radio>
               </el-radio-group>
             </div> -->
-            <el-form-item label="模型名称" prop="name" class="form-input" :required="true">
+            <el-form-item label="数据名称"  class="form-input" :required="true">
                 <el-input class="input"
                           v-model="data.name"
                           maxlength="30"
@@ -52,16 +52,16 @@
                         />
             </el-form-item><br/>
             <div style="margin: 20px 0" />
-            <el-form-item label="模型介绍"  prop="introduce" class="form-input" :required="true">
+            <el-form-item label="数据介绍"  class="form-input" :required="true">
                 <el-input class="input"
                           v-model="data.introduce"
                           maxlength="100"
-                          placeholder="请简单描述该模型"
+                          placeholder="请简单描述该数据"
                           show-word-limit
                           type="textarea"
                         />
             </el-form-item><br/>
-            <el-form-item label="模型介绍"  class="form-input" :required="true" style="margin-left:-500px">
+            <el-form-item label="数据上传"  class="form-input" :required="true" style="margin-left:-500px">
               <el-button  round  :class="button1Class" @click="change(1)">文件上传</el-button>
               <el-button round :class="button2Class"  @click="change(2)">手动上传</el-button>
             </el-form-item><br/>
@@ -122,8 +122,8 @@ const steps = reactive([
     status: 'in-progress',
   },
   {
-    title: '故障分析',
-    description: '获取检测结果',
+    title: '数据分析',
+    description: '进行数据清洗',
     status: 'uncompleted',
   },
   {
@@ -147,7 +147,8 @@ let change = (num) =>{
 
 
 let submit = () =>{
-  router.push({ path: "/fault" });
+  router.push({ path: "/fault" }); //多条
+  // router.push({ path: "/onefault" }); //单挑
 // Message.error("错误");
 }
 onBeforeMount(() => {

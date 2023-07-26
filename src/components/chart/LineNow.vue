@@ -37,7 +37,7 @@ export default {
       return res;
     },
     generateRandomData(prevValue, minLimit, maxLimit) {
-      const diff = (maxLimit - minLimit) * 0.1; // 10% of the range
+      const diff = (maxLimit - minLimit) * 0.15; // 10% of the range
       let newValue = parseFloat((Math.random() * (2 * diff) + prevValue - diff).toFixed(2));
       newValue = Math.min(maxLimit, Math.max(minLimit, newValue));
       return newValue;
@@ -112,10 +112,10 @@ export default {
       const lastCpuValue = this.cpuData[this.cpuData.length - 1] || 0;
 
       // Generate random data for memory with 10% difference from the previous value
-      const randomMemoryData = this.generateRandomData(lastMemoryValue, 15, 70);
+      const randomMemoryData = this.generateRandomData(lastMemoryValue, 17, 70);
 
       // Generate random data for CPU with 10% difference from the previous value
-      const randomCpuData = this.generateRandomData(lastCpuValue, 15, 70);
+      const randomCpuData = this.generateRandomData(lastCpuValue, 20, 70);
 
       this.memoryData.push(randomMemoryData);
       this.cpuData.push(randomCpuData);

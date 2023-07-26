@@ -25,100 +25,7 @@
         </TabPane>
       </Tabs>
     </div>
-    <div class="box-table">
-      <Tabs v-model="activeTab" class="custom-tabs">
-        <TabPane label="结果集概览" name="name1" >
-          <div class="t-json">
-            <json-viewer
-                  :value="data.jsonData"
-                  :expand-depth="5"
-                  class="viewer"
-                  copyable
-                  boxed
-                  sort
-                  :expanded="expanded"
-                  :key="expanded"
-                ></json-viewer>
-        </div>
-        </TabPane>
-      </Tabs>
-        <div>
-          <Tabs v-model="activeTab" class="custom-tabs">
-            <TabPane label="相似故障推荐" name="name1" >
-              <div class="left">
-                <div class="small-div-body fault" v-if="wayData.length === 0">
-                  <el-empty description="未找到历史解决办法" image-size="130">
-                  </el-empty>
-                </div>
-                <div class="small-div-body fault" v-else>
-                  <div>
-                    <el-table
-                      :data="wayData"
-                      @selection-change="handleSelectionChange"
-                      style="width: 100%"
-                      :header-cell-style="{background: 'rgb(242,243,245)', color: 'rgb(0,0,71)', fonsSize: '22px', height: '60px'}"
-                      :cell-style="{color: 'rgb(85,68,85)', fontWeight: '350', fonsSize: '18px',}"
-                      :row-style="{height: '50px'}">
-                      <el-table-column prop="way" label="解决方案" :formatter="format"/>
-                      <el-table-column fixed="right" label="操作" width="120">
-                        <template v-slot="scope">
-                          <el-button link type="primary" @click="handleCheck(scope.row)">
-                            <el-icon><View /></el-icon> 查看
-                          </el-button>
-                        </template>
-                      </el-table-column>
-                    </el-table>
-                  </div>
-                  <div class="pager">
-                    <el-pagination
-                      :current-page="currentPage"
-                      :page-size="pageSize"
-                      layout="total, prev, pager, next"
-                      :total="totalNum"
-                      @current-change="handleCurrentChange"/>
-                  </div>
-                </div>
-              </div>
-            </TabPane>
-            <!-- <TabPane label="修复中心" name="name2">
-              <div class="right">
-                <div class="info">
-                  <Alert show-icon class="alert">
-                    提示
-                    <template #icon>
-                        <Icon type="ios-bulb-outline"></Icon>
-                    </template>
-                    <template #desc>为了帮助我们共同改进和学习，需要您提供一些关于您解决故障的详细信息，填写以下内容时尽可能提供清晰准确的描述。</template>
-                  </Alert>
-                  <div class="info-content">
-                    <Toolbar
-                      style="border-bottom: 1px solid #ccc"
-                      :editor="editorRef"
-                      :defaultConfig="toolbarConfig"
-                      :mode="mode"/>
-                    <Editor
-                      style="height: 500px; width: 100%; overflow-y: hidden;"
-                      v-model="valueHtml"
-                      :defaultConfig="editorConfig"
-                      :mode="mode"
-                      @onCreated="handleCreated"/>
-                  </div>
-                  <el-button class="next" @click="next">提交</el-button>
-                </div>
-              </div>
-            </TabPane> -->
-          </Tabs>
-        </div>
-        <div style="padding-top:50px;">
-          <Tabs v-model="activeTab" class="custom-tabs">
-            <TabPane label="可视化分析" name="name1" >
-              <RadarChart  style="margin: 0 auto;"/>
-              <Bubble />
-            </TabPane>
-          </Tabs>
-        </div>
 
-    </div>
   </div>
 </template>
 
@@ -165,29 +72,9 @@ const data = reactive({
   ],
   data: [
       {
-        value: '0',
-        count: 322,
-      },
-      {
-        value: '1',
-        count: 341,
-      },
-      {
-        value: '2',
-        count: 327,
-      },
-      {
         value: '3',
-        count: 307,
+        count: 1,
       },
-      {
-        value: '4',
-        count: 389,
-      },
-      {
-        value: '5',
-        count: 328,
-      }
   ]
 
 })
@@ -331,7 +218,7 @@ defineExpose({
   position: sticky;
   top:0;
   width:100%;
-  // height: 190vh;
+  height: 100vh;
   box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, 0.08);
   .box-title{
     float: left;
